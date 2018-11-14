@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Reserva;
 use Illuminate\Http\Request;
+use App\Booked\Booked;
 
 class ReservaController extends Controller
 {
@@ -14,7 +15,8 @@ class ReservaController extends Controller
      */
     public function index()
     {
-        //
+        $booked = new Booked;
+        $booked->salas();
     }
 
     /**
@@ -25,6 +27,8 @@ class ReservaController extends Controller
     public function create()
     {
         //
+        $booked = new Booked;
+        $booked->reservas();
     }
 
     /**
