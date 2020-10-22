@@ -12,10 +12,10 @@ class Booked
     public function __construct()
     {
         $client = new Client();
-        $res = $client->request('POST','http://localhost:8001/Web/Services/index.php/Authentication/Authenticate', [
+        $res = $client->request('POST', config('salas.bookedHost') . '/Authentication/Authenticate', [
             'json' => [
-                'username' => 'admin',
-                'password' => 'admin123',
+                'username' => config('salas.bookedUser'),
+                'password' => config('salas.bookedPass'),
             ],
         ]);
 
@@ -26,7 +26,7 @@ class Booked
     public function salas()
     {
         $client = new Client();
-        $res = $client->request('GET','http://localhost:8001/Web/Services/index.php/Resources/', [
+        $res = $client->request('GET', config('salas.bookedHost') . '/Resources/', [
             'headers' => [
                 'X-Booked-SessionToken' => $this->session->sessionToken,
                 'X-Booked-UserId' => $this->session->userId,
@@ -39,7 +39,7 @@ class Booked
     public function reservas()
     {
         $client = new Client();
-        $res = $client->request('GET','http://localhost:8001/Web/Services/index.php/Reservations/', [
+        $res = $client->request('GET', config('salas.bookedHost') . '/Reservations/', [
             'headers' => [
                 'X-Booked-SessionToken' => $this->session->sessionToken,
                 'X-Booked-UserId' => $this->session->userId,
