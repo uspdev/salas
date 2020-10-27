@@ -16,7 +16,7 @@ class ReservaController extends Controller
     public function index()
     {
         $booked = new Booked;
-        $booked->salas();
+        return $booked->salas();
     }
 
     /**

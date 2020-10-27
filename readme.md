@@ -29,9 +29,9 @@ php artisan serve
 
 ## Rotas
 
-Lista de salas:
+Lista de salas em json:
 ```bash
-/reservas
+/api/salas
 ```
 
 ## Dicas
