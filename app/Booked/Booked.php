@@ -35,6 +35,23 @@ class Booked
         return response()->json(json_decode($res->getBody()->getContents()));
     }
 
+    /**
+     * Return Json schedules list
+     *
+     * @return void
+     */
+    public function agendas()
+    {
+        $client = new Client();
+        $res = $client->request('GET', config('salas.bookedHost') . '/Schedules/', [
+            'headers' => [
+                'X-Booked-SessionToken' => $this->session->sessionToken,
+                'X-Booked-UserId' => $this->session->userId,
+            ],
+        ]);
+        return response()->json(json_decode($res->getBody()->getContents()));
+    }
+
     public function reservas()
     {
         $client = new Client();
