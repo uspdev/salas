@@ -11,4 +11,4 @@
 |
 */
 
-Route::resource('/reservas','ReservaController');
+# Route::resource('/reservas','ReservaController');

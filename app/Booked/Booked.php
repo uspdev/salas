@@ -32,8 +32,7 @@ class Booked
                 'X-Booked-UserId' => $this->session->userId,
             ],
         ]);
-        dd($res->getBody()->getContents());
-
+        return response()->json(json_decode($res->getBody()->getContents()));
     }
 
     public function reservas()
