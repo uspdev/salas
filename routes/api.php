@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/salas','ReservaController@index');
+
+Route::get('/agendas','ReservaController@schedules');

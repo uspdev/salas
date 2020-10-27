@@ -20,6 +20,18 @@ class ReservaController extends Controller
     }
 
     /**
+     * Display a listing of the schedules.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function schedules()
+    {
+        $booked = new Booked;
+        return $booked->agendas();
+    }
+
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
