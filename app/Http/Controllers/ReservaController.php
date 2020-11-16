@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Reserva;
+use App\Models\Reserva;
 use Illuminate\Http\Request;
 use App\Booked\Booked;
 
