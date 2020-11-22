@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Reserva;
 use Illuminate\Http\Request;
-use App\Booked\Booked;
+use App\Http\Requests\ReservaRequest;
+
+/* use App\Booked\Booked; */
 
 class ReservaController extends Controller
 {
@@ -14,9 +16,12 @@ class ReservaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $booked = new Booked;
-        return $booked->salas();
+    {   
+        $reservas = Reserva::all();
+        /* $booked = new Booked; */
+        return view('reserva.index', [
+            'reservas' => $reservas
+        ] /*, [$booked->salas();] */);
     }
 
     /**
@@ -26,8 +31,8 @@ class ReservaController extends Controller
      */
     public function schedules()
     {
-        $booked = new Booked;
-        return $booked->agendas();
+        /* $booked = new Booked;
+        return $booked->agendas(); */
     }
 
 
@@ -39,8 +44,12 @@ class ReservaController extends Controller
     public function create()
     {
         //
-        $booked = new Booked;
-        $booked->reservas();
+        /* $booked = new Booked;
+        $booked->reservas(); */
+        return view('reserva.create', [
+            'reserva' => new Reserva,
+        ]);
+
     }
 
     /**
@@ -49,9 +58,12 @@ class ReservaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(ReservaRequest $request)
+    {   
+        $validated = $request->validated();
+        $reserva = Reserva::create($validated);
+        request()->session()->flash('alert-info', 'Reserva feita com sucesso.');
+        return redirect("/reserva/{$reserva->id}");
     }
 
     /**
@@ -62,7 +74,9 @@ class ReservaController extends Controller
      */
     public function show(Reserva $reserva)
     {
-        //
+        return view('reserva.show',[
+            'reserva' => $reserva
+            ]);
     }
 
     /**
@@ -73,7 +87,9 @@ class ReservaController extends Controller
      */
     public function edit(Reserva $reserva)
     {
-        //
+        return view('reserva.edit', [
+            'reserva' => $reserva
+        ]);
     }
 
     /**
@@ -83,9 +99,12 @@ class ReservaController extends Controller
      * @param  \App\Reserva  $reserva
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Reserva $reserva)
+    public function update(ReservaRequest $request, Reserva $reserva)
     {
-        //
+        $validated = $request->validated();
+        $reserva->update($validated);
+        request()->session()->flash('alert-info', 'Reserva atualizada com sucesso.');
+        return redirect("/reserva/{$reserva->id}");
     }
 
     /**
@@ -96,6 +115,8 @@ class ReservaController extends Controller
      */
     public function destroy(Reserva $reserva)
     {
-        //
+        $reserva->delete();
+        request()->session()->flash('alert-info', 'Reserva excluída com sucesso.');
+        return redirect('/reserva');
     }
 }
