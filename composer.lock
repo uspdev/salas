@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a0a17db8dd210ca96d566c9aef106a0",
+    "content-hash": "fb0d1eeebfc93a15df08de330bfcb0b4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4762,6 +4762,53 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2020-07-13T06:12:54+00:00"
+        },
+        {
+            "name": "uspdev/laravel-fullcalendar",
+            "version": "v1.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uspdev/laravel-fullcalendar.git",
+                "reference": "5f592789c17067117c6881ad85506c85338b13b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uspdev/laravel-fullcalendar/zipball/5f592789c17067117c6881ad85506c85338b13b4",
+                "reference": "5f592789c17067117c6881ad85506c85338b13b4",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*|6.*|7.*|8.*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MaddHatter\\LaravelFullcalendar\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "Calendar": "MaddHatter\\LaravelFullcalendar\\Facades\\Calendar"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "MaddHatter\\LaravelFullcalendar": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shawn Tunney",
+                    "email": "shawn.tunney@gmail.com"
+                }
+            ],
+            "description": "Laravel helper for FullCalendar.io",
+            "time": "2020-11-24T15:52:39+00:00"
         },
         {
             "name": "uspdev/laravel-usp-theme",
