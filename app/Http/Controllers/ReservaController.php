@@ -18,7 +18,7 @@ class ReservaController extends Controller
         $reservas = Reserva::all();
         return view('reserva.index', [
             'reservas' => $reservas
-        ];
+        ]);
     }
 
     /**
