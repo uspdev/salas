@@ -1,0 +1,27 @@
+/* Coloca cor de fundo no menu quando o item está ativo */
+.active {
+  background: lightgray;
+}
+
+/* Cores para menu principal */
+
+#navbarNav ul.navbar-nav li.nav-item a:link {
+  color: black;
+  text-decoration: none;
+}
+
+#navbarNav ul.navbar-nav li.nav-item a:visited {
+  color: black;
+  text-decoration: none;
+}
+
+#navbarNav ul.navbar-nav li.nav-item a:hover {
+  color: black;
+  text-decoration: none;
+}
+
+#navbarNav ul.navbar-nav li.nav-item a:active {
+  color: black;
+  text-decoration: none;
+}
+
