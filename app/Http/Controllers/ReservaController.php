@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservaRequest;
 use Illuminate\Support\Facades\Validator;
 
-/* use App\Booked\Booked; */
-
 class ReservaController extends Controller
 {
     /**
@@ -19,23 +17,10 @@ class ReservaController extends Controller
     public function index()
     {   
         $reservas = Reserva::all();
-        /* $booked = new Booked; */
         return view('reserva.index', [
             'reservas' => $reservas
-        ] /*, [$booked->salas();] */);
+        ]);
     }
-
-    /**
-     * Display a listing of the schedules.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function schedules()
-    {
-        /* $booked = new Booked;
-        return $booked->agendas(); */
-    }
-
 
     /**
      * Show the form for creating a new resource.
@@ -44,13 +29,9 @@ class ReservaController extends Controller
      */
     public function create()
     {
-        //
-        /* $booked = new Booked;
-        $booked->reservas(); */
         return view('reserva.create', [
             'reserva' => new Reserva,
         ]);
-
     }
 
     /**
