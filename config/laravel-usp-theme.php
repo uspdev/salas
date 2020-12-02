@@ -41,6 +41,7 @@ $menu = [
     [
         'text' => '<i class="fas fa-home"></i> Home',
         'url' => config('app.url') . '/home',
+        'can' => '',
     ],
     [
         'text' => 'Item1',
