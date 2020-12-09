@@ -2,7 +2,6 @@
 
 @section('content')
 
-  {!! $calendar->calendar() !!}
-  {!! $calendar->script() !!}
+Sistema em construção
 
 @endsection

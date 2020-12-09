@@ -56,8 +56,33 @@ class SalaController extends Controller
      */
     public function show(Sala $sala)
     {
+        # pegando as reservas das salas
+        $events = [];
+
+        foreach($sala->reservas as $reserva) {
+            $events[] = \Calendar::event(
+                $reserva->nome,
+                false, //full day event?
+                $reserva->inicio,
+                $reserva->fim,
+                0, //optionally, you can specify an event ID,
+                [
+                    'color' => $reserva->cor,
+                    'url' => '/reserva/' . $reserva->id ,
+                ],
+            );
+        }
+
+        $calendar = \Calendar::addEvents($events)
+            ->setOptions([
+                'firstDay' => 1,
+                'defaultView' => 'agendaWeek'
+        ]);
+
+
         return view('sala.show',[
-            'sala' => $sala
+            'sala'     => $sala,
+            'calendar' => $calendar
             ]);
     }
 

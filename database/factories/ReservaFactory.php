@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Reserva;
+use App\Models\Sala;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReservaFactory extends Factory
@@ -26,6 +27,7 @@ class ReservaFactory extends Factory
             'data_inicio' => $this->faker->dateTime(),
             'data_fim'    => $this->faker->dateTime(),
             'cor'         => $this->faker->hexcolor,
+            'sala_id'     => Sala::factory()->create()->id,
         ];
     }
 }

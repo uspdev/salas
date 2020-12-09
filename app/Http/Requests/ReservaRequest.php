@@ -27,7 +27,10 @@ class ReservaRequest extends FormRequest
             'nome' => 'required',
             'data_inicio' => 'required',
             'data_fim' => 'required',
+            'horario_inicio' => 'required',
+            'horario_fim' => 'required',
             'cor' => 'nullable',
+            'sala_id' => 'required',
         ];
     }
 
