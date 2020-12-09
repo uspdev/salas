@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservaRequest;
+use Illuminate\Support\Facades\Validator;
 
 class ReservaController extends Controller
 {

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservaController; 
+use App\Http\Controllers\SalaController; 
 use App\Http\Controllers\IndexController; 
 
 /*
@@ -15,5 +16,7 @@ use App\Http\Controllers\IndexController;
 |
 */
 
+Route::view('/home', 'home');
 Route::get('/', [IndexController::class,'index']);
 Route::resource('/reserva', ReservaController::class);
+Route::resource('/sala', SalaController::class);

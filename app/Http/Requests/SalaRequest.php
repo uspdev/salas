@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReservaRequest extends FormRequest
+class SalaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,6 @@ class ReservaRequest extends FormRequest
     {
         return [
             'nome' => 'required',
-            'data_inicio' => 'required',
-            'data_fim' => 'required',
-            'cor' => 'nullable',
         ];
     }
 
@@ -35,10 +32,6 @@ class ReservaRequest extends FormRequest
     {
     return [
         'nome.required' => 'O nome não pode ficar em branco.',
-        'data_inicio.required' => 'A data de início não pode ficar em branco.',
-        'data_fim.required' => 'A data de fim não pode ficar em branco.',
     ];
     }
-
-
 }

@@ -16,6 +16,9 @@ class ReservaSeeder extends Seeder
     {
         $reserva = [
             'nome' => 'Aula FLP32020',
+            'data_inicio' => '2020-03-09 00:00:00',
+            'data_fim' => '2020-05-01 01:00:00',
+            'cor' => '#aea1ff',           
         ];
         
     Reserva::create($reserva);

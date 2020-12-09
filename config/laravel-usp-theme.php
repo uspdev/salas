@@ -1,48 +1,52 @@
 <?php
 
-$submenu1 = [
+$submenuSalas = [
     [
-        'text' => '<i class="fas fa-atom"></i>  SubItem 1',
-        'url' => config('app.url') . '/subitem1',
+        'text' => '<i class="fa fa-list"></i>  Lista de Salas',
+        'url' => config('app.url') . '/sala',
     ],
     [
-        'text' => 'SubItem 2',
-        'url' => config('app.url') . '/subitem2',
-        'can' => 'admin',
+        'text' => '<i class="fa fa-plus-square"></i>  Cadastrar nova sala',
+        'url' => config('app.url') . '/sala/create',
+        /* 'can' => 'admin', */
     ],
     [
         'type' => 'divider',
+        'can'  => '',
     ],
     [
         'type' => 'header',
         'text' => 'Cabeçalho',
+        'can'  => '',
     ],
     [
         'text' => 'SubItem 3',
         'url' => config('app.url') . '/subitem3',
+        'can' => '',
     ],
 ];
 
-$submenu2 = [
+$submenuReservas = [
     [
-        'text' => 'SubItem 1',
-        'url' => config('app.url') . '/subitem1',
+        'text' => '<i class="fa fa-calendar"></i> Todas as reservas',
+        'url' => config('app.url') . '/reserva',
     ],
     [
-        'text' => 'SubItem 2',
-        'url' => config('app.url') . '/subitem2',
-        'can' => 'admin',
+        'text' => '<i class="fa fa-calendar-plus"></i> Nova reserva',
+        'url' => config('app.url') . '/reserva/create',
+        /* 'can' => 'admin', */
     ],
 ];
 $menu = [
     [
         'text' => '<i class="fas fa-home"></i> Home',
-        'url' => config('app.url') . '/reserva',
+        'url' => config('app.url') . '/home',
+        'can' => '',
     ],
     [
-        'text' => 'Nova reserva',
-        'url' => config('app.url') . '/reserva/create',
-        /* 'can' => '', */
+        'text' => 'Item1',
+        'url' => config('app.url') . '',
+        'can' => '',
     ],
     [
         'text' => 'Item 3',
@@ -50,15 +54,16 @@ $menu = [
         'can' => 'admin',
     ],
     [
-        'text' => 'SubMenu1',
-        'submenu' => $submenu1,
-        'can' => '',
+        'text' => 'Salas',
+        'submenu' => $submenuSalas,
+        /* 'can' => 'admin', */
     ],
     [
-        'text' => 'SubMenu2',
-        'submenu' => $submenu2,
-        'can' => 'admin',
+        'text' => 'Reservas',
+        'submenu' => $submenuReservas,
+        /* 'can' => '', */
     ],
+
 ];
 
 $right_menu = [
