@@ -1,6 +1,6 @@
 @extends('main')
 @section('content')
-    <form method="POST" action="/reserva">
+    <form method="POST" action="/reservas">
         @csrf
         @include('reserva.partials.form')
     </form>

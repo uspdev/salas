@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Sala;
-use App\Models\Categoria;
+use App\Models\Recurso;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class SalaFactory extends Factory
+class RecursoFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Sala::class;
+    protected $model = Recurso::class;
 
     /**
      * Define the model's default state.
@@ -23,9 +22,7 @@ class SalaFactory extends Factory
     public function definition()
     {
         return [
-            'nome'         => $this->faker->sentence(2),
-            'categoria_id' => Categoria::factory()->create()->id,
-            'capacidade'   => $this->faker->randomDigit(), 
+            'nome' => $this->faker->word(),
         ];
     }
 }

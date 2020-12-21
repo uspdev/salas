@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalasTable extends Migration
+class CreateRecursosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateSalasTable extends Migration
      */
     public function up()
     {
-        Schema::create('salas', function (Blueprint $table) {
+        Schema::create('recursos', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('nome');
-            $table->integer('capacidade');
-            $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
         });
     }
 
@@ -29,6 +27,6 @@ class CreateSalasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salas');
+        Schema::dropIfExists('recursos');
     }
 }
