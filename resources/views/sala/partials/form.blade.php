@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-sm form-group">
                     Capacidade<br>
-                    <input name="capacidade" type="number" min="0">
+                    <input name="capacidade" type="number" min="0" value="{{  old('capacidade', $sala->capacidade) }}">
                 </div>
             </div>
         </div>
