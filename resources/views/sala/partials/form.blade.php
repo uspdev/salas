@@ -1,17 +1,17 @@
 <div class="card">
   <div class="card-header">
-    Nova Sala
+    <h5>Nova Sala</h5>
   </div>
     <div class="card-body">
         <div class="container">
             <div class="row">
                 <div class="col-sm form-group">  
-                    Nome
+                    <b>Nome</b>
                     <br>
                     <input type="text" name="nome" value="{{  old('nome', $sala->nome) }}" >
                 </div>
                 <div class="col-sm form-group">  
-                    Categoria
+                    <b>Categoria</b>
                     <br>
                     <select name="categoria_id">
                         <option value="" selected="">Selecione uma opção </option>
@@ -24,7 +24,7 @@
             </div>
             <div class="row">
                 <div class="col-sm form-group">
-                    Capacidade<br>
+                    <b>Capacidade</b><br>
                     <input name="capacidade" type="number" min="0" value="{{  old('capacidade', $sala->capacidade) }}">
                 </div>
             </div>

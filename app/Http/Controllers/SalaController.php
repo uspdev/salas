@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sala;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 use App\Http\Requests\SalaRequest;
 use Illuminate\Support\Facades\Validator;

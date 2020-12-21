@@ -1,12 +1,12 @@
 <div class="card">
   <div class="card-header">
-    Novo Recurso
+    <h5>Novo Recurso</h5>
   </div>
     <div class="card-body">
         <div class="container">
             <div class="row">
                 <div class="col-sm form-group">  
-                    Nome
+                    <b>Nome</b>
                     <br>
                     <input type="text" name="nome" value="{{  old('nome', $recurso->nome) }}" >
                 </div>

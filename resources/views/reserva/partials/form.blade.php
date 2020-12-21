@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header">
-    Nova reserva
+    <h5>Nova reserva</h5>
   </div>
     <div class="card-body">
       <div class="container">
