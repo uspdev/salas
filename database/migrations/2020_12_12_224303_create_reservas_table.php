@@ -22,7 +22,9 @@ class CreateReservasTable extends Migration
             $table->time('horario_inicio');
             $table->time('horario_fim');
             $table->string('cor');
+            $table->boolean('full_day_event');
             $table->foreignId('sala_id')->constrained('salas')->onDelete('cascade');
+            $table->string('descricao');
         });
     }
 

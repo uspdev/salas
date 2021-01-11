@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sala;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 use App\Http\Requests\SalaRequest;
 use Illuminate\Support\Facades\Validator;
@@ -45,7 +46,7 @@ class SalaController extends Controller
         $validated = $request->validated();
         $sala = Sala::create($validated);
         request()->session()->flash('alert-info', 'Sala criada com sucesso.');
-        return redirect("/sala/{$sala->id}");
+        return redirect("/salas/{$sala->id}");
     }
 
     /**
@@ -68,7 +69,7 @@ class SalaController extends Controller
                 0, //optionally, you can specify an event ID,
                 [
                     'color' => $reserva->cor,
-                    'url' => '/reserva/' . $reserva->id ,
+                    'url' => '/reservas/' . $reserva->id ,
                 ],
             );
         }
@@ -111,7 +112,7 @@ class SalaController extends Controller
         $validated = $request->validated();
         $sala->update($validated);
         request()->session()->flash('alert-info', 'Sala atualizada com sucesso.');
-        return redirect("/sala/{$sala->id}");
+        return redirect("/salas/{$sala->id}");
     }
 
     /**
@@ -124,6 +125,6 @@ class SalaController extends Controller
     {
         $sala->delete();
         request()->session()->flash('alert-info', 'Sala excluída com sucesso.');
-        return redirect('/sala');
+        return redirect('/salas');
     }
 }

@@ -23,11 +23,15 @@ class ReservaFactory extends Factory
     public function definition()
     {   
         return [
-            'nome'        => $this->faker->sentence(2),
-            'data_inicio' => $this->faker->dateTime(),
-            'data_fim'    => $this->faker->dateTime(),
-            'cor'         => $this->faker->hexcolor,
-            'sala_id'     => Sala::factory()->create()->id,
+            'nome'           => $this->faker->sentence(2),
+            'data_inicio'    => '20/12/2020',
+            'data_fim'       => '20/12/2020',
+            'horario_inicio' => $this->faker->time(),
+            'horario_fim'    => $this->faker->time(),
+            'full_day_event' => 0,
+            'cor'            => $this->faker->hexcolor,
+            'sala_id'        => Sala::factory()->create()->id,
+            'descricao'      => $this->faker->sentence(4),
         ];
     }
 }

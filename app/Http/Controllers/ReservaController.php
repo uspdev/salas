@@ -45,7 +45,7 @@ class ReservaController extends Controller
         $validated = $request->validated();
         $reserva = Reserva::create($validated);
         request()->session()->flash('alert-info', 'Reserva feita com sucesso.');
-        return redirect("/reserva/{$reserva->id}");
+        return redirect("/reservas/{$reserva->id}");
     }
 
     /**
@@ -86,7 +86,7 @@ class ReservaController extends Controller
         $validated = $request->validated();
         $reserva->update($validated);
         request()->session()->flash('alert-info', 'Reserva atualizada com sucesso.');
-        return redirect("/reserva/{$reserva->id}");
+        return redirect("/reservas/{$reserva->id}");
     }
 
     /**
@@ -99,6 +99,6 @@ class ReservaController extends Controller
     {
         $reserva->delete();
         request()->session()->flash('alert-info', 'Reserva excluída com sucesso.');
-        return redirect('/reserva');
+        return redirect('/reservas');
     }
 }

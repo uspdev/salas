@@ -1,9 +1,9 @@
 @extends('main')
 @section('title') Sistema de Reserva de Salas @endsection
 @section('content')
-@forelse($salas as $sala)
-@include('sala.partials.fields')
+@forelse($recursos as $recurso)
+@include('recurso.partials.fields')
 @empty
-    <p>Não há salas cadastradas ainda.</p>
+    <p>Não há recursos cadastrados ainda.</p>
 @endforelse
 @endsection

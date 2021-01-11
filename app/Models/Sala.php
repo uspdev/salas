@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Reserva;
+use App\Models\Categoria;
 
 class Sala extends Model
 {
@@ -13,5 +14,10 @@ class Sala extends Model
 
     public function reservas(){
         return $this->hasMany(Reserva::class);
+    }
+
+    public static function categorias(){
+        $categorias = Categoria::all();
+        return $categorias;
     }
 }

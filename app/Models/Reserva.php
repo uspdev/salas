@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\Sala;
 
 class Reserva extends Model
 {
@@ -45,6 +46,11 @@ class Reserva extends Model
     public function getFimAttribute()
     {
         return Carbon::createFromFormat('d/m/Y H:i:s', $this->data_fim .' '. $this->horario_fim);
+    }
+
+    public static function salas(){
+        $salas = Sala::all();
+        return $salas;
     }
 
 }

@@ -15,7 +15,10 @@ class SalaSeeder extends Seeder
     public function run()
     {
         $sala = [
-            'nome' => 'Sala 101',
+            'nome'         => 'Sala 101',
+            'categoria_id' => 1,
+            'capacidade'   => 175,
+
         ];
         
     Sala::create($sala);
