@@ -14,10 +14,18 @@ class ReservaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {   
-        $reservas = Reserva::all();
-        return view('reserva.index', [
+        if(isset(request()->search)){
+            $reservas = Reserva::where('nome', 'LIKE',"%{$request->search}%")->get();
+                                    # ->orwhere('categoria', 'LIKE',"%{$request->search}%")->paginate(5);
+        }
+
+        else{
+        $reservas = Reserva::paginate(5);
+        }
+
+        return view('reserva.index',[
             'reservas' => $reservas
         ]);
     }

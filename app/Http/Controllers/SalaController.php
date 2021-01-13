@@ -15,10 +15,17 @@ class SalaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $salas = Sala::all();
-        return view('sala.index', [
+        if(isset(request()->search)){
+            $salas = Sala::where('nome', 'LIKE',"%{$request->search}%")->get();
+        }
+
+        else{
+        $salas = Sala::paginate(5);
+        }
+
+        return view('sala.index',[
             'salas' => $salas
         ]);
     }
