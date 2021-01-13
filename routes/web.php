@@ -18,7 +18,6 @@ use App\Http\Controllers\IndexController;
 |
 */
 
-Route::view('/home', 'home');
 Route::get('/', [IndexController::class,'index']);
 Route::resource('/reservas', ReservaController::class);
 Route::resource('/salas', SalaController::class);

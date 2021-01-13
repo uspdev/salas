@@ -43,14 +43,14 @@
             <br>
             <input type="time" name="horario_inicio" value="{{  old('horario_inicio', $reserva->horario_inicio) }}">
             <br>
-            <small class="form-text text-muted">Formato: 12:00 AM</small>
+            <small class="form-text text-muted">Formato: 24:00 </small>
           </div>        
           <div class="col-sm form-group">
             <label for="" class="required"><b>Horário de fim </b></label>
             <br>
             <input type="time" name="horario_fim" value="{{  old('horario_fim', $reserva->horario_fim) }}">
             <br>
-            <small class="form-text text-muted">Formato: 12:00 AM</small>
+            <small class="form-text text-muted">Formato: 24:00 </small>
           </div>
         </div>
         <div class="row">
