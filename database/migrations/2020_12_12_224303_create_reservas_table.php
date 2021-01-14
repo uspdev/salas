@@ -17,12 +17,10 @@ class CreateReservasTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('nome');
-            $table->date('data_inicio');
-            $table->date('data_fim');
+            $table->date('data');
             $table->string('horario_inicio');
             $table->string('horario_fim');
             $table->string('cor');
-            $table->boolean('full_day_event');
             $table->foreignId('sala_id')->constrained('salas')->onDelete('cascade');
             $table->string('descricao');
         });

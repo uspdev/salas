@@ -15,14 +15,7 @@
     <div class="card-body">
         <ul class="list-group list-group-flush">
             <li class="list-group-item" ><h6>Nome</h6><a href="/reservas/{{$reserva->id}}">{{  $reserva->nome ?? ''  }}</a></li>
-            <li class="list-group-item" ><h6>Data de início</h6>{{  $reserva->data_inicio ?? ''  }}</li>
-            <li class="list-group-item" ><h6>Data de fim</h6>{{  $reserva->data_fim ?? ''  }}</li>
-            <li class="list-group-item" ><h6>Evento de dia inteiro?</h6>
-            @if ($reserva->full_day_event == 1)
-                Sim
-            @else
-                Não
-            @endif</li>
+            <li class="list-group-item" ><h6>Data</h6>{{  $reserva->data ?? ''  }}</li>
             <li class="list-group-item" ><h6>Horário de início</h6>{{  $reserva->horario_inicio ?? ''  }}</li>
             <li class="list-group-item" ><h6>Horário de fim</h6>{{  $reserva->horario_fim ?? ''  }}</li>
             <li class="list-group-item" ><h6>Sala</h6>

@@ -24,11 +24,9 @@ class ReservaFactory extends Factory
     {   
         return [
             'nome'           => $this->faker->sentence(2),
-            'data_inicio'    => '20/12/2020',
-            'data_fim'       => '20/12/2020',
-            'horario_inicio' => $this->faker->time(),
-            'horario_fim'    => $this->faker->time(),
-            'full_day_event' => 0,
+            'data'           => $this->faker->date($format = 'd/m/Y'),
+            'horario_inicio' => $this->faker->time($format = 'H:i'),
+            'horario_fim'    => $this->faker->time($format = 'H:i'),
             'cor'            => $this->faker->hexcolor,
             'sala_id'        => Sala::factory()->create()->id,
             'descricao'      => $this->faker->sentence(4),

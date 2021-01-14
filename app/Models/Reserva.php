@@ -12,20 +12,11 @@ class Reserva extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function setDataInicioAttribute($value) {
-        $this->attributes['data_inicio'] = Carbon::createFromFormat('d/m/Y', $value);
+    public function setDataAttribute($value) {
+        $this->attributes['data'] = Carbon::createFromFormat('d/m/Y', $value);
     }
 
-    public function getDataInicioAttribute($value) {
-        if($value)
-          return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
-    }
-
-    public function setDataFimAttribute($value) {
-        $this->attributes['data_fim'] = Carbon::createFromFormat('d/m/Y', $value);
-    }
-
-    public function getDataFimAttribute($value) {
+    public function getDataAttribute($value) {
         if($value)
           return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
     }
@@ -36,7 +27,7 @@ class Reserva extends Model
      */
     public function getInicioAttribute()
     {
-        return Carbon::createFromFormat('d/m/Y H:i:s', $this->data_inicio .' '. $this->horario_inicio);
+        return Carbon::createFromFormat('d/m/Y H:i:s', $this->data .' '. $this->horario_inicio);
     }
 
     /**
@@ -45,7 +36,7 @@ class Reserva extends Model
      */
     public function getFimAttribute()
     {
-        return Carbon::createFromFormat('d/m/Y H:i:s', $this->data_fim .' '. $this->horario_fim);
+        return Carbon::createFromFormat('d/m/Y H:i:s', $this->data .' '. $this->horario_fim);
     }
 
     public static function salas(){

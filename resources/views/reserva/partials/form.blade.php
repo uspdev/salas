@@ -13,46 +13,29 @@
         </div>
         <div class="row">
           <div class="col-sm form-group">
-            <label for="" class="required"><b>Data de início </b></label>
+            <label for="" class="required"><b>Data</b></label>
             <br>
-            <input type="text" name="data_inicio" class="datepicker" value="{{  old('data_inicio', $reserva->data_inicio) }}">
-          </div>
-          <div class="col-sm form-group">
-            <label for="" class="required"><b>Data de fim </b></label>
-            <br>
-            <input type="text" name="data_fim" class="datepicker" value="{{  old('data_fim', $reserva->data_fim) }}">
-          </div>
-          <div class="col-sm form-group">
-            <label for="" class="required"><b>Evento de dia inteiro?</b></label>
-            <br>
-            <input type="radio" name="full_day_event" value="1" @if (isset($reserva->full_day_event) and ($reserva->full_day_event === 1))
-                checked
-            @elseif ((old('full_day_event') != null) and (old('fixarip') == 1))
-                checked
-            @endif> Sim<br>
-            <input type="radio" name="full_day_event" value="0" @if (isset($reserva->full_day_event) and ($reserva->full_day_event === 0))
-                            checked
-                        @elseif ((old('full_day_event') != null) and (old('fixarip') == 0))
-                            checked
-            @endif> Não
+            <input type="text" name="data" class="datepicker" value="{{  old('data', $reserva->data) }}">
           </div>
         </div>
+        
         <div class="row">
           <div class="col-sm form-group">
             <label for="" class="required"><b>Horário de início </b></label>
             <br>
-            <input type="time" name="horario_inicio" value="{{  old('horario_inicio', $reserva->horario_inicio) }}">
+            <input type="text" name="horario_inicio" value="{{  old('horario_inicio', $reserva->horario_inicio) }}">
             <br>
-            <small class="form-text text-muted">Formato: 24:00 </small>
+            <small class="form-text text-muted">Formato: 11:00 </small>
           </div>        
           <div class="col-sm form-group">
             <label for="" class="required"><b>Horário de fim </b></label>
             <br>
-            <input type="time" name="horario_fim" value="{{  old('horario_fim', $reserva->horario_fim) }}">
+            <input type="text" name="horario_fim" value="{{  old('horario_fim', $reserva->horario_fim) }}">
             <br>
-            <small class="form-text text-muted">Formato: 24:00 </small>
+            <small class="form-text text-muted">Formato: 15:00 </small>
           </div>
         </div>
+        
         <div class="row">
           <div class="col-sm form-group">     
             <label for="" class="required"><b>Sala </b></label>

@@ -16,11 +16,9 @@ class ReservaSeeder extends Seeder
     {
         $reserva = [
             'nome'           => 'Aula FLP32020',
-            'data_inicio'    => '20/12/2020',
-            'data_fim'       => '20/12/2020',
-            'horario_inicio' => '12:00:00',
-            'horario_fim'    => '13:00:00',
-            'full_day_event' => 0,
+            'data'           => '14/01/2021',
+            'horario_inicio' => '12:00',
+            'horario_fim'    => '13:00',
             'cor'            => '#aea1ff',
             'sala_id'        => 1,
             'descricao'      => 'Aula de Política III do ano de 2020.'
