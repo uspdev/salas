@@ -27,7 +27,7 @@ class Reserva extends Model
      */
     public function getInicioAttribute()
     {
-        return Carbon::createFromFormat('d/m/Y H:i:s', $this->data .' '. $this->horario_inicio);
+        return Carbon::createFromFormat('d/m/Y H:i', $this->data .' '. $this->horario_inicio);
     }
 
     /**
@@ -36,7 +36,7 @@ class Reserva extends Model
      */
     public function getFimAttribute()
     {
-        return Carbon::createFromFormat('d/m/Y H:i:s', $this->data .' '. $this->horario_fim);
+        return Carbon::createFromFormat('d/m/Y H:i', $this->data .' '. $this->horario_fim);
     }
 
     public static function salas(){

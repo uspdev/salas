@@ -40,13 +40,24 @@
           <div class="col-sm form-group">     
             <label for="" class="required"><b>Sala </b></label>
             <br>
+
             <select name="sala_id">
-                        <option value="" selected="">Selecione uma opção </option>
-                        empty($reserva::salas()) ? "" : 
-                            @foreach($reserva::salas() as $sala)
-                                <option value="{{ $sala->id }}" selected=""> {{ $sala->nome }} </option>
-                            @endforeach
+                <option value="" selected=""> - Selecione  -</option>
+                @foreach ($reserva::salas() as $sala)
+                    {{-- 1. Situação em que não houve tentativa de submissão --}}
+                    @if (old('sala_id') == '')
+                      <option value="{{ $sala->id }}" {{ ( $reserva->sala_id == $sala->id) ? 'selected' : ''}}>
+                        {{ $sala->nome }}
+                      </option>
+                    {{-- 2. Situação em que houve tentativa de submissão, o valor de old prevalece --}}
+                    @else
+                      <option value="{{ $sala->id }}" {{ ( old('sala_id') == $sala->id) ? 'selected' : ''}}>
+                        {{ $sala->nome }}
+                      </option>
+                    @endif
+                @endforeach
             </select>
+
           </div>
           <div class="col-sm form-group">
             <label for="" class="required"><b>Cor</b></label>

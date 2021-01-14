@@ -18,7 +18,7 @@ class SalaController extends Controller
     public function index(Request $request)
     {
         if(isset(request()->search)){
-            $salas = Sala::where('nome', 'LIKE',"%{$request->search}%")->get();
+            $salas = Sala::where('nome', 'LIKE',"%{$request->search}%")->paginate(5);
         }
 
         else{

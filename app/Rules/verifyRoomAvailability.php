@@ -5,6 +5,7 @@ namespace App\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use App\Models\Reserva;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class verifyRoomAvailability implements Rule
 {
@@ -36,19 +37,23 @@ class verifyRoomAvailability implements Rule
         # 2. Se não há reserva alguma na data e sala em questão, podemos cadastrar
         if($reservas->isEmpty()) return true;
 
-        # 3. Vamos construir $inicio e $fim
+        # 3. Se há conflitos vamos montar a string $conflicts indicando-os
         $inicio = Carbon::createFromFormat('d/m/Y H:i', $value . ' ' .$this->fields['horario_inicio']);
         $fim    = Carbon::createFromFormat('d/m/Y H:i', $value . ' ' .$this->fields['horario_fim']);
 
-        #foreach($reservas as $reserva){
-        #    dd($reserva->nome);
-        #}
-
-        # 4. Se há conflitos vamos montar a string $conflicts indicando-os
+        $desejado = CarbonPeriod::between($inicio, $fim);
+        $return = true;
         foreach($reservas as $reserva){
-            $this->conflicts .= "<li><a href='/reservas/{$reserva->id}'>$reserva->nome</a></li>";
+            $period = CarbonPeriod::between($reserva->inicio, $reserva->fim);
+            if($period->overlaps($desejado)) {
+                # vamos ignorar a própria reserva
+                if($this->fields['id'] != $reserva->id){
+                    $this->conflicts .= "<li><a href='/reservas/{$reserva->id}'>$reserva->nome</a></li>";
+                    $return = false;
+                }
+            }
         }
-        return false;
+        return $return;
     }
 
     /**

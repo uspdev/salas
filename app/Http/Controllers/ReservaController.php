@@ -17,7 +17,7 @@ class ReservaController extends Controller
     public function index(Request $request)
     {   
         if(isset(request()->search)){
-            $reservas = Reserva::where('nome', 'LIKE',"%{$request->search}%")->get();
+            $reservas = Reserva::where('nome', 'LIKE',"%{$request->search}%")->paginate(5);
                                     # ->orwhere('categoria', 'LIKE',"%{$request->search}%")->paginate(5);
         }
 

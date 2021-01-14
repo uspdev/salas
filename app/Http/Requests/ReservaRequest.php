@@ -4,7 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Carbon\Carbon;
+
+use App\Models\Sala;
 use App\Rules\verifyRoomAvailability;
+use Illuminate\Validation\Rule;
 
 class ReservaRequest extends FormRequest
 {
@@ -28,21 +31,30 @@ class ReservaRequest extends FormRequest
         /**
          * A validação da disponibilidade será customizada
          */
-        $data = new verifyRoomAvailability([
+        if ($this->method() == 'PATCH' || $this->method() == 'PUT'){
+            $id = $this->reserva->id;
+        } else {
+            $id = 0; 
+        }
+
+         $data = new verifyRoomAvailability([
             'horario_inicio' => $this->horario_inicio,
             'horario_fim'    => $this->horario_fim,
-            'sala_id'        => $this->sala_id
+            'sala_id'        => $this->sala_id,
+            'id'             => $id
         ]);
 
-        return [
+        $rules = [
             'nome'           => 'required',
             'horario_inicio' => 'required|date_format:H:i',
             'horario_fim'    => 'required|date_format:H:i|after:horario_inicio',
             'cor'            => 'nullable',
-            'sala_id'        => 'required',
+            'sala_id'        => ['required',Rule::in(Sala::pluck('id')->toArray())],
             'descricao'      => 'nullable',
             'data'           => ['required','date_format:d/m/Y',$data],
         ];
+
+        return $rules;
     }
 
     public function messages()
@@ -53,7 +65,6 @@ class ReservaRequest extends FormRequest
             'horario_inicio.required' => 'O horário de início não pode ficar em branco.',
             'horario_fim.required'    => 'O horário de fim não pode ficar em branco.',
             'sala_id.required'        => 'Selecione uma sala.',
-            'full_day_event.required' => 'Selecione uma opção para "Evento de dia inteiro".',
         ];
     }
 
