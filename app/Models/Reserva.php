@@ -17,10 +17,25 @@ class Reserva extends Model
     }
 
     public function getDataAttribute($value) {
-        if($value)
-          return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
+        if($value) return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
     }
 
+    public function setRepeatUntilAttribute($value) {
+        if($value) $this->attributes['repeat_until'] = Carbon::createFromFormat('d/m/Y', $value);
+    }
+
+    public function getRepeatUntilAttribute($value) {
+        if($value) return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
+    }
+
+    public function setRepeatDaysAttribute($value) {
+        $this->attributes['repeat_days'] = implode(',',$value);
+    }
+
+    public function getRepeatDaysAttribute($value) {
+        if($value) return explode(',',$value);
+    }
+    
     /**
      * O mutator getInicioAttribute foi criado para usarmos no FullCalendar
      * a junção da data com o horário, desta forma: $reserva->inicio
@@ -43,5 +58,16 @@ class Reserva extends Model
         $salas = Sala::all();
         return $salas;
     }
+
+    public function parent()
+    {
+        return $this->belongsTo($this,'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany($this, 'parent_id');
+    }
+
 
 }

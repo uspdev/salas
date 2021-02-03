@@ -21,8 +21,12 @@ class CreateReservasTable extends Migration
             $table->string('horario_inicio');
             $table->string('horario_fim');
             $table->string('cor');
-            $table->foreignId('sala_id')->constrained('salas')->onDelete('cascade');
             $table->string('descricao');
+            $table->foreignId('sala_id')->constrained('salas')->onDelete('cascade');
+            # Campos para repetição semanal
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->date('repeat_until')->nullable();
+            $table->string('repeat_days')->nullable();
         });
     }
 

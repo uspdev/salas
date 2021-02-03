@@ -37,13 +37,6 @@ class ReservaRequest extends FormRequest
             $id = 0; 
         }
 
-         $data = new verifyRoomAvailability([
-            'horario_inicio' => $this->horario_inicio,
-            'horario_fim'    => $this->horario_fim,
-            'sala_id'        => $this->sala_id,
-            'id'             => $id
-        ]);
-
         $rules = [
             'nome'           => 'required',
             'horario_inicio' => 'required|date_format:H:i',
@@ -51,7 +44,9 @@ class ReservaRequest extends FormRequest
             'cor'            => 'nullable',
             'sala_id'        => ['required',Rule::in(Sala::pluck('id')->toArray())],
             'descricao'      => 'nullable',
-            'data'           => ['required','date_format:d/m/Y',$data],
+            'data'           => ['required','date_format:d/m/Y',new verifyRoomAvailability($this,$id)],
+            'repeat_until'   => ['required_with:repeat_days','nullable','date_format:d/m/Y'],
+            'repeat_days.*'   => 'integer|between:0,6',
         ];
 
         return $rules;

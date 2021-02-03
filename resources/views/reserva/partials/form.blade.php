@@ -23,16 +23,38 @@
           <div class="col-sm form-group">
             <label for="" class="required"><b>Horário de início </b></label>
             <br>
-            <input type="text" name="horario_inicio" value="{{  old('horario_inicio', $reserva->horario_inicio) }}">
+            <input type="text" name="horario_inicio" value="{{ old('horario_inicio', $reserva->horario_inicio) }}">
             <br>
             <small class="form-text text-muted">Formato: 11:00 </small>
           </div>        
           <div class="col-sm form-group">
             <label for="" class="required"><b>Horário de fim </b></label>
             <br>
-            <input type="text" name="horario_fim" value="{{  old('horario_fim', $reserva->horario_fim) }}">
+            <input type="text" name="horario_fim" value="{{ old('horario_fim', $reserva->horario_fim) }}">
             <br>
             <small class="form-text text-muted">Formato: 15:00 </small>
+          </div>
+        </div>
+
+        <div class="row">
+          
+          <div class="col-sm form-group">
+             <input type="checkbox" name="repeat_days[]" value="0"> dom
+             <input type="checkbox" name="repeat_days[]" value="1"> seg
+             <input type="checkbox" name="repeat_days[]" value="2"> ter
+             <input type="checkbox" name="repeat_days[]" value="3"> qua
+             <input type="checkbox" name="repeat_days[]" value="4"> qui
+             <input type="checkbox" name="repeat_days[]" value="5"> sex
+             <input type="checkbox" name="repeat_days[]" value="6"> sab
+            <small class="form-text text-muted">Selecione os dias da semana que o evento deve se repetir </small>
+          </div>
+
+          <div class="col-sm form-group">
+            <label for="" class="required"><b> Repetição semanal até:</b></label>
+            <br>
+            <input type="text" name="repeat_until" value="{{  old('repeat_until', $reserva->repeat_until) }}">
+            <br>
+            <small class="form-text text-muted">Formato: 30/12/2021</small>
           </div>
         </div>
         

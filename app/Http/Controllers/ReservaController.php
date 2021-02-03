@@ -6,6 +6,8 @@ use App\Models\Reserva;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservaRequest;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class ReservaController extends Controller
 {
@@ -52,7 +54,27 @@ class ReservaController extends Controller
     {   
         $validated = $request->validated();
         $reserva = Reserva::create($validated);
-        request()->session()->flash('alert-info', 'Reserva feita com sucesso.');
+
+        $created = '';
+        if (array_key_exists("repeat_days", $validated)) {
+
+            $inicio = Carbon::createFromFormat('d/m/Y', $validated['data']);
+            $fim = Carbon::createFromFormat('d/m/Y', $validated['repeat_until']);
+
+            $period = CarbonPeriod::between($inicio, $fim);
+
+            foreach ($period as $date) {
+                if(in_array($date->dayOfWeek, $validated['repeat_days'])){
+                    $new = $reserva->replicate();
+                    $new->parent_id = $reserva->id;
+                    $new->data = $date->format('d/m/Y');
+                    $new->save();
+                    $created .= "<li><a href='/reservas/{$new->id}'> {$date->format('d/m/Y')}- {$new->nome}</a></li>";
+                }
+            }
+        }
+
+        request()->session()->flash('alert-info', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
         return redirect("/reservas/{$reserva->id}");
     }
 
@@ -93,7 +115,8 @@ class ReservaController extends Controller
     {
         $validated = $request->validated();
         $reserva->update($validated);
-        request()->session()->flash('alert-info', 'Reserva atualizada com sucesso.');
+
+        request()->session()->flash('alert-info', "Reserva atualizada com sucesso");
         return redirect("/reservas/{$reserva->id}");
     }
 
