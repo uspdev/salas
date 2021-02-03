@@ -13,6 +13,20 @@
     <h5>{{ $reserva->nome }}</h5>
     </div>
     <div class="card-body">
+        <div class="col-sm form-group">
+            <form action="/reservas/{{  $reserva->id  }}" method="POST">
+                <a class="btn btn-outline-success" href="/reservas/{{  $reserva->id  }}/edit" role="button">Editar</a>
+                @csrf
+                @method('delete')
+                <button class="btn btn-outline-danger" type="submit" name="tipo" value="one" onclick="return confirm('Tem certeza?');">Apagar</button>
+
+                @if($reserva->parent_id != null)
+                    <button class="btn btn-outline-danger" type="submit" name="tipo" value="all" onclick="return confirm('Todas instâncias serão deletadas');">Apagar todas instâncias</button> 
+                @endif
+            </form>
+            
+        </div>
+
         <ul class="list-group list-group-flush">
             <li class="list-group-item" ><h6>Nome</h6><a href="/reservas/{{$reserva->id}}">{{  $reserva->nome ?? ''  }}</a></li>
             <li class="list-group-item" ><h6>Data</h6>{{  $reserva->data ?? ''  }}</li>
@@ -26,16 +40,21 @@
             @endforeach</li>
             <li class="list-group-item" ><h6>Cor</h6><div class="rectangle" style="background-color: {{  $reserva->cor ?? ''  }};"></div></li>
             <li class="list-group-item" ><h6>Descrição</h6>{{ $reserva->descricao ?? '' }}</li>
+
+            <br>
+            <b>Reservas do mesmo grupo:</b>
+            <ul>
+            
+            @if($reserva->irmaos())
+                @foreach($reserva->irmaos() as $reserva)
+                    <li><a href="/reservas/{{ $reserva->id }}">{{ $reserva->data }}</a></li>
+                @endforeach
+            @endif
+            </ul>
+
         </ul>
         </br>
-        <div class="col-sm form-group">
-            <form action="/reservas/{{  $reserva->id  }}" method="POST">
-                <a class="btn btn-outline-success" href="/reservas/{{  $reserva->id  }}/edit" role="button">Editar</a>
-                @csrf
-                @method('delete')
-                <button class="btn btn-outline-danger" type="submit" onclick="return confirm('Tem certeza?');">Apagar</button> 
-            </form>
-        </div>
+
     </div>
 </div>
 <br>

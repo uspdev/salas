@@ -35,7 +35,7 @@ class verifyRoomAvailability implements Rule
     {
         $this->check($value);
 
-        if($this->reserva->repeat_days){
+        if($this->reserva->repeat_days && $this->reserva->repeat_until){
             # TODO: temos que checar que $fim é maior que $inicio
             $inicio = Carbon::createFromFormat('d/m/Y', $value);
             $fim = Carbon::createFromFormat('d/m/Y', $this->reserva->repeat_until);

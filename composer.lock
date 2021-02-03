@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a234ac50e930578833c4a8032e831a42",
+    "content-hash": "eaddf005eb318f19c19c7bef63be10fc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1419,6 +1419,71 @@
             "time": "2020-11-03T16:38:41+00:00"
         },
         {
+            "name": "laravel/socialite",
+            "version": "v5.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/socialite.git",
+                "reference": "2e6beafe911a09f2300353c102d882e9d63f1f72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/2e6beafe911a09f2300353c102d882e9d63f1f72",
+                "reference": "2e6beafe911a09f2300353c102d882e9d63f1f72",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "illuminate/http": "^6.0|^7.0|^8.0",
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "league/oauth1-client": "^1.0",
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "illuminate/contracts": "^6.0|^7.0",
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "^4.0|^5.0|^6.0",
+                "phpunit/phpunit": "^8.0|^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Socialite\\SocialiteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Socialite": "Laravel\\Socialite\\Facades\\Socialite"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Socialite\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel wrapper around OAuth 1 & OAuth 2 libraries.",
+            "homepage": "https://laravel.com",
+            "keywords": [
+                "laravel",
+                "oauth"
+            ],
+            "time": "2021-01-05T17:02:09+00:00"
+        },
+        {
             "name": "laravel/tinker",
             "version": "v2.5.0",
             "source": {
@@ -1718,6 +1783,77 @@
                 }
             ],
             "time": "2020-10-18T11:50:25+00:00"
+        },
+        {
+            "name": "league/oauth1-client",
+            "version": "v1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth1-client.git",
+                "reference": "1e7e6be2dc543bf466236fb171e5b20e1b06aee6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth1-client/zipball/1e7e6be2dc543bf466236fb171e5b20e1b06aee6",
+                "reference": "1e7e6be2dc543bf466236fb171e5b20e1b06aee6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "php": ">=7.1||>=8.0"
+            },
+            "require-dev": {
+                "ext-simplexml": "*",
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "mockery/mockery": "^1.3.3",
+                "phpstan/phpstan": "^0.12.42",
+                "phpunit/phpunit": "^7.5||9.5"
+            },
+            "suggest": {
+                "ext-simplexml": "For decoding XML-based responses."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev",
+                    "dev-develop": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\OAuth1\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Corlett",
+                    "email": "bencorlett@me.com",
+                    "homepage": "http://www.webcomm.com.au",
+                    "role": "Developer"
+                }
+            ],
+            "description": "OAuth 1.0 Client Library",
+            "keywords": [
+                "Authentication",
+                "SSO",
+                "authorization",
+                "bitbucket",
+                "identity",
+                "idp",
+                "oauth",
+                "oauth1",
+                "single sign on",
+                "trello",
+                "tumblr",
+                "twitter"
+            ],
+            "time": "2021-01-20T01:40:53+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2633,6 +2769,69 @@
                 }
             ],
             "time": "2020-08-18T17:17:46+00:00"
+        },
+        {
+            "name": "socialiteproviders/manager",
+            "version": "v3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SocialiteProviders/Manager.git",
+                "reference": "fc8dbcf0061f12bfe0cc347e9655af932860ad36"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SocialiteProviders/Manager/zipball/fc8dbcf0061f12bfe0cc347e9655af932860ad36",
+                "reference": "fc8dbcf0061f12bfe0cc347e9655af932860ad36",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "laravel/socialite": "~4.0|~5.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.2",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "SocialiteProviders\\Manager\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SocialiteProviders\\Manager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Wendt",
+                    "email": "andy@awendt.com"
+                },
+                {
+                    "name": "Anton Komarev",
+                    "email": "a.komarev@cybercog.su"
+                },
+                {
+                    "name": "Miguel Piedrafita",
+                    "email": "soy@miguelpiedrafita.com"
+                },
+                {
+                    "name": "atymic",
+                    "email": "atymicq@gmail.com",
+                    "homepage": "https://atymic.dev"
+                }
+            ],
+            "description": "Easily add new or override built-in providers in Laravel Socialite.",
+            "homepage": "https://socialiteproviders.com/",
+            "time": "2020-09-08T10:41:06+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4820,6 +5019,43 @@
             "time": "2020-07-13T06:12:54+00:00"
         },
         {
+            "name": "uspdev/cache",
+            "version": "0.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uspdev/cache.git",
+                "reference": "766bac22955267f3f1eaed1313caab28344de899"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uspdev/cache/zipball/766bac22955267f3f1eaed1313caab28344de899",
+                "reference": "766bac22955267f3f1eaed1313caab28344de899",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Uspdev\\Cache\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Masaki Kawabata Neto",
+                    "email": "masaki.kawabata@gmail.com"
+                }
+            ],
+            "description": "Library to connect to cache server",
+            "homepage": "https://github.com/uspdev/cache",
+            "time": "2021-01-27T13:56:38+00:00"
+        },
+        {
             "name": "uspdev/laravel-fullcalendar",
             "version": "v1.3.2",
             "source": {
@@ -4905,6 +5141,91 @@
             ],
             "description": "usp theme for laravel",
             "time": "2020-11-16T11:57:43+00:00"
+        },
+        {
+            "name": "uspdev/replicado",
+            "version": "1.6.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uspdev/replicado.git",
+                "reference": "dde0ad9201f8dc03eec6af6b96ecb5f4018ff3eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uspdev/replicado/zipball/dde0ad9201f8dc03eec6af6b96ecb5f4018ff3eb",
+                "reference": "dde0ad9201f8dc03eec6af6b96ecb5f4018ff3eb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo_dblib": "*",
+                "monolog/monolog": "^1.25 || ^2",
+                "php": ">=7.0",
+                "uspdev/cache": "^0.7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0 || ^9.0",
+                "vlucas/phpdotenv": "^5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Uspdev\\Replicado\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Thiago Gomes Verissimo",
+                    "email": "thiago.verissimo@usp.br",
+                    "homepage": "https://github.com/thiagogomesverissimo"
+                }
+            ],
+            "description": "Classes PHP que consome dados do Replicado USP",
+            "homepage": "https://github.com/uspdev/replicado",
+            "time": "2021-02-03T13:16:45+00:00"
+        },
+        {
+            "name": "uspdev/senhaunica-socialite",
+            "version": "2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uspdev/senhaunica-socialite.git",
+                "reference": "f12569779d6cbffe0f5d816d1b1e376eba500663"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uspdev/senhaunica-socialite/zipball/f12569779d6cbffe0f5d816d1b1e376eba500663",
+                "reference": "f12569779d6cbffe0f5d816d1b1e376eba500663",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/socialite": "^5.0",
+                "php": ">=7.1.3",
+                "socialiteproviders/manager": "^3.4.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Uspdev\\SenhaunicaSocialite\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Thiago Gomes Veríssimo",
+                    "email": "thiago.verissimo@usp.br",
+                    "homepage": "https://github.com/thiagogomesverissimo"
+                }
+            ],
+            "description": "Senhaunica OAuth1 Provider for Laravel Socialite",
+            "homepage": "https://github.com/uspdev/senhaunica-socialite",
+            "time": "2021-01-20T19:53:59+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -5057,12 +5378,12 @@
             "version": "1.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },

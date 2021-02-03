@@ -69,5 +69,11 @@ class Reserva extends Model
         return $this->hasMany($this, 'parent_id');
     }
 
+    public function irmaos()
+    {
+        if($this->parent_id != null)
+            return Reserva::where('parent_id',$this->parent_id)->get();
+        return ;
+    }
 
 }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoriaRequest;
 use Illuminate\Support\Facades\Validator;
+use Uspdev\Replicado\Pessoa;
 
 class CategoriaController extends Controller
 {
@@ -100,5 +102,25 @@ class CategoriaController extends Controller
         $categoria->delete();
         request()->session()->flash('alert-info', 'Categoria excluída com sucesso.');
         return redirect('/categorias');
+    }
+
+    public function adduser(Request $request, Categoria $categoria){
+        # é um número USP válido?
+        $pessoa = Pessoa::dump($request->codpes);
+        if(!$pessoa) {
+            dd('Não encontrei ess apessoa chara');
+        }
+
+        $user = User::where('codpes',$request->codpes)->first();
+        if(!$user) {
+            $user = new User;
+            $user->codpes = $request->codpes;
+            $user->name = $pessoa['nompes'];
+            $user->email = Pessoa::emailusp($request->codpes);
+            $user->save();
+        }
+
+        $categoria->users()->attach($user);
+        return redirect("/categorias/{$categoria->id}");
     }
 }

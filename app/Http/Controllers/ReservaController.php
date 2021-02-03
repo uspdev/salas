@@ -56,7 +56,9 @@ class ReservaController extends Controller
         $reserva = Reserva::create($validated);
 
         $created = '';
-        if (array_key_exists("repeat_days", $validated)) {
+        if (array_key_exists("repeat_days", $validated) && array_key_exists("repeat_until", $validated)) {
+            $reserva->parent_id = $reserva->id;
+            $reserva->save();
 
             $inicio = Carbon::createFromFormat('d/m/Y', $validated['data']);
             $fim = Carbon::createFromFormat('d/m/Y', $validated['repeat_until']);
@@ -99,6 +101,10 @@ class ReservaController extends Controller
      */
     public function edit(Reserva $reserva)
     {
+        if($reserva->parent_id !=null) {
+            request()->session()->flash('alert-danger', "
+            Atenção: Essa reversa faz parte de grupo e você está editando somente essa instância");
+        }
         return view('reserva.edit', [
             'reserva' => $reserva
         ]);
@@ -115,7 +121,6 @@ class ReservaController extends Controller
     {
         $validated = $request->validated();
         $reserva->update($validated);
-
         request()->session()->flash('alert-info', "Reserva atualizada com sucesso");
         return redirect("/reservas/{$reserva->id}");
     }
@@ -126,10 +131,16 @@ class ReservaController extends Controller
      * @param  \App\Reserva  $reserva
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reserva $reserva)
+    public function destroy(Request $request, Reserva $reserva)
     {
-        $reserva->delete();
-        request()->session()->flash('alert-info', 'Reserva excluída com sucesso.');
+        if($request->tipo == 'one'){
+            $reserva->delete();
+            request()->session()->flash('alert-info', 'Reserva excluída com sucesso.');
+        } else if($request->tipo == 'all'){
+            Reserva::where('parent_id',$reserva->parent_id)->delete();
+            request()->session()->flash('alert-info', 'Todas Instâncias foram excluídas com sucesso.');
+        }
+
         return redirect('/reservas');
     }
 }

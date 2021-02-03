@@ -14,4 +14,9 @@ class Categoria extends Model
     public function salas(){
         return $this->hasMany(Sala::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\User', 'categoria_user')->withTimestamps();
+    }
 }
