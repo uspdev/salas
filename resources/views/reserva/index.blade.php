@@ -9,10 +9,10 @@
     <span class="input-group-btn">
         <button type="submit" class="btn btn-success"> Buscar </button>
     </span>
-
     </div>
 </div>
 </form><br>
+<a class="btn btn-primary" href="/salas" role="button">Salas</a><br>
 @forelse($reservas as $reserva)
 @include('reserva.partials.fields')
 @empty

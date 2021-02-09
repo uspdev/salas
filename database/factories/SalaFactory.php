@@ -23,7 +23,7 @@ class SalaFactory extends Factory
     public function definition()
     {
         return [
-            'nome'         => $this->faker->sentence(2),
+            'nome'         => $this->faker->word(),
             'categoria_id' => Categoria::factory()->create()->id,
             'capacidade'   => $this->faker->randomDigit(), 
         ];
