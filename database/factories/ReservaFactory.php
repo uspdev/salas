@@ -23,7 +23,7 @@ class ReservaFactory extends Factory
     public function definition()
     {   
         return [
-            'nome'           => $this->faker->sentence(2),
+            'nome'           => $this->faker->word(),
             'data'           => $this->faker->date($format = 'd/m/Y'),
             'horario_inicio' => $this->faker->time($format = 'H:i'),
             'horario_fim'    => $this->faker->time($format = 'H:i'),

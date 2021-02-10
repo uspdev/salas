@@ -8,7 +8,7 @@ $submenuSalas = [
     [
         'text' => '<i class="fa fa-plus-square"></i>  Cadastrar nova sala',
         'url' => config('app.url') . '/salas/create',
-        /* 'can' => 'admin', */
+        'can' => 'admin',
     ],
     [
         'type' => 'divider',
@@ -77,26 +77,26 @@ $menu = [
         'url' => config('app.url') . '/item3',
         'can' => 'admin',
     ],
-    [
+ /*    [
         'text' => 'Salas',
         'submenu' => $submenuSalas,
-        /* 'can' => 'admin', */
+        'can' => 'admin',
     ],
     [
         'text' => 'Reservas',
         'submenu' => $submenuReservas,
-        /* 'can' => '', */
+        'can' => '',
     ],
     [
         'text' => 'Categorias',
         'submenu' => $submenuCategorias,
-        /* 'can' => '', */
+        'can' => '',
     ],
     [
         'text' => 'Recursos',
         'submenu' => $submenuRecursos,
-        /* 'can' => '', */
-    ],
+        'can' => '',
+    ], */
 
 ];
 

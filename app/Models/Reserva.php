@@ -12,27 +12,33 @@ class Reserva extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function setDataAttribute($value) {
+    public function setDataAttribute($value) 
+    {
         $this->attributes['data'] = Carbon::createFromFormat('d/m/Y', $value);
     }
 
-    public function getDataAttribute($value) {
+    public function getDataAttribute($value) 
+    {
         if($value) return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
     }
 
-    public function setRepeatUntilAttribute($value) {
+    public function setRepeatUntilAttribute($value) 
+    {
         if($value) $this->attributes['repeat_until'] = Carbon::createFromFormat('d/m/Y', $value);
     }
 
-    public function getRepeatUntilAttribute($value) {
+    public function getRepeatUntilAttribute($value) 
+    {
         if($value) return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
     }
 
-    public function setRepeatDaysAttribute($value) {
+    public function setRepeatDaysAttribute($value) 
+    {
         $this->attributes['repeat_days'] = implode(',',$value);
     }
 
-    public function getRepeatDaysAttribute($value) {
+    public function getRepeatDaysAttribute($value) 
+    {
         if($value) return explode(',',$value);
     }
     
@@ -75,5 +81,11 @@ class Reserva extends Model
             return Reserva::where('parent_id',$this->parent_id)->get();
         return ;
     }
+    
+    # a princípio não retornou nada
+    /* public function allChildren()
+    {
+        return $this->children()->with('allChildren');
+    } */
 
 }

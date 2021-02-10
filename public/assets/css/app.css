@@ -1,0 +1,8 @@
+.card-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pagination {
+    justify-content: center     ;
+}

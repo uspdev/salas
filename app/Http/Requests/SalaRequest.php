@@ -36,7 +36,7 @@ class SalaRequest extends FormRequest
         'nome.required'         => 'O nome não pode ficar em branco.',
         'categoria_id.required' => 'A categoria não pode ficar em branco.',
         'capacidade.required'   => 'A capacidade não pode ficar em branco.',
-        'capacidade.integer'   => 'A capacidade deve ser um número.',
+        'capacidade.integer'    => 'A capacidade deve ser um número.',
     ];
     }
 }

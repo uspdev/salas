@@ -7,6 +7,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/pt-br.min.js'></script>
     <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css" />
     <link rel='stylesheet' href="{{ asset('assets/css/calendar.css') }}" />
+    <link rel='stylesheet' href="{{ asset('assets/css/app.css') }}">
 @endsection
 
 @section('javascripts_bottom')
