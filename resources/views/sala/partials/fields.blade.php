@@ -24,6 +24,5 @@
     @csrf
     @method('delete')
     <button class="btn btn-danger" type="submit" onclick="return confirm('Tem certeza?');">Apagar</button> 
-    <a class="btn btn-primary" href="/salas" role="button">Voltar</a>
 </form>
 
