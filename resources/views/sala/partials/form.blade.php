@@ -27,6 +27,7 @@
                 <input name="capacidade" type="number" min="0" value="{{  old('capacidade', $sala->capacidade) }}">
             </div>
         </div>
-        <button type="submit" class="btn btn-success"> Enviar </button>   
+        <button type="submit" class="btn btn-success"> Enviar </button>
+        <a class="btn btn-primary" href="/salas" role="button">Voltar</a>
     </div>
 </div>

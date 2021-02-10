@@ -71,6 +71,7 @@
         </div>
       </div><br>
     <button type="submit" class="btn btn-success"> Enviar </button>
+    <a class="btn btn-primary" href="/reservas" role="button">Voltar</a>
   </div>
 </div>
 
