@@ -22,7 +22,7 @@ class SalaController extends Controller
         }
 
         else{
-        $salas = Sala::paginate(5);
+        $salas = Sala::paginate(20);
         }
 
         return view('sala.index',[

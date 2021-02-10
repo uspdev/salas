@@ -12,12 +12,19 @@ class Sala extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function reservas(){
+    public function reservas()
+    {
         return $this->hasMany(Reserva::class);
     }
 
-    public static function categorias(){
+    public static function categorias()
+    {
         $categorias = Categoria::all();
         return $categorias;
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
     }
 }

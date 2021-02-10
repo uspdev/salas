@@ -24,7 +24,7 @@ class ReservaController extends Controller
         }
 
         else{
-        $reservas = Reserva::paginate(5);
+        $reservas = Reserva::paginate(20);
         }
 
         return view('reserva.index',[
