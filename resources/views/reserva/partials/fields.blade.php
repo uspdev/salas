@@ -11,15 +11,19 @@
 <div class="card">
     <div class="card-header">
         <b>{{ $reserva->nome }}</b>
-        <form action="/reservas/{{  $reserva->id  }}" method="POST">
-            <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/edit" role="button">Editar</a>
-            @csrf
-            @method('delete')
-            <button class="btn btn-danger" type="submit" name="tipo" value="one" onclick="return confirm('Tem certeza?');">Apagar</button>
-            @if($reserva->parent_id != null)
-                <button class="btn btn-danger" type="submit" name="tipo" value="all" onclick="return confirm('Todas instâncias serão deletadas');">Apagar todas instâncias</button> 
-            @endif
-        </form>
+
+        @can('owner',$reserva)
+            <form action="/reservas/{{  $reserva->id  }}" method="POST">
+                <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/edit" role="button">Editar</a>
+                @csrf
+                @method('delete')
+                <button class="btn btn-danger" type="submit" name="tipo" value="one" onclick="return confirm('Tem certeza?');">Apagar</button>
+                @if($reserva->parent_id != null)
+                    <button class="btn btn-danger" type="submit" name="tipo" value="all" onclick="return confirm('Todas instâncias serão deletadas');">Apagar todas instâncias</button> 
+                @endif
+            </form>
+        @endcan
+
     </div>
     <div class="card-body">
         <div class="col-sm form-group">

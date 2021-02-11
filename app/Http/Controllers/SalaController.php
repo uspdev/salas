@@ -39,6 +39,7 @@ class SalaController extends Controller
     {
         return view('sala.create', [
             'sala' => new Sala,
+            'categorias' => Categoria::all()
         ]);
     }
 
@@ -103,7 +104,8 @@ class SalaController extends Controller
     public function edit(Sala $sala)
     {
         return view('sala.edit', [
-            'sala' => $sala
+            'sala' => $sala,
+            'categorias' => Categoria::all()
         ]);
     }
 

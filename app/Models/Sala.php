@@ -17,12 +17,6 @@ class Sala extends Model
         return $this->hasMany(Reserva::class);
     }
 
-    public static function categorias()
-    {
-        $categorias = Categoria::all();
-        return $categorias;
-    }
-
     public function categoria()
     {
         return $this->belongsTo(Categoria::class);

@@ -1,5 +1,6 @@
 @extends('main')
 @section('content')
+
   @include('categoria.partials.fields') 
 
   Pessoa nesta categoria:
@@ -14,4 +15,5 @@
     Adicionar pessoa na Categoria, Número USP: <input name="codpes">
     <button type="submit">Enviar</button>
   </form>
+  
 @endsection  

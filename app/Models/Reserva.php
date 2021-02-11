@@ -60,11 +60,6 @@ class Reserva extends Model
         return Carbon::createFromFormat('d/m/Y H:i', $this->data .' '. $this->horario_fim);
     }
 
-    public static function salas(){
-        $salas = Sala::all();
-        return $salas;
-    }
-
     public function parent()
     {
         return $this->belongsTo($this,'parent_id');
@@ -87,5 +82,11 @@ class Reserva extends Model
     {
         return $this->children()->with('allChildren');
     } */
+
+    public function sala(){
+        return $this->belongsTo(Sala::class);
+    }
+
+    
 
 }

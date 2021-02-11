@@ -39,8 +39,21 @@ class ReservaController extends Controller
      */
     public function create()
     {
+        $this->authorize('logado');
+
+        $categorias = auth()->user()->categorias;
+        
+        $salas = collect();
+
+        foreach($categorias as $categoria){
+            foreach($categoria->salas as $sala){
+                $salas->push($sala);
+            }
+        }
+
         return view('reserva.create', [
             'reserva' => new Reserva,
+            'salas'   => $salas,
         ]);
     }
 
@@ -53,6 +66,8 @@ class ReservaController extends Controller
     public function store(ReservaRequest $request)
     {   
         $validated = $request->validated();
+        $this->authorize('members',$validated['sala_id']);
+
         $reserva = Reserva::create($validated);
 
         $created = '';
@@ -88,6 +103,8 @@ class ReservaController extends Controller
      */
     public function show(Reserva $reserva)
     {
+        $this->authorize('members',$reserva->sala_id);
+
         return view('reserva.show',[
             'reserva' => $reserva
             ]);
@@ -101,6 +118,7 @@ class ReservaController extends Controller
      */
     public function edit(Reserva $reserva)
     {
+        $this->authorize('owner',$reserva);
         if($reserva->parent_id !=null) {
             request()->session()->flash('alert-danger', "
             Atenção: Essa reversa faz parte de grupo e você está editando somente essa instância");
@@ -119,6 +137,7 @@ class ReservaController extends Controller
      */
     public function update(ReservaRequest $request, Reserva $reserva)
     {
+        $this->authorize('owner',$reserva);
         $validated = $request->validated();
         $reserva->update($validated);
         request()->session()->flash('alert-info', "Reserva atualizada com sucesso");
@@ -133,6 +152,7 @@ class ReservaController extends Controller
      */
     public function destroy(Request $request, Reserva $reserva)
     {
+        $this->authorize('owner',$reserva);
         if($request->tipo == 'one'){
             $reserva->delete();
             request()->session()->flash('alert-info', 'Reserva excluída com sucesso.');

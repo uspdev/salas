@@ -14,8 +14,8 @@
                 <br>
                 <select class="form-select" name="categoria_id">
                     <option value="" selected="">Selecione uma opção </option>
-                    empty($sala::categorias()) ? "" : 
-                        @foreach($sala::categorias() as $categoria)
+                    empty($categorias ? "" : 
+                        @foreach($categorias as $categoria)
                             <option value="{{ $categoria->id }}" selected=""> {{ $categoria->nome }} </option>
                         @endforeach
                 </select>

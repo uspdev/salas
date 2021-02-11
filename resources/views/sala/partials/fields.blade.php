@@ -7,13 +7,7 @@
         </tr>
         <tr>
             <td><a href="/salas/{{ $sala->id }}">{{ $sala->nome }}</a></td>
-            <td>
-            @foreach($sala::categorias() as $categoria)
-                @if($sala->categoria_id == $categoria->id)
-                    {{  $categoria->nome  }}<br>
-                @endif
-            @endforeach
-            </td>
+            <td> {{ $sala->categoria->nome }} </td>
             <td>{{  $sala->capacidade ?? ''  }}</td>
         </tr>
     </div>

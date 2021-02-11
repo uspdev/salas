@@ -40,7 +40,7 @@
           <br>
           <select class="form-select" name="sala_id">
               <option value="" selected=""> - Selecione  -</option>
-              @foreach ($reserva::salas() as $sala)
+              @foreach ($salas as $sala)
                   {{-- 1. Situação em que não houve tentativa de submissão --}}
                   @if (old('sala_id') == '')
                     <option value="{{ $sala->id }}" {{ ( $reserva->sala_id == $sala->id) ? 'selected' : ''}}>

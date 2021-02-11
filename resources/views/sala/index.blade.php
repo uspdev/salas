@@ -2,19 +2,7 @@
 @section('title') Sistema de Reserva de Salas @endsection
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-                <a class="nav-link" href="/"><b>Categorias</b></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="true" href="/reservas"><b>Salas</b></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/reservas"><b>Reservas</b></a>
-            </li>
-        </ul>    
-    </div>
+        @include('partials.header',['s' => 'active'])
         <div class="card-body">
             <form method="get" action="/salas">
                 <div class="row">
@@ -36,7 +24,7 @@
                     @forelse($salas as $sala)
                     <tr>
                         <td><a href="/salas/{{ $sala->id }}">{{ $sala->nome }}</a></td>
-                        <td>{{ $sala->categoria_id }}</td>
+                        <td>{{ $sala->categoria->nome }}</td>
                         <td>{{ $sala->capacidade }}</td>
                     </tr>
                     @empty

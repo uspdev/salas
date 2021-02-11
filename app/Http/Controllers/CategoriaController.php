@@ -60,7 +60,7 @@ class CategoriaController extends Controller
     {
         return view('categoria.show',[
             'categoria' => $categoria
-            ]);
+        ]);
     }
 
     /**
