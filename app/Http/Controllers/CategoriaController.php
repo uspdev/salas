@@ -108,8 +108,12 @@ class CategoriaController extends Controller
         # é um número USP válido?
         $pessoa = Pessoa::dump($request->codpes);
         if(!$pessoa) {
-            dd('Não encontrei ess apessoa chara');
+            /* dd('Não encontrei ess apessoa chara') */
+            request()->session()->flash('alert-danger', 'Número USP inválido');
+            return redirect("/categorias/{$categoria->id}");
         }
+        # não pode existir na tabela categoria_users uma instância
+        # com o user_id e a categoria_id solicitados.
 
         $user = User::where('codpes',$request->codpes)->first();
         if(!$user) {
@@ -119,8 +123,8 @@ class CategoriaController extends Controller
             $user->email = Pessoa::emailusp($request->codpes);
             $user->save();
         }
-
         $categoria->users()->attach($user);
+        request()->session()->flash('alert-success', "{$user->name} cadastrado(a) em {$categoria->nome}");
         return redirect("/categorias/{$categoria->id}");
     }
 }

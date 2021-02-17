@@ -4,6 +4,7 @@
 <div class="card">
         @include('partials.header',['s' => 'active'])
         <div class="card-body">
+            @include('partials.admHeader')
             <form method="get" action="/salas">
                 <div class="row">
                     <div class=" col-sm input-group">

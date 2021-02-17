@@ -4,6 +4,7 @@
 <div class="card">
     @include('partials.header',['r' => 'active'])
     <div class="card-body">
+        @include('partials.admHeader')
         <form method="get" action="/reservas">
             <div class="row">
                 <div class=" col-sm input-group">
@@ -24,7 +25,13 @@
                 </tr>
                 @forelse($reservas as $reserva)
                 <tr>
-                    <td><a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a></td>
+                    <td> 
+                        @can('owner',$reserva)
+                            <a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a>
+                        @else
+                            {{ $reserva->nome }}
+                        @endcan
+                    </td>
                     <td>{{ $reserva->data }}</td>
                     <td>{{ $reserva->horario_inicio }} a {{ $reserva->horario_fim }}</td>
                     <td>{{ $reserva->sala->nome }}</td>

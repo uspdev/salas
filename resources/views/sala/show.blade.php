@@ -3,7 +3,7 @@
   <div class="card">
     <div class="card-header" type="button" data-toggle="collapse" data-target="#collapse{{ $sala->id }}" aria-expanded="false" aria-controls="collapse{{ $sala->id }}">
       <span><b>{{ $sala->nome }}</b></span>
-      <i class="fas fa-plus"></i>
+      <i class="far fa-plus-square"></i>
     </div>
   </div>
   <div class="collapse" id="collapse{{ $sala->id }}">
@@ -11,12 +11,11 @@
       @include('sala.partials.fields')
     </div>
   </div><br>
-  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <a class="btn btn-outline-dark" href="/salas" role="button">
-      <i class="fas fa-plus"></i>
-    </a>
-  </div>
-  <br>{!! $calendar->calendar() !!}
+      <i class="fas fa-arrow-left"></i> Voltar
+    </a><br>
+  <br>
+  {!! $calendar->calendar() !!}
   {!! $calendar->script() !!}
 
 @endsection  
