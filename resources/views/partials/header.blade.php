@@ -1,5 +1,5 @@
 <div class="card-header">
-    <ul class="nav nav-tabs card-header-tabs">
+    <ul class="nav nav-pills card-header-pills">
         <li class="nav-item">
             <a class="nav-link {{ $c ?? '' }}" href="/"><b>Categorias</b></a>
         </li>

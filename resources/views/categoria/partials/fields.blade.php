@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-    <h5>{{ $categoria->nome }}</h5>
+    <b>{{ $categoria->nome }}</b>
     </div>
     <div class="card-body">
         <ul class="list-group list-group-flush">
@@ -9,10 +9,10 @@
         </br>
         <div class="col-sm form-group">
             <form action="/categorias/{{  $categoria->id  }}" method="POST">
-                <a class="btn btn-outline-success" href="/categorias/{{  $categoria->id  }}/edit" role="button">Editar</a>
+                <a class="btn btn-success" href="/categorias/{{  $categoria->id  }}/edit" role="button">Editar</a>
                 @csrf
                 @method('delete')
-                <button class="btn btn-outline-danger" type="submit" onclick="return confirm('Tem certeza?');">Apagar</button> 
+                <button class="btn btn-danger" type="submit" onclick="return confirm('Tem certeza?');">Apagar</button>  
             </form>
         </div>
     </div>

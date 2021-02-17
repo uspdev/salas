@@ -62,7 +62,7 @@ $submenuRecursos = [
     ],
 ];
 $menu = [
-    [
+    /* [
         'text' => '<i class="fas fa-home"></i> Home',
         'url' => config('app.url') . '/home',
         'can' => '',
@@ -77,7 +77,7 @@ $menu = [
         'url' => config('app.url') . '/item3',
         'can' => 'admin',
     ],
- /*    [
+    [
         'text' => 'Salas',
         'submenu' => $submenuSalas,
         'can' => 'admin',

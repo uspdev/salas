@@ -6,3 +6,8 @@
 .pagination {
     justify-content: center     ;
 }
+
+#pesIndexList{
+    display: flex;
+    justify-content: space-between;
+}
