@@ -99,12 +99,15 @@ class CategoriaController extends Controller
      */
     public function destroy(Categoria $categoria)
     {
+        $this->authorize('admin');
         $categoria->delete();
         request()->session()->flash('alert-info', 'Categoria excluída com sucesso.');
         return redirect('/categorias');
     }
 
-    public function adduser(Request $request, Categoria $categoria){
+    public function addUser(Request $request, Categoria $categoria){
+        $this->authorize('admin');
+
         # é um número USP válido?
         $pessoa = Pessoa::dump($request->codpes);
         if(!$pessoa) {
@@ -112,9 +115,8 @@ class CategoriaController extends Controller
             request()->session()->flash('alert-danger', 'Número USP inválido');
             return redirect("/categorias/{$categoria->id}");
         }
-        # não pode existir na tabela categoria_users uma instância
-        # com o user_id e a categoria_id solicitados.
 
+        # Cria um objeto para o usuário em questão
         $user = User::where('codpes',$request->codpes)->first();
         if(!$user) {
             $user = new User;
@@ -123,8 +125,20 @@ class CategoriaController extends Controller
             $user->email = Pessoa::emailusp($request->codpes);
             $user->save();
         }
-        $categoria->users()->attach($user);
+
+        # não pode existir na tabela categoria_users uma instância
+        # com o user_id e a categoria_id solicitados.
+        if(!$categoria->users->contains($user)) {
+            $categoria->users()->attach($user);
+        }
+
         request()->session()->flash('alert-success', "{$user->name} cadastrado(a) em {$categoria->nome}");
+        return redirect("/categorias/{$categoria->id}");
+    }
+
+    public function removeUser(Request $request, Categoria $categoria, User $user){
+        $this->authorize('admin');
+        $categoria->users()->detach($user->id);
         return redirect("/categorias/{$categoria->id}");
     }
 }

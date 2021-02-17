@@ -10,7 +10,11 @@
             @forelse($categoria->users as $user)
                 <li class="list-group-item" id="pesIndexList">
                     {{ $user->codpes }} - {{ $user->name }}
-                    <button class="btn btn-danger btn-sm" type="button">Excluir</button>
+                    <form method="POST" action="/categorias/removeuser/{{ $categoria->id }}/{{ $user->id }}">
+                        @csrf
+                        @method('delete')
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
                 </li>
             @empty
                 Não há pessoas cadastradas nesta categoria ainda.

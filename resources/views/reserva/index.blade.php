@@ -4,7 +4,9 @@
 <div class="card">
     @include('partials.header',['r' => 'active'])
     <div class="card-body">
-        @include('partials.admHeader')
+
+        @include('partials.admHeader',['c' => 'reservas'])
+
         <form method="get" action="/reservas">
             <div class="row">
                 <div class=" col-sm input-group">

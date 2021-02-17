@@ -11,7 +11,10 @@
 @endsection
 
 @section('javascripts_bottom')
-    <script src="{{ asset('js/datepicker.js') }}" type="text/javascript"></script>
+    @parent
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+    <script src="{{ asset('assets/js/datepicker.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('flash')

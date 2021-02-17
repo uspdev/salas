@@ -20,4 +20,6 @@ Route::resource('/recursos', RecursoController::class);
 
 
 Route::resource('/categorias', CategoriaController::class);
-Route::post('/categorias/adduser/{categoria}', [CategoriaController::class,'adduser']);
+
+Route::post('/categorias/adduser/{categoria}', [CategoriaController::class,'addUser']);
+Route::delete('/categorias/removeuser/{categoria}/{user}', [CategoriaController::class,'removeUser']);
