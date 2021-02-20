@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" id="repeat_container">
     <div class="col-sm form-group">
         <b>Dias da repetição</b>
         <div class="checkFlex">

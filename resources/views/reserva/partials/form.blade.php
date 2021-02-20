@@ -57,11 +57,19 @@
             <div class="col-sm form-group"> 
                 <b>Repetição</b>
                 <div class="checkFlex">
-                    @include('reserva.partials.checkFlex', ['name' => "rep_bool", 'value' => "0", 'type' => "radio", 'label' => "Não"])
-                    @include('reserva.partials.checkFlex', ['name' => "rep_bool", 'value' => "1", 'type' => "radio", 'label' => "Sim"])
+                  <div class="card">
+                      <div class="card-body">
+                          <input class="form-check-input me-1" onclick="hide()" type="radio" name="rep_bool">Não
+                      </div>
+                  </div>
+                  <div class="card">
+                      <div class="card-body">
+                          <input class="form-check-input me-1" onclick="collapse()" type="radio" name="rep_bool">Sim
+                      </div>
+                  </div>
                 </div>
-            </div> 
-        </div> 
+            </div>
+        </div>
         @include('reserva.partials.repeat')
       @endif
       <div class="row">
@@ -77,7 +85,3 @@
       <i class="fas fa-arrow-left"></i> Voltar
     </a><br>  </div>
 </div>
-
-
-
-

@@ -5,4 +5,3 @@ function collapse() {
 function hide() {
     document.getElementById("repeat_container").style.display = "none";
 }
-require('./bootstrap');

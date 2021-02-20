@@ -72,8 +72,8 @@ class ReservaController extends Controller
         
         $validated = $request->validated();
         $this->authorize('members',$validated['sala_id']);
-        $reserva = Reserva::create($validated);
 
+        $reserva = Reserva::create($validated);
         $created = '';
         if (array_key_exists("repeat_days", $validated) && array_key_exists("repeat_until", $validated)) {
             $reserva->parent_id = $reserva->id;
