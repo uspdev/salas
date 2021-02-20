@@ -10,12 +10,10 @@
           <input class="form-control" type="text" name="nome" value="{{  old('nome', $reserva->nome) }}"> 
         </div>
         <div class="col-sm form-group">
-          <label for="" class="required"><b>Data</b></label>
+          <label for="" class="required" ><b>Data</b></label>
           <br>
-          <input class="form-control" type="text" name="data" class="datepicker" value="{{  old('data', $reserva->data) }}">
+          <input type="text" name="data" class="datepicker" value="{{  old('data', $reserva->data) }}">
         </div>
-      </div>  
-      <div class="row">
         <div class="col-sm form-group">
           <label for="" class="required"><b>Horário de início </b></label>
           <br>
@@ -28,33 +26,25 @@
           <input class="form-control" type="text" name="horario_fim" value="{{ old('horario_fim', $reserva->horario_fim) }}">
           <small class="form-text text-muted">Formato: 15:00 </small>
         </div>
-      </div>
-      
-      @if($reserva->id == null) 
-        @include('reserva.partials.repeat')
-      @endif
-
-      <div class="row">
         <div class="col-sm form-group">     
           <label for="" class="required"><b>Sala </b></label>
           <br>
           <select class="form-select" name="sala_id">
-              <option value="" selected=""> - Selecione  -</option>
+              <option value="" selected=""> -- Selecione  --</option>
               @foreach ($salas as $sala)
                   {{-- 1. Situação em que não houve tentativa de submissão --}}
                   @if (old('sala_id') == '')
-                    <option value="{{ $sala->id }}" {{ ( $reserva->sala_id == $sala->id) ? 'selected' : ''}}>
+                    <option value="{{ $sala->id }}" {{ ($reserva->sala_id == $sala->id) ? 'selected' : ''}}>
                       {{ $sala->nome }}
                     </option>
                   {{-- 2. Situação em que houve tentativa de submissão, o valor de old prevalece --}}
                   @else
-                    <option value="{{ $sala->id }}" {{ ( old('sala_id') == $sala->id) ? 'selected' : ''}}>
+                    <option value="{{ $sala->id }}" {{ (old('sala_id') == $sala->id) ? 'selected' : ''}}>
                       {{ $sala->nome }}
                     </option>
                   @endif
               @endforeach
           </select>
-
         </div>
         <div class="col-sm form-group">
           <label for="" class="required"><b>Cor</b></label>
@@ -62,6 +52,18 @@
           <input type="color" class="form-control form-control-color" name="cor" value= "{{ empty($reserva->cor) ? '#ff0000' :  old('cor', $reserva->cor) }}">
         </div>
       </div>
+      @if($reserva->id == null)
+        <div class="row">
+            <div class="col-sm form-group"> 
+                <b>Repetição</b>
+                <div class="checkFlex">
+                    @include('reserva.partials.checkFlex', ['name' => "rep_bool", 'value' => "0", 'type' => "radio", 'label' => "Não"])
+                    @include('reserva.partials.checkFlex', ['name' => "rep_bool", 'value' => "1", 'type' => "radio", 'label' => "Sim"])
+                </div>
+            </div> 
+        </div> 
+        @include('reserva.partials.repeat')
+      @endif
       <div class="row">
         <div class="col-sm form-group">
           <label for="" class="required"><b>Descrição</b></label>
@@ -71,8 +73,9 @@
         </div>
       </div><br>
     <button type="submit" class="btn btn-success"> Enviar </button>
-    <a class="btn btn-primary" href="/reservas" role="button">Voltar</a>
-  </div>
+    <a class="btn btn-outline-dark" href="/reservas" role="button">
+      <i class="fas fa-arrow-left"></i> Voltar
+    </a><br>  </div>
 </div>
 
 

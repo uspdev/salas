@@ -10,7 +10,7 @@ class IndexController extends Controller
     public function index()
     {   
         return view('index',[
-            'categorias' => Categoria::all()
+            'categorias' => Categoria::orderBy('nome')->get()
         ]);
     }
 }

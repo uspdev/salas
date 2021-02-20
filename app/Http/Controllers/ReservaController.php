@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sala;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservaRequest;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Gate;
 
 class ReservaController extends Controller
 {
@@ -18,13 +20,11 @@ class ReservaController extends Controller
      */
     public function index(Request $request)
     {   
-        if(isset(request()->search)){
-            $reservas = Reserva::where('nome', 'LIKE',"%{$request->search}%")->paginate(5);
-                                    # ->orwhere('categoria', 'LIKE',"%{$request->search}%")->paginate(5);
-        }
-
-        else{
-        $reservas = Reserva::paginate(20);
+        if(isset(request()->search)) {
+            $reservas = Reserva::where('data', 'LIKE',"%{$request->search}%")
+                                    ->orWhere('nome', 'LIKE',"%{$request->search}%")->paginate(5);
+        } else {
+        $reservas = Reserva::orderBy('id', 'desc')->paginate(20);
         }
 
         return view('reserva.index',[
@@ -40,14 +40,18 @@ class ReservaController extends Controller
     public function create()
     {
         $this->authorize('logado');
-
-        $categorias = auth()->user()->categorias;
         
-        $salas = collect();
+        if (Gate::allows('admin')) {
+            $salas = Sala::all();
 
-        foreach($categorias as $categoria){
-            foreach($categoria->salas as $sala){
-                $salas->push($sala);
+        } else {
+            $categorias = auth()->user()->categorias;
+            $salas = collect();
+    
+            foreach($categorias as $categoria){
+                foreach($categoria->salas as $sala){
+                    $salas->push($sala);
+                }
             }
         }
 
@@ -65,9 +69,9 @@ class ReservaController extends Controller
      */
     public function store(ReservaRequest $request)
     {   
+        
         $validated = $request->validated();
         $this->authorize('members',$validated['sala_id']);
-
         $reserva = Reserva::create($validated);
 
         $created = '';
@@ -81,7 +85,7 @@ class ReservaController extends Controller
             $period = CarbonPeriod::between($inicio, $fim);
 
             foreach ($period as $date) {
-                if(in_array($date->dayOfWeek, $validated['repeat_days'])){
+                if(in_array($date->dayOfWeek, $validated['repeat_days'])) {
                     $new = $reserva->replicate();
                     $new->parent_id = $reserva->id;
                     $new->data = $date->format('d/m/Y');
@@ -121,10 +125,10 @@ class ReservaController extends Controller
         $this->authorize('owner',$reserva);
         if($reserva->parent_id !=null) {
             request()->session()->flash('alert-danger', "
-            Atenção: Essa reversa faz parte de grupo e você está editando somente essa instância");
+            Atenção: Essa reserva faz parte de grupo e você está editando somente essa instância");
         }
         return view('reserva.edit', [
-            'reserva' => $reserva
+            'reserva' => $reserva,
         ]);
     }
 
@@ -138,6 +142,7 @@ class ReservaController extends Controller
     public function update(ReservaRequest $request, Reserva $reserva)
     {
         $this->authorize('owner',$reserva);
+
         $validated = $request->validated();
         $reserva->update($validated);
         request()->session()->flash('alert-info', "Reserva atualizada com sucesso");
@@ -153,6 +158,7 @@ class ReservaController extends Controller
     public function destroy(Request $request, Reserva $reserva)
     {
         $this->authorize('owner',$reserva);
+
         if($request->tipo == 'one'){
             $reserva->delete();
             request()->session()->flash('alert-info', 'Reserva excluída com sucesso.');

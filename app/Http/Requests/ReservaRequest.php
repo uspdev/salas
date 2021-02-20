@@ -39,8 +39,8 @@ class ReservaRequest extends FormRequest
 
         $rules = [
             'nome'           => 'required',
-            'horario_inicio' => 'required|date_format:H:i',
-            'horario_fim'    => 'required|date_format:H:i|after:horario_inicio',
+            'horario_inicio' => 'required|date_format:H:i|',
+            'horario_fim'    => 'required|date_format:H:i|after:horario_inicio|',
             'cor'            => 'nullable',
             'sala_id'        => ['required',Rule::in(Sala::pluck('id')->toArray())],
             'descricao'      => 'nullable',

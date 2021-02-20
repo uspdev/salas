@@ -4,9 +4,9 @@
 <div class="card">
     @include('partials.header',['r' => 'active'])
     <div class="card-body">
-
-        @include('partials.admHeader',['c' => 'reservas'])
-
+        @can('logado')
+            @include('partials.admHeader',['param' => 'reservas'])
+        @endcan
         <form method="get" action="/reservas">
             <div class="row">
                 <div class=" col-sm input-group">

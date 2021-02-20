@@ -1,11 +1,9 @@
-@can('admin')
-    <div class="card">
-        <div class="card-header">
-            <b>Administração</b>
-        </div>
-        <div class="card-body">
-            <a href="/{{ $c ?? '' }}/create" class="btn btn-success">Cadastrar {{ $c ?? '' }}</a>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <b>Administração</b>
     </div>
-    <br>
-@endcan
+    <div class="card-body">
+        <a href="/{{ $param ?? '' }}/create" class="btn btn-success">Cadastrar {{ $param ?? '' }}</a>
+    </div>
+</div>
+<br>

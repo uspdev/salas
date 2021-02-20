@@ -1,7 +1,9 @@
 <div class="card">
     @include('partials.header',['c' => 'active'])
     <div class="card-body">
-        @include('partials.admHeader')
+        @can('admin')
+            @include('partials.admHeader', ['param' => 'categorias'])
+        @endcan
         <ul class="list-group">
             @foreach($categorias as $categoria)
             <li class="list-group-item">
