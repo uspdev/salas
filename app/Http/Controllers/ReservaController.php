@@ -18,15 +18,27 @@ class ReservaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {   
-        if(isset(request()->search)) {
-            $reservas = Reserva::where('data', 'LIKE',"%{$request->search}%")
-                                    ->orWhere('nome', 'LIKE',"%{$request->search}%")->paginate(5);
-        } else {
-        $reservas = Reserva::orderBy('id', 'desc')->paginate(20);
-        }
 
+    public function search(Request $request) 
+    {
+        if(isset(request()->busca_nome)) {
+            $reservas = Reserva::where('nome', 'LIKE',"%{$request->busca_nome}%")->paginate(5);
+
+        } else if(isset(request()->busca_data)) {
+            $data = $request->busca_data;
+            $data = Carbon::createFromFormat('d/m/Y', $data)->format('Y-m-d');
+            $reservas = Reserva::where('data', 'LIKE',"%{$data}%")->paginate(5);
+
+        } else {
+            $reservas = Reserva::orderBy('id', 'desc')->paginate(20);  
+        }
+        /* dd($reservas); */
+        return $reservas;
+    } 
+
+    public function index(Request $request)
+    {  
+        $reservas =  $this->search($request); 
         return view('reserva.index',[
             'reservas' => $reservas
         ]);

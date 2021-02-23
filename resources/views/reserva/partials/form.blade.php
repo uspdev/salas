@@ -59,12 +59,12 @@
                 <div class="checkFlex">
                   <div class="card">
                       <div class="card-body">
-                          <input class="form-check-input me-1" onclick="hide()" type="radio" name="rep_bool">Não
+                          <input class="form-check-input me-1" onclick="hide('repeat_container')" type="radio" name="rep_bool">Não
                       </div>
                   </div>
                   <div class="card">
                       <div class="card-body">
-                          <input class="form-check-input me-1" onclick="collapse()" type="radio" name="rep_bool">Sim
+                          <input class="form-check-input me-1" onclick="show('repeat_container')" type="radio" name="rep_bool">Sim
                       </div>
                   </div>
                 </div>

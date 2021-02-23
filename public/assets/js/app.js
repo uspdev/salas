@@ -1,7 +1,12 @@
-function collapse() {
-    document.getElementById("repeat_container").style.display = "flex";
+function show(id) {
+    document.getElementById(id).style.display = "flex";
   }
 
-function hide() {
-    document.getElementById("repeat_container").style.display = "none";
+function hide(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+function showHide(id, id1) {
+  show(id);
+  hide(id1);
 }
