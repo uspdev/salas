@@ -10,7 +10,7 @@
             <form method="get" action="/salas">
                 <div class="row">
                     <div class=" col-sm input-group">
-                        <input type="text" class="form-control" name="search" type="text" placeholder="Busca por sala..." aria-label="default input example" value="{{ request()->search }}">
+                        <input type="text" class="form-control" name="search" type="text" placeholder="Busca por sala" aria-label="default input example" value="{{ request()->search }}">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-success"> Buscar </button>
                         </span>
