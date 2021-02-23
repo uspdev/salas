@@ -22,7 +22,7 @@ class SalaController extends Controller
         }
 
         else{
-        $salas = Sala::paginate(20);
+        $salas = Sala::orderBy('nome', 'asc')->paginate(20);
         }
 
         return view('sala.index',[
@@ -36,7 +36,9 @@ class SalaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    {   
+        $this->authorize('admin');
+
         return view('sala.create', [
             'sala' => new Sala,
             'categorias' => Categoria::all()
@@ -51,6 +53,8 @@ class SalaController extends Controller
      */
     public function store(SalaRequest $request)
     {
+        $this->authorize('admin');
+
         $validated = $request->validated();
         $sala = Sala::create($validated);
         request()->session()->flash('alert-info', 'Sala criada com sucesso.');
@@ -103,6 +107,8 @@ class SalaController extends Controller
      */
     public function edit(Sala $sala)
     {
+        $this->authorize('admin');
+
         return view('sala.edit', [
             'sala' => $sala,
             'categorias' => Categoria::all()
@@ -118,6 +124,8 @@ class SalaController extends Controller
      */
     public function update(SalaRequest $request, Sala $sala)
     {
+        $this->authorize('admin');
+
         $validated = $request->validated();
         $sala->update($validated);
         request()->session()->flash('alert-info', 'Sala atualizada com sucesso.');
@@ -132,6 +140,8 @@ class SalaController extends Controller
      */
     public function destroy(Sala $sala)
     {
+        $this->authorize('admin');
+        
         $sala->delete();
         request()->session()->flash('alert-info', 'Sala excluída com sucesso.');
         return redirect('/salas');

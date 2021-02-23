@@ -19,6 +19,7 @@ class CategoriaController extends Controller
     public function index()
     {
         $categorias = Categoria::all();
+
         return view('categoria.index', [
             'categorias' => $categorias
         ]);
@@ -31,6 +32,8 @@ class CategoriaController extends Controller
      */
     public function create()
     {
+        $this->authorize('admin');
+        
         return view('categoria.create', [
             'categoria' => new Categoria,
         ]);
@@ -44,6 +47,8 @@ class CategoriaController extends Controller
      */
     public function store(CategoriaRequest $request)
     {
+        $this->authorize('admin');
+
         $validated = $request->validated();
         $categoria = Categoria::create($validated);
         request()->session()->flash('alert-info', 'Categoria criada com sucesso.');
@@ -71,6 +76,8 @@ class CategoriaController extends Controller
      */
     public function edit(Categoria $categoria)
     {
+        $this->authorize('admin');
+
         return view('categoria.edit', [
             'categoria' => $categoria
         ]);
@@ -85,6 +92,8 @@ class CategoriaController extends Controller
      */
     public function update(CategoriaRequest $request, Categoria $categoria)
     {
+        $this->authorize('admin');
+        
         $validated = $request->validated();
         $categoria->update($validated);
         request()->session()->flash('alert-info', 'Categoria atualizada com sucesso.');
@@ -100,12 +109,14 @@ class CategoriaController extends Controller
     public function destroy(Categoria $categoria)
     {
         $this->authorize('admin');
+
         $categoria->delete();
         request()->session()->flash('alert-info', 'Categoria excluída com sucesso.');
         return redirect('/categorias');
     }
 
-    public function addUser(Request $request, Categoria $categoria){
+    public function addUser(Request $request, Categoria $categoria)
+    {
         $this->authorize('admin');
 
         # é um número USP válido?
@@ -130,15 +141,21 @@ class CategoriaController extends Controller
         # com o user_id e a categoria_id solicitados.
         if(!$categoria->users->contains($user)) {
             $categoria->users()->attach($user);
+            request()->session()->flash('alert-success', "{$user->name} cadastrado(a) em {$categoria->nome}");
         }
-
-        request()->session()->flash('alert-success', "{$user->name} cadastrado(a) em {$categoria->nome}");
+        else {
+            request()->session()->flash('alert-warning', "{$user->name} já está cadastrado(a) em {$categoria->nome}");
+        }
+        
         return redirect("/categorias/{$categoria->id}");
     }
 
-    public function removeUser(Request $request, Categoria $categoria, User $user){
+    public function removeUser(Request $request, Categoria $categoria, User $user)
+    {    
         $this->authorize('admin');
+
         $categoria->users()->detach($user->id);
+        request()->session()->flash('alert-danger', "{$user->name} foi excluído(a) de {$categoria->nome}");
         return redirect("/categorias/{$categoria->id}");
     }
 }

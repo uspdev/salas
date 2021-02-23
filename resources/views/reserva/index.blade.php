@@ -4,13 +4,25 @@
 <div class="card">
     @include('partials.header',['r' => 'active'])
     <div class="card-body">
-
-        @include('partials.admHeader',['c' => 'reservas'])
-
+        @can('logado')
+            @include('partials.admHeader',['param' => 'reservas'])
+        @endcan
         <form method="get" action="/reservas">
             <div class="row">
                 <div class=" col-sm input-group">
-                    <input type="text" class="form-control" name="search" type="text" placeholder="Busca por reserva..." aria-label="default input example" value="{{ request()->search }}">
+                    <div class="d-grid gap-2 d-md-block">
+                        <span><b>Busca por</b></span>
+                        <select class="form-select" aria-label="Default select example">
+                            <option onclick="disable('input_busca_data', 'input_busca_nome')" selected>Reserva</option>
+                            <option onclick="disable('input_busca_nome', 'input_busca_data')">Data</option>
+                        </select>
+                    </div>
+                </div>
+            </div><br>
+            <div class="row">
+                <div class=" col-sm input-group">
+                    <input type="text" class="form-control" id="input_busca_nome" name="busca_nome" type="text" placeholder="Reserva" value="{{ request()->busca_nome }}">
+                    <input type="text" class="datepicker" id="input_busca_data" name="busca_data" type="text" placeholder="Data" value="{{ request()->busca_data }}" disabled>
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-success"> Buscar </button>
                     </span>
