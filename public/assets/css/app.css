@@ -29,6 +29,6 @@
     padding: 0.5rem 1.7rem 0.5rem 1.7rem;
 }
 
-#repeat_container, #input_busca_data {
+#repeat_container {
     display: none;
 }
