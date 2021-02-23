@@ -16,6 +16,7 @@ class RecursoController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
         $recursos = Recurso::all();
         return view('recurso.index', [
             'recursos' => $recursos
@@ -29,6 +30,7 @@ class RecursoController extends Controller
      */
     public function create()
     {
+        $this->authorize('admin');
         return view('recurso.create', [
             'recurso' => new Recurso,
         ]);
@@ -42,6 +44,7 @@ class RecursoController extends Controller
      */
     public function store(RecursoRequest $request)
     {
+        $this->authorize('admin');
         $validated = $request->validated();
         $recurso = Recurso::create($validated);
         request()->session()->flash('alert-info', 'Recurso criada com sucesso.');
@@ -56,6 +59,7 @@ class RecursoController extends Controller
      */
     public function show(Recurso $recurso)
     {
+        $this->authorize('admin');
         return view('recurso.show',[
             'recurso' => $recurso
             ]);
@@ -69,6 +73,7 @@ class RecursoController extends Controller
      */
     public function edit(Recurso $recurso)
     {
+        $this->authorize('admin');
         return view('recurso.edit', [
             'recurso' => $recurso
         ]);
@@ -83,6 +88,7 @@ class RecursoController extends Controller
      */
     public function update(RecursoRequest $request, Recurso $recurso)
     {
+        $this->authorize('admin');
         $validated = $request->validated();
         $recurso->update($validated);
         request()->session()->flash('alert-info', 'Recurso atualizada com sucesso.');
@@ -97,6 +103,7 @@ class RecursoController extends Controller
      */
     public function destroy(Recurso $recurso)
     {
+        $this->authorize('admin');
         $recurso->delete();
         request()->session()->flash('alert-info', 'Recurso excluída com sucesso.');
         return redirect('/recursos');
