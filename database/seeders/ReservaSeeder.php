@@ -21,7 +21,8 @@ class ReservaSeeder extends Seeder
             'horario_fim'    => '13:00',
             'cor'            => '#aea1ff',
             'sala_id'        => 1,
-            'descricao'      => 'Aula de Política III do ano de 2020.'
+            'descricao'      => 'Aula de Política III do ano de 2020.',
+            'user_id'        => 1
         ];
         
     Reserva::create($reserva);

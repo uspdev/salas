@@ -83,6 +83,8 @@ class ReservaController extends Controller
     {   
         
         $validated = $request->validated();
+        $validated['user_id'] = auth()->user()->id;
+
         $this->authorize('members',$validated['sala_id']);
 
         $reserva = Reserva::create($validated);

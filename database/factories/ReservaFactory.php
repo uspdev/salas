@@ -30,6 +30,7 @@ class ReservaFactory extends Factory
             'cor'            => $this->faker->hexcolor,
             'sala_id'        => Sala::factory()->create()->id,
             'descricao'      => $this->faker->sentence(4),
+            'user_id'        => 1
         ];
     }
 }

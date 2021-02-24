@@ -29,6 +29,7 @@ class CreateReservasTable extends Migration
             $table->string('repeat_days')->nullable();
             # Campo fazer o track com os sistemas USP: jupiter, janus e apolo
             $table->string('usptrack')->nullable();
+            $table->foreignId('user_id')->constrained();
         });
     }
 
