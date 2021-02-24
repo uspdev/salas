@@ -114,7 +114,7 @@ $right_menu = [
 # USPTHEME_SKIN deve ser colocado no .env da aplicação 
 
 return [
-    'title' => config('app.name'),
+    'title' => '',
     'skin' => env('USP_THEME_SKIN', 'uspdev'),
     'app_url' => config('app.url'),
     'logout_method' => 'POST',
