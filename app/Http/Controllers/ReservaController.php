@@ -121,7 +121,7 @@ class ReservaController extends Controller
      */
     public function show(Reserva $reserva)
     {
-        $this->authorize('members',$reserva->sala_id);
+        #$this->authorize('members',$reserva->sala_id);
 
         return view('reserva.show',[
             'reserva' => $reserva
