@@ -10,20 +10,6 @@ $submenuSalas = [
         'url' => config('app.url') . '/salas/create',
         'can' => 'admin',
     ],
-    [
-        'type' => 'divider',
-        'can'  => '',
-    ],
-    [
-        'type' => 'header',
-        'text' => 'Cabeçalho',
-        'can'  => '',
-    ],
-    [
-        'text' => 'SubItem 3',
-        'url' => config('app.url') . '/subitem3',
-        'can' => '',
-    ],
 ];
 
 $submenuReservas = [
@@ -34,7 +20,7 @@ $submenuReservas = [
     [
         'text' => '<i class="fa fa-calendar-plus"></i> Nova reserva',
         'url' => config('app.url') . '/reservas/create',
-        /* 'can' => 'admin', */
+        'can' => 'admin',
     ],
 ];
 
@@ -46,7 +32,7 @@ $submenuCategorias = [
     [
         'text' => '<i class="fa fa-plus-square"></i> Cadastrar nova categoria',
         'url' => config('app.url') . '/categorias/create',
-        /* 'can' => 'admin', */
+        'can' => 'admin',
     ],
 ];
 
@@ -58,7 +44,7 @@ $submenuRecursos = [
     [
         'text' => '<i class="fa fa-plus-square"></i> Cadastrar novo recurso',
         'url' => config('app.url') . '/recursos/create',
-        /* 'can' => 'admin', */
+        'can' => 'admin',
     ],
 ];
 $menu = [
@@ -105,7 +91,7 @@ $right_menu = [
         'text' => '<i class="fas fa-cog"></i>',
         'title' => 'Configurações',
         'target' => '_blank',
-        'url' => config('app.url') . '/item1',
+        'url' => config('app.url') . '/',
         'align' => 'right',
     ],
 ];
