@@ -110,7 +110,7 @@ class ReservaController extends Controller
         }
 
         request()->session()->flash('alert-info', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
-        return redirect("/reservas/{$reserva->id}");
+        return redirect("/salas/{$reserva->sala->id}");
     }
 
     /**

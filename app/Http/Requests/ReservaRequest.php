@@ -55,15 +55,13 @@ class ReservaRequest extends FormRequest
     public function messages()
     {
         return [
-            'nome.required'           => 'O nome não pode ficar em branco.',
-            'data.required'           => 'A data não pode ficar em branco.',
-            'horario_inicio.required' => 'O horário de início não pode ficar em branco.',
-            'horario_fim.required'    => 'O horário de fim não pode ficar em branco.',
-            'sala_id.required'        => 'Selecione uma sala.',
+            'nome.required'              => 'O nome não pode ficar em branco.',
+            'data.required'              => 'A data não pode ficar em branco.',
+            'horario_inicio.required'    => 'O horário de início não pode ficar em branco.',
+            'horario_fim.required'       => 'O horário de fim não pode ficar em branco.',
+            'sala_id.required'           => 'Selecione uma sala.',
+            'repeat_until.required_with' => 'Selecione uma data para o fim da repetição.',
         ];
     }
-
-
-
 
 }
