@@ -137,12 +137,28 @@ class ReservaController extends Controller
     public function edit(Reserva $reserva)
     {
         $this->authorize('owner',$reserva);
+
+        if (Gate::allows('admin')) {
+            $salas = Sala::all();
+
+        } else {
+            $categorias = auth()->user()->categorias;
+            $salas = collect();
+    
+            foreach($categorias as $categoria){
+                foreach($categoria->salas as $sala){
+                    $salas->push($sala);
+                }
+            }
+        }
+
         if($reserva->parent_id !=null) {
             request()->session()->flash('alert-danger', "
             Atenção: Essa reserva faz parte de grupo e você está editando somente essa instância");
         }
         return view('reserva.edit', [
             'reserva' => $reserva,
+            'salas'   => $salas,
         ]);
     }
 
