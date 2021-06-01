@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Gate;
+use App\Service\GeneralSettings;
 
 class ReservaController extends Controller
 {
@@ -49,7 +50,7 @@ class ReservaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(GeneralSettings $settings)
     {
         $this->authorize('logado');
         
@@ -70,6 +71,7 @@ class ReservaController extends Controller
         return view('reserva.create', [
             'reserva' => new Reserva,
             'salas'   => $salas,
+            'settings' => $settings,
         ]);
     }
 
@@ -134,7 +136,7 @@ class ReservaController extends Controller
      * @param  \App\Reserva  $reserva
      * @return \Illuminate\Http\Response
      */
-    public function edit(Reserva $reserva)
+    public function edit(Reserva $reserva, GeneralSettings $settings)
     {
         $this->authorize('owner',$reserva);
 
@@ -157,8 +159,9 @@ class ReservaController extends Controller
             Atenção: Essa reserva faz parte de grupo e você está editando somente essa instância");
         }
         return view('reserva.edit', [
-            'reserva' => $reserva,
-            'salas'   => $salas,
+            'reserva'  => $reserva,
+            'salas'    => $salas,
+            'settings' => $settings,
         ]);
     }
 

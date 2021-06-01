@@ -49,7 +49,7 @@
         <div class="col-sm form-group">
           <label for="" class="required"><b>Cor</b></label>
           <br>
-          <input type="color" class="form-control form-control-color" name="cor" value= "{{ empty($reserva->cor) ? '#ff0000' :  old('cor', $reserva->cor) }}">
+          <input type="color" class="form-control form-control-color" name="cor" value= "{{ empty($reserva->cor) ? $settings->cor :  old('cor', $reserva->cor) }}">
         </div>
       </div>
       @if($reserva->id == null)

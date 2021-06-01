@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\RecursoController; 
 use App\Http\Controllers\IndexController; 
 use App\Http\Controllers\LoginController; 
+use App\Http\Controllers\GeneralSettingsController;
 
 Route::get('login', [LoginController::class, 'redirectToProvider']);
 Route::get('callback', [LoginController::class, 'handleProviderCallback']);
@@ -23,3 +24,7 @@ Route::resource('/categorias', CategoriaController::class);
 
 Route::post('/categorias/adduser/{categoria}', [CategoriaController::class,'addUser']);
 Route::delete('/categorias/removeuser/{categoria}/{user}', [CategoriaController::class,'removeUser']);
+
+# settings
+Route::get('/settings', [GeneralSettingsController::class,'show']);
+Route::post('/settings', [GeneralSettingsController::class,'update']);

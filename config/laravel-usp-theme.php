@@ -91,8 +91,9 @@ $right_menu = [
         'text' => '<i class="fas fa-cog"></i>',
         'title' => 'Configurações',
         'target' => '_blank',
-        'url' => config('app.url') . '/',
+        'url' => config('app.url') . '/settings',
         'align' => 'right',
+        'can' => 'admin',
     ],
 ];
 
