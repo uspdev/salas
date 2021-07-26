@@ -25,6 +25,9 @@ Route::resource('/categorias', CategoriaController::class);
 Route::post('/categorias/adduser/{categoria}', [CategoriaController::class,'addUser']);
 Route::delete('/categorias/removeuser/{categoria}/{user}', [CategoriaController::class,'removeUser']);
 
+# Logs  
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->middleware('can:admin');
+
 # settings
 Route::get('/settings', [GeneralSettingsController::class,'show']);
 Route::post('/settings', [GeneralSettingsController::class,'update']);
