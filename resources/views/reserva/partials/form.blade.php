@@ -18,13 +18,13 @@
           <label for="" class="required"><b>Horário de início </b></label>
           <br>
           <input class="form-control" type="text" name="horario_inicio" value="{{ old('horario_inicio', $reserva->horario_inicio) }}">
-          <small class="form-text text-muted">Formato: 11:00 </small>
+          <small class="form-text text-muted">Formato: 9:00 </small>
         </div>        
         <div class="col-sm form-group">
           <label for="" class="required"><b>Horário de fim </b></label>
           <br>
           <input class="form-control" type="text" name="horario_fim" value="{{ old('horario_fim', $reserva->horario_fim) }}">
-          <small class="form-text text-muted">Formato: 15:00 </small>
+          <small class="form-text text-muted">Formato: 9:00 </small>
         </div>
         <div class="col-sm form-group">     
           <label for="" class="required"><b>Sala </b></label>
@@ -49,7 +49,9 @@
         <div class="col-sm form-group">
           <label for="" class="required"><b>Cor</b></label>
           <br>
-          <input type="color" class="form-control form-control-color" name="cor" value= "{{ empty($reserva->cor) ? $settings->cor :  old('cor', $reserva->cor) }}">
+          <input type="color" class="form-control form-control-color" name="cor" value= "{{ empty($reserva->cor) ? $settings->cor : old('cor', $reserva->cor) }}">
+
+
         </div>
       </div>
       @if($reserva->id == null)
