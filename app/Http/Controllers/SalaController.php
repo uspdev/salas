@@ -92,7 +92,6 @@ class SalaController extends Controller
                 'defaultView' => 'agendaWeek'
         ]);
 
-
         return view('sala.show',[
             'sala'     => $sala,
             'calendar' => $calendar

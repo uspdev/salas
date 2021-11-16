@@ -31,3 +31,5 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->m
 # settings
 Route::get('/settings', [GeneralSettingsController::class,'show']);
 Route::post('/settings', [GeneralSettingsController::class,'update']);
+
+Route::get('home', [IndexController::class,'home']);

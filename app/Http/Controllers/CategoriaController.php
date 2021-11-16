@@ -158,4 +158,6 @@ class CategoriaController extends Controller
         request()->session()->flash('alert-danger', "{$user->name} foi excluído(a) de {$categoria->nome}");
         return redirect("/categorias/{$categoria->id}");
     }
+
+
 }
