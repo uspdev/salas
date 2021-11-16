@@ -13,7 +13,6 @@ Route::get('login', [LoginController::class, 'redirectToProvider']);
 Route::get('callback', [LoginController::class, 'handleProviderCallback']);
 Route::post('logout', [LoginController::class, 'logout']);
 
-Route::get('/', [IndexController::class,'index']);
 Route::resource('/reservas', ReservaController::class);
 Route::resource('/salas', SalaController::class);
 
@@ -32,4 +31,9 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->m
 Route::get('/settings', [GeneralSettingsController::class,'show']);
 Route::post('/settings', [GeneralSettingsController::class,'update']);
 
-Route::get('home', [IndexController::class,'home']);
+
+# index atual:
+#Route::get('/', [IndexController::class,'index']);
+
+# nova index:
+Route::get('/', [IndexController::class,'home']);

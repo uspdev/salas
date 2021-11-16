@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categoria;
-
+use App\Models\Sala;
 use App\Models\Reserva;
 use Carbon\Carbon;
 
@@ -17,10 +17,19 @@ class IndexController extends Controller
         ]);
     }
 
-    public function home(){
+    public function home(Request $request){
 
-        #$reservas = Reserva::where('data', Carbon::today()->toDateString())->get();
-        $reservas = Reserva::where('data','>=', Carbon::today()->toDateString())->get();
+        $reservas = new Reserva;
+
+        if($request->filter){
+            $salas = Sala::select('id')->whereIn('categoria_id',$request->filter)->pluck('id');
+            
+            $reservas = Reserva::whereIn('sala_id',$salas->toArray())
+                                 ->where('data','>=', Carbon::today()->toDateString())->get();
+
+        } else {
+            $reservas = Reserva::where('data','>=', Carbon::today()->toDateString())->get();
+        }
 
         $events = [];
 
@@ -46,7 +55,8 @@ class IndexController extends Controller
         ]);
 
         return view('home',[
-            'calendar' => $calendar
+            'calendar'   => $calendar,
+            'categorias' => Categoria::all()
         ]);
     }
 }
