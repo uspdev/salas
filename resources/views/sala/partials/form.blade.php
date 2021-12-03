@@ -13,10 +13,20 @@
                 <b>Categoria</b>
                 <br>
                 <select class="form-select" name="categoria_id">
-                    <option value="" selected="">Selecione uma opção </option>
+                    <option value="" selected>Selecione uma opção </option>
                     empty($categorias ? "" : 
                         @foreach($categorias as $categoria)
-                            <option value="{{ $categoria->id }}" selected=""> {{ $categoria->nome }} </option>
+                            {{-- 1. Situação em que não houve tentativa de submissão --}}
+                            @if (old('categoria_id') == '')
+                                <option value="{{ $categoria->id }}" {{ ($sala->categoria_id == $categoria->id) ? 'selected' : ''}}>
+                                    {{ $categoria->nome }}
+                                 </option>
+                            {{-- 2. Situação em que houve tentativa de submissão, o valor de old prevalece --}}
+                            @else
+                                <option value="{{ $categoria->id }}" {{ (old('categoria_id') == $sala->id) ? 'selected' : ''}}>
+                                    {{ $categoria->nome }}
+                                </option>
+                            @endif
                         @endforeach
                 </select>
             </div>

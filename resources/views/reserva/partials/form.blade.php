@@ -5,10 +5,12 @@
     <div class="card-body">
       <div class="row">
         <div class="col-sm form-group">     
-          <label for="" class="required"><b>Nome</b></label>
+          <label for="" class="required"><b>Título</b></label>
           <br>
-          <input class="form-control" type="text" name="nome" value="{{  old('nome', $reserva->nome) }}"> 
+          <input type="text" class="form-control"  name="nome" value="{{  old('nome', $reserva->nome) }}"> 
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm form-group">
           <label for="" class="required" ><b>Data</b></label>
           <br>
@@ -35,12 +37,12 @@
                   {{-- 1. Situação em que não houve tentativa de submissão --}}
                   @if (old('sala_id') == '')
                     <option value="{{ $sala->id }}" {{ ($reserva->sala_id == $sala->id) ? 'selected' : ''}}>
-                      {{ $sala->nome }}
+                      {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
                     </option>
                   {{-- 2. Situação em que houve tentativa de submissão, o valor de old prevalece --}}
                   @else
                     <option value="{{ $sala->id }}" {{ (old('sala_id') == $sala->id) ? 'selected' : ''}}>
-                      {{ $sala->nome }}
+                      {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
                     </option>
                   @endif
               @endforeach
