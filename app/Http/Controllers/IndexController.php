@@ -10,18 +10,13 @@ use Carbon\Carbon;
 
 class IndexController extends Controller
 {
-    public function index()
-    {   
-        return view('index',[
-            'categorias' => Categoria::orderBy('nome')->get()
-        ]);
-    }
 
-    public function home(Request $request){
+    public function index(Request $request){
 
         $reservas = new Reserva;
 
         if($request->filter){
+            //dd($request->filter);
             $salas = Sala::select('id')->whereIn('categoria_id',$request->filter)->pluck('id');
             
             $reservas = Reserva::whereIn('sala_id',$salas->toArray())

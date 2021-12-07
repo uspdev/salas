@@ -38,8 +38,6 @@
             </div>
         </div>
         <button type="submit" class="btn btn-success"> Enviar </button>
-        <a class="btn btn-outline-dark" href="/salas" role="button">
-            <i class="fas fa-arrow-left"></i> Voltar
-        </a><br>
+        <br>
     </div>
 </div>
