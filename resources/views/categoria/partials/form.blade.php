@@ -11,8 +11,5 @@
             </div>
         </div>
         <button type="submit" class="btn btn-success"> Enviar </button>   
-        <a class="btn btn-outline-dark" href="/" role="button">
-          <i class="fas fa-arrow-left"></i> Voltar
-        </a>
     </div>
 </div>
