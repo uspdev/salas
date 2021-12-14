@@ -2,11 +2,7 @@
 @section('title') Sistema de Reserva de Salas @endsection
 @section('content')
 <div class="card">
-    @include('partials.header',['r' => 'active'])
     <div class="card-body">
-        @can('logado')
-            @include('partials.admHeader',['param' => 'reservas'])
-        @endcan
         <form method="get" action="/reservas">
             <div class="row">
                 <div class=" col-sm input-group">

@@ -33,6 +33,11 @@ $menu = [
         'can'  => 'logado',
     ],
     [
+        'text' => 'Reservas',
+        'url'  => config('app.url') . '/reservas',
+        'can'  => 'logado',
+    ],
+    [
         'text'    => 'Categoria',
         'submenu' => $categoria,
         'can'     => 'logado',
