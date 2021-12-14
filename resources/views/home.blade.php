@@ -13,7 +13,7 @@
                     @foreach($categorias as $categoria)
                             <div class="form-group col-md-3">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="{{ $categoria->id }}" id="inlineCheckbox{{ $categoria->id }}" name="filter[]"/>
+                                    <input class="form-check-input" type="checkbox" value="{{ $categoria->id }}" id="inlineCheckbox{{ $categoria->id }}" name="filter[]" @if(in_array($categoria->id, $filter))  checked  @endif/>
                                     <label class="form-check-label" for="inlineCheckbox{{ $categoria->id }}">{{ $categoria->nome }}</label>
                                 </div>
                             </div>
