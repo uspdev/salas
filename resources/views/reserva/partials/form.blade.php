@@ -63,12 +63,12 @@
                 <div class="checkFlex">
                   <div class="card">
                       <div class="card-body">
-                          <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool" @if (old('rep_bool') == 'Não') checked @endif>Não
+                          <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool" @if (old('rep_bool') == 'Não') checked @endif><label for="rep_bool_Nao">Não</label>
                       </div>
                   </div>
                   <div class="card">
                       <div class="card-body">
-                          <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool" @if (old('rep_bool') == 'Sim') checked @endif>Sim
+                          <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool" @if (old('rep_bool') == 'Sim') checked @endif><label for="rep_bool_Sim">Sim</label>
                       </div>
                   </div>
                 </div>
