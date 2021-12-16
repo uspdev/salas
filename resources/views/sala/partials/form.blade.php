@@ -12,7 +12,7 @@
             <div class="col-sm form-group">  
                 <b>Categoria</b>
                 <br>
-                <select class="form-select" name="categoria_id">
+                <select class="categorias_select" name="categoria_id">
                     <option value="" selected>Selecione uma opção </option>
                     empty($categorias ? "" : 
                         @foreach($categorias as $categoria)

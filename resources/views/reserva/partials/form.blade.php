@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header">
-    <b>Nova reserva</b>
+    <b>{{ $title }} reserva</b>
   </div>
     <div class="card-body">
       <div class="row">
@@ -31,7 +31,7 @@
         <div class="col-sm form-group">     
           <label for="" class="required"><b>Sala </b></label>
           <br>
-          <select class="form-select" name="sala_id">
+          <select class="salas_select" name="sala_id">
               <option value="" selected=""> -- Selecione  --</option>
               @foreach ($salas as $sala)
                   {{-- 1. Situação em que não houve tentativa de submissão --}}

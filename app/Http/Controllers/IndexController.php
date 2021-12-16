@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class IndexController extends Controller
 {
 
-    public function index(Request $request){
+    public function home(Request $request){
 
         $reservas = new Reserva;
 
