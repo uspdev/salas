@@ -31,9 +31,5 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->m
 Route::get('/settings', [GeneralSettingsController::class,'show']);
 Route::post('/settings', [GeneralSettingsController::class,'update']);
 
-
-# index atual:
-#Route::get('/', [IndexController::class,'index']);
-
-# nova index:
+# index:
 Route::get('/', [IndexController::class,'home']);

@@ -11,9 +11,7 @@
       @include('sala.partials.fields')
     </div>
   </div><br>
-    <a class="btn btn-outline-dark" href="/salas" role="button">
-      <i class="fas fa-arrow-left"></i> Voltar
-    </a><br>
+
   <br>
   {!! $calendar->calendar() !!}
   {!! $calendar->script() !!}

@@ -1,24 +1,34 @@
 @extends('main')
 @section('content')
 
-<form method="GET" action="/">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Filtrar reservas por categoria</h5>
+        </div>
+        <div class="card-body">
 
-@foreach($categorias as $categoria)
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="checkbox" value="{{ $categoria->id }}" id="inlineCheckbox{{ $categoria->id }}" name="filter[]"/>
-    <label class="form-check-label" for="inlineCheckbox{{ $categoria->id }}">{{ $categoria->nome }}</label>
-  </div>
-@endforeach
+            <form method="GET" action="/">
 
-<button type="submit" class="btn btn-success">Filtrar</button>
+                <div class="form-row">
+                    @foreach($categorias as $categoria)
+                            <div class="form-group col-md-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" value="{{ $categoria->id }}" id="inlineCheckbox{{ $categoria->id }}" name="filter[]" @if(in_array($categoria->id, $filter))  checked  @endif/>
+                                    <label class="form-check-label" for="inlineCheckbox{{ $categoria->id }}">{{ $categoria->nome }}</label>
+                                </div>
+                            </div>
+                    @endforeach
+                </div>
+                <br>
+                <button style="margin-top: 1%;" type="submit" class="btn btn-success">Filtrar</button>
 
-</form>
+            </form>
 
-  <br>
-  <br>
+        </div>
+    </div>
+    <br>
 
-
-  {!! $calendar->calendar() !!}
-  {!! $calendar->script() !!}
+    {!! $calendar->calendar() !!}
+    {!! $calendar->script() !!}
 
 @endsection  

@@ -53,7 +53,7 @@ class ReservaController extends Controller
     public function create(GeneralSettings $settings)
     {
         $this->authorize('logado');
-        
+
         if (Gate::allows('admin')) {
             $salas = Sala::all();
 
@@ -83,7 +83,6 @@ class ReservaController extends Controller
      */
     public function store(ReservaRequest $request)
     {   
-        
         $validated = $request->validated();
         $validated['user_id'] = auth()->user()->id;
 

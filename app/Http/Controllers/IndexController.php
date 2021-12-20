@@ -10,18 +10,13 @@ use Carbon\Carbon;
 
 class IndexController extends Controller
 {
-    public function index()
-    {   
-        return view('index',[
-            'categorias' => Categoria::orderBy('nome')->get()
-        ]);
-    }
 
     public function home(Request $request){
 
         $reservas = new Reserva;
 
         if($request->filter){
+
             $salas = Sala::select('id')->whereIn('categoria_id',$request->filter)->pluck('id');
             
             $reservas = Reserva::whereIn('sala_id',$salas->toArray())
@@ -56,7 +51,8 @@ class IndexController extends Controller
 
         return view('home',[
             'calendar'   => $calendar,
-            'categorias' => Categoria::all()
+            'categorias' => Categoria::all(),
+            'filter'     => ($request->filter) ?: [],
         ]);
     }
 }
