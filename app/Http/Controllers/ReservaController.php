@@ -94,7 +94,7 @@ class ReservaController extends Controller
             $reserva->parent_id = $reserva->id;
             $reserva->save();
 
-            $inicio = Carbon::createFromFormat('d/m/Y', $validated['data']);
+            $inicio = Carbon::createFromFormat('d/m/Y', $validated['data'])->addDays(1);
             $fim = Carbon::createFromFormat('d/m/Y', $validated['repeat_until']);
 
             $period = CarbonPeriod::between($inicio, $fim);
