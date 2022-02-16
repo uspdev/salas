@@ -23,12 +23,12 @@ class ReservaController extends Controller
     public function search(Request $request) 
     {
         if(isset(request()->busca_nome)) {
-            $reservas = Reserva::where('nome', 'LIKE',"%{$request->busca_nome}%")->paginate(5);
+            $reservas = Reserva::where('nome', 'LIKE',"%{$request->busca_nome}%")->paginate(20);
 
         } else if(isset(request()->busca_data)) {
             $data = $request->busca_data;
             $data = Carbon::createFromFormat('d/m/Y', $data)->format('Y-m-d');
-            $reservas = Reserva::where('data', 'LIKE',"%{$data}%")->paginate(5);
+            $reservas = Reserva::where('data', 'LIKE',"%{$data}%")->paginate(20);
 
         } else {
             $reservas = Reserva::orderBy('id', 'desc')->paginate(20);  
@@ -42,6 +42,23 @@ class ReservaController extends Controller
         $reservas =  $this->search($request); 
         return view('reserva.index',[
             'reservas' => $reservas
+        ]);
+    }
+
+    public function my(Request $request)
+    {  
+        $this->authorize('logado');
+        $reservas = Reserva::where('user_id',auth()->user()->id);
+
+        // Só estamos interessado nas reservas de maior hierarquia
+        $reservas->where(function($query) {
+            $query->whereNull('parent_id')->orWhereColumn('parent_id','id');
+        });
+
+        $reservas->orderBy('data');
+        
+        return view('reserva.my',[
+            'reservas' => $reservas->get()
         ]);
     }
 

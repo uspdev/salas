@@ -26,6 +26,6 @@ class ReservaSeeder extends Seeder
         ];
         
     Reserva::create($reserva);
-    Reserva::factory(20)->create();
+    Reserva::factory(2000)->create();
     }
 }

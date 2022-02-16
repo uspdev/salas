@@ -1,14 +1,25 @@
 @extends('main')
-@section('content')
+
+@section('styles')
+  @parent
+  <style>
+    .dot {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    }
+  </style>
+@endsection
+
+@section('content')  
 
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Filtrar reservas por categoria</h5>
+            <div class="card-title"><b>Reservas de hoje: {{\Carbon\Carbon::now()->format('d/m/Y')}}</b></div>
         </div>
         <div class="card-body">
-
             <form method="GET" action="/">
-
                 <div class="form-row">
                     @foreach($categorias as $categoria)
                             <div class="form-group col-md-3">
@@ -19,16 +30,26 @@
                             </div>
                     @endforeach
                 </div>
-                <br>
-                <button style="margin-top: 1%;" type="submit" class="btn btn-success">Filtrar</button>
+                <button type="submit" class="btn btn-success">Filtrar</button>
 
             </form>
 
+            <br>
+            <table class="table">
+            <tbody>
+                @forelse($reservas as $reserva)
+                <tr>
+                    <td>{{ $reserva->horario_inicio }}:{{$reserva->horario_fim}}</td>
+                    <td><span class="dot" style="background-color:{{$reserva->cor}};"></span></td>
+                    <td><a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a></td>
+                    <td>{{ $reserva->sala->categoria->nome }} </td>
+                    <td>{{ $reserva->sala->nome  }} </td>
+                </tr>
+                @empty 
+                <tr><td>Não há reservas registradas para hoje </td></tr>
+                @endforelse
+            </tbody>
+            </table>
         </div>
     </div>
-    <br>
-
-    {!! $calendar->calendar() !!}
-    {!! $calendar->script() !!}
-
 @endsection  

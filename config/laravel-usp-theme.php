@@ -2,7 +2,7 @@
 
 $categoria = [
     [
-        'text' => '<i class="fas fa-list"></i> Índice',
+        'text' => '<i class="fas fa-list"></i> Listar',
         'url'  => config('app.url') . '/categorias',
         'can'  => 'logado',
     ],
@@ -15,28 +15,39 @@ $categoria = [
 
 $salas = [
     [
-        'text' => '<i class="fas fa-list"></i> Índice',
-        'url'  => config('app.url') . '/salas',
-        'can'  => 'logado',
-    ],
-    [
         'text' => '<i class="fas fa-plus"></i> Nova Sala',
         'url'  => config('app.url') . '/salas/create',
         'can'  => 'admin',
     ],
 ];
 
-$menu = [
+$reservas = [
+    [
+        'text' => '<i class="fas fa-list"></i> Minhas Reservas',
+        'url'  => config('app.url') . '/reservas/my',
+        'can'  => 'logado',
+    ],
     [
         'text' => '<i class="fas fa-plus-square"></i> Nova reserva',
         'url'  => config('app.url') . '/reservas/create',
         'can'  => 'logado',
     ],
+];
+
+$menu = [
     [
-        'text' => 'Reservas',
-        'url'  => config('app.url') . '/reservas',
-        'can'  => 'logado',
+        'text' => 'Hoje',
+        'url'  => config('app.url') . '/',
     ],
+    [
+        'text' => 'Buscar Reservas',
+        'url'  => config('app.url') . '/reservas',
+    ],
+    [
+        'text' => 'Calendário por Sala',
+        'url'  => config('app.url') . '/salas',
+    ],
+
     [
         'text'    => 'Categoria',
         'submenu' => $categoria,
@@ -48,6 +59,11 @@ $menu = [
         'can'     => 'logado',
     ],
 
+    [
+        'text'    => 'Reservas',
+        'submenu' => $reservas,
+        'can'     => 'logado',
+    ],
 ];
 
 $right_menu = [
@@ -56,6 +72,22 @@ $right_menu = [
         'title'  => 'Configurações',
         'target' => '_blank',
         'url'    => config('app.url') . '/settings',
+        'align'  => 'right',
+        'can'    => 'admin',
+    ],
+    [
+        'text'   => '<i class="fas fa-users"></i>',
+        'title'  => 'Pessoas',
+        'target' => '_blank',
+        'url'    => config('app.url') . '/users',
+        'align'  => 'right',
+        'can'    => 'admin',
+    ],
+    [
+        'text'   => '<i class="fas fa-user-secret"></i>',
+        'title'  => 'Login As',
+        'target' => '_blank',
+        'url'    => config('app.url') . '/loginas',
         'align'  => 'right',
         'can'    => 'admin',
     ],

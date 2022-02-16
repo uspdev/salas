@@ -30,11 +30,6 @@ class AuthServiceProvider extends ServiceProvider
             return true;
         });
 
-        Gate::define('admin', function ($user) {
-            $admins = explode(',', trim(env('ADMINS')));
-            return in_array($user->codpes, $admins);
-        });
-
         /** 
          * As pessoas só podem editar e excluir reservas feitas por elas mesma
          **/

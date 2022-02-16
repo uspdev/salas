@@ -39,6 +39,14 @@
                 </tr>
             </div>
         </table>
+
+        @if($reserva->irmaos())
+            <b>Recorrências:</b>
+                @foreach($reserva->irmaos() as $reserva)
+                    <a href="/reservas/{{ $reserva->id }}">{{ $reserva->data }}</a>,
+                @endforeach
+        @endif
+
         @can('owner',$reserva)
             <form action="/reservas/{{  $reserva->id  }}" method="POST">
                 <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/edit" role="button">Editar</a>
@@ -51,25 +59,7 @@
             </form>
         @endcan
         <br>
-        <div class="card">
-            <div class="card-header" type="button" data-toggle="collapse" data-target="#collapse{{ $reserva->id }}" aria-expanded="false" aria-controls="collapse{{ $reserva->id }}">
-                <span><b>Reservas do mesmo grupo</b></span>
-                <i class="far fa-plus-square"></i>
-            </div>
-        </div>
-        <div class="collapse" id="collapse{{ $reserva->id }}">
-            <div class="card card-body">
-                <ul class="list-group list-group-flush">  
-                @if($reserva->irmaos())
-                    @foreach($reserva->irmaos() as $reserva)
-                        <li class="list-group-item"><a href="/reservas/{{ $reserva->id }}">{{ $reserva->data }}</a></li>
-                    @endforeach
-                @else
-                    Não há reservas do mesmo grupo.
-                @endif
-                </ul>
-            </div>
-        </div><br>
+        <br>
         <a class="btn btn-outline-dark" href="/reservas" role="button">
             <i class="fas fa-arrow-left"></i> Voltar
         </a>

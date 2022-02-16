@@ -25,32 +25,7 @@
                 </div>
             </div>
         </form><br>
-        <table class="table table-borderless">
-            <div class="table-responsive">
-                <tr>
-                    <th>Reserva</th>
-                    <th>Data</th>
-                    <th>Horário</th>
-                    <th>Sala</th>
-                </tr>
-                @forelse($reservas as $reserva)
-                <tr>
-                    <td> 
-                        @can('owner',$reserva)
-                            <a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a>
-                        @else
-                            {{ $reserva->nome }}
-                        @endcan
-                    </td>
-                    <td>{{ $reserva->data }}</td>
-                    <td>{{ $reserva->horario_inicio }} a {{ $reserva->horario_fim }}</td>
-                    <td>{{ $reserva->sala->nome }}</td>
-                </tr>
-                @empty
-                    <p>Não há reservas feitas ainda.</p>
-                @endforelse
-            </div>
-        </table>
+        @include('reserva.partials.table')
         {{ $reservas->appends(request()->query())->links() }}
     </div>
 </div>
