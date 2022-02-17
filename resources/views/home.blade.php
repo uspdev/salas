@@ -39,7 +39,7 @@
             <tbody>
                 @forelse($reservas as $reserva)
                 <tr>
-                    <td>{{ $reserva->horario_inicio }}:{{$reserva->horario_fim}}</td>
+                    <td>{{ $reserva->horario_inicio }} - {{$reserva->horario_fim}}</td>
                     <td><span class="dot" style="background-color:{{$reserva->cor}};"></span></td>
                     <td><a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a></td>
                     <td>{{ $reserva->sala->categoria->nome }} </td>
