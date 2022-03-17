@@ -19,6 +19,7 @@
             <div class="table-responsive">
                 <tr>
                     <th>Reserva</th>
+                    <th>Cadastrada por</th>
                     <th>Data</th>
                     <th>Horário</th>
                     <th>Sala</th>
@@ -27,6 +28,7 @@
                 </tr>
                 <tr>
                     <td><a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a></td>
+                    <td>{{ $reserva->user->name }} - {{ $reserva->user->codpes }}</td>
                     <td>{{ $reserva->data }}</td>
                     <td>{{ $reserva->horario_inicio }} a {{ $reserva->horario_fim }}</td>
                     <td>
