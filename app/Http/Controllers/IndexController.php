@@ -31,7 +31,7 @@ class IndexController extends Controller
             $query->where('data', Carbon::today()->toDateString());
         }
 
-        $reservas = $query->orderBy('data')->get();
+        $reservas = $query->orderBy('sala_id')->orderBy('data')->get();
 
         return view('home',[
             'categorias' => Categoria::all(),
