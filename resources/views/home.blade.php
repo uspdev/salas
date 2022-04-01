@@ -16,7 +16,7 @@
 
     <div class="card">
         <div class="card-header">
-            <div class="card-title"><b>Reservas de hoje: {{\Carbon\Carbon::now()->format('d/m/Y')}}</b></div>
+            <div class="card-title"><b>Reservas do dia: {{ request()->busca_data ?? \Carbon\Carbon::now()->format('d/m/Y')}}</b></div>
         </div>
         <div class="card-body">
             <form method="GET" action="/">
@@ -30,7 +30,15 @@
                             </div>
                     @endforeach
                 </div>
-                <button type="submit" class="btn btn-success">Filtrar</button>
+
+                <div class="row">
+                    <div class=" col-sm input-group">
+                        <input type="text" class="datepicker" id="input_busca_data" name="busca_data" type="text" placeholder="Data" value="{{ request()->busca_data ?? \Carbon\Carbon::now()->format('d/m/Y')}}">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-success"> Filtrar </button>
+                        </span>
+                    </div>
+                </div>
 
             </form>
 
@@ -39,11 +47,12 @@
             <tbody>
                 @forelse($reservas as $reserva)
                 <tr>
-                    <td>{{ $reserva->horario_inicio }} - {{$reserva->horario_fim}}</td>
+                    <td>{{ $reserva->horario_inicio }}-{{$reserva->horario_fim}}</td>
+                    <td>{{ $reserva->sala->nome }} </td>
+                    <td>{{ $reserva->sala->categoria->nome }} </td>
                     <td><span class="dot" style="background-color:{{$reserva->cor}};"></span></td>
                     <td><a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a></td>
-                    <td>{{ $reserva->sala->categoria->nome }} </td>
-                    <td>{{ $reserva->sala->nome  }} </td>
+                    <td>{{ $reserva->descricao }} </td>
                 </tr>
                 @empty 
                 <tr><td>Não há reservas registradas para hoje </td></tr>

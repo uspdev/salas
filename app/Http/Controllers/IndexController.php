@@ -12,18 +12,26 @@ class IndexController extends Controller
 {
     # rota usada para reservas do dia apenas
     public function home(Request $request){
-        $reservas = new Reserva;
+
+        $query = Reserva::orderBy('sala_id');
+
+        //dd($request->busca_data);
 
         if($request->filter){
 
             $salas = Sala::select('id')->whereIn('categoria_id',$request->filter)->pluck('id');
             
-            $reservas = Reserva::whereIn('sala_id',$salas->toArray())
-                                 ->where('data', Carbon::today()->toDateString())->get();
+            $query = Reserva::whereIn('sala_id',$salas->toArray());
+        } 
 
+        if($request->busca_data){
+            $day = Carbon::createFromFormat('d/m/Y', $request->busca_data)->format('Y-m-d');
+            $query->where('data', $day);
         } else {
-            $reservas = Reserva::where('data', Carbon::today()->toDateString())->get();
+            $query->where('data', Carbon::today()->toDateString());
         }
+
+        $reservas = $query->orderBy('data')->get();
 
         return view('home',[
             'categorias' => Categoria::all(),
