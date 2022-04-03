@@ -2,41 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Categoria;
-use App\Models\Sala;
 use App\Models\Reserva;
+use App\Models\Sala;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    # rota usada para reservas do dia apenas
-    public function home(Request $request){
+    // rota usada para reservas do dia apenas
+    public function home(Request $request)
+    {
+        $reservas = new Reserva();
 
-        $query = Reserva::orderBy('sala_id');
-
-        //dd($request->busca_data);
-
-        if($request->filter){
-
-            $salas = Sala::select('id')->whereIn('categoria_id',$request->filter)->pluck('id');
-            
-            $query = Reserva::whereIn('sala_id',$salas->toArray());
-        } 
-
-        if($request->busca_data){
-            $day = Carbon::createFromFormat('d/m/Y', $request->busca_data)->format('Y-m-d');
-            $query->where('data', $day);
+        if (isset(request()->busca_data)) {
+            $data = $request->busca_data;
+            $data = Carbon::createFromFormat('d/m/Y', $data)->format('Y-m-d');
         } else {
-            $query->where('data', Carbon::today()->toDateString());
+            $data = Carbon::today()->toDateString();
         }
 
-        $reservas = $query->orderBy('sala_id')->orderBy('data')->get();
+        if ($request->filter) {
+            $salas = Sala::select('id')->whereIn('categoria_id', $request->filter)->pluck('id');
 
-        return view('home',[
+            $reservas = Reserva::whereIn('sala_id', $salas->toArray())
+                                 ->where('data', 'LIKE', "%{$data}%")->paginate(20);
+        } else {
+            $reservas = Reserva::where('data', 'LIKE', "%{$data}%")->paginate(20);
+        }
+
+        $data = Carbon::parse($data)->format('d/m/Y');
+
+        return view('home', [
             'categorias' => Categoria::all(),
-            'filter'     => ($request->filter) ?: [],
-            'reservas'   => $reservas 
+            'filter' => ($request->filter) ?: [],
+            'reservas' => $reservas,
+            'data' => $data,
         ]);
     }
 }

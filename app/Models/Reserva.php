@@ -2,67 +2,74 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
-use App\Models\Sala;
 
 class Reserva extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function setDataAttribute($value) 
+    public function setDataAttribute($value)
     {
         $this->attributes['data'] = Carbon::createFromFormat('d/m/Y', $value);
     }
 
-    public function getDataAttribute($value) 
+    public function getDataAttribute($value)
     {
-        if($value) return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
+        if ($value) {
+            return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
+        }
     }
 
-    public function setRepeatUntilAttribute($value) 
+    public function setRepeatUntilAttribute($value)
     {
-        if($value) $this->attributes['repeat_until'] = Carbon::createFromFormat('d/m/Y', $value);
+        if ($value) {
+            $this->attributes['repeat_until'] = Carbon::createFromFormat('d/m/Y', $value);
+        }
     }
 
-    public function getRepeatUntilAttribute($value) 
+    public function getRepeatUntilAttribute($value)
     {
-        if($value) return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
+        if ($value) {
+            return Carbon::CreateFromFormat('Y-m-d', $value)->format('d/m/Y');
+        }
     }
 
-    public function setRepeatDaysAttribute($value) 
+    public function setRepeatDaysAttribute($value)
     {
-        $this->attributes['repeat_days'] = implode(',',$value);
+        $this->attributes['repeat_days'] = implode(',', $value);
     }
 
-    public function getRepeatDaysAttribute($value) 
+    public function getRepeatDaysAttribute($value)
     {
-        if($value) return explode(',',$value);
+        if ($value) {
+            return explode(',', $value);
+        }
     }
-    
+
     /**
      * O mutator getInicioAttribute foi criado para usarmos no FullCalendar
-     * a junção da data com o horário, desta forma: $reserva->inicio
+     * a junção da data com o horário, desta forma: $reserva->inicio.
      */
     public function getInicioAttribute()
     {
-        return Carbon::createFromFormat('d/m/Y H:i', $this->data .' '. $this->horario_inicio);
+        return Carbon::createFromFormat('d/m/Y H:i', $this->data.' '.$this->horario_inicio);
     }
 
     /**
      * O mutator getFimAttribute foi criado para usarmos no FullCalendar
-     * a junção da data com o horário, desta forma: $reserva->fim
+     * a junção da data com o horário, desta forma: $reserva->fim.
      */
     public function getFimAttribute()
     {
-        return Carbon::createFromFormat('d/m/Y H:i', $this->data .' '. $this->horario_fim);
+        return Carbon::createFromFormat('d/m/Y H:i', $this->data.' '.$this->horario_fim);
     }
 
     public function parent()
     {
-        return $this->belongsTo($this,'parent_id');
+        return $this->belongsTo($this, 'parent_id');
     }
 
     public function children()
@@ -72,21 +79,20 @@ class Reserva extends Model
 
     public function irmaos()
     {
-        if($this->parent_id != null)
-            return Reserva::where('parent_id',$this->parent_id)->get();
-        return ;
-    }
-    
-    # a princípio não retornou nada
-    /* public function allChildren()
-    {
-        return $this->children()->with('allChildren');
-    } */
+        if ($this->parent_id != null) {
+            return Reserva::where('parent_id', $this->parent_id)->get();
+        }
 
-    public function sala(){
+        return;
+    }
+
+    public function sala()
+    {
         return $this->belongsTo(Sala::class);
     }
 
-    
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
