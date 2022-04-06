@@ -1,27 +1,32 @@
-<table class="table table-striped">
-    <div class="table-responsive">
-        <tr>
-            <th>Reserva</th>
-            <th>Cadastrada por</th>
-            <th>Data</th>
-            <th>Horário</th>
-            <th>Sala</th>
-        </tr>
+<style>
+    .dot 
+    {
+        height: 12px;
+        width: 12px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+</style>
+
+<table class="table">
+    <tbody>
         @forelse($reservas as $reserva)
-        <tr>
-            <td> 
-                <a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a>
-                @if( $reserva->parent_id != NULL  )
-                    (reserva com recorrências)
-                @endif
-            </td>
-            <td>{{ $reserva->user->name }} - {{ $reserva->user->codpes }}</td>
-            <td>{{ $reserva->data }}</td>
-            <td>{{ $reserva->horario_inicio }} a {{ $reserva->horario_fim }}</td>
-            <td>{{ $reserva->sala->nome }}</td>
-        </tr>
-        @empty
-            <p>Não há reservas feitas ainda.</p>
+            <tr>
+                <td>{{ $reserva->data }}</td>
+                <td>{{ $reserva->horario_inicio }} - {{$reserva->horario_fim}}</td>
+                <td>{{ $reserva->sala->nome }}</td>
+                <td>{{ $reserva->sala->categoria->nome }}</td>
+                <td><div class="dot" style="background-color: {{$reserva->cor}};"></div></td>
+                <td><a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a></td>
+                <td>Capacidade: {{ $reserva->sala->capacidade  }}</td>
+                <td>{{ $reserva->descricao }}</td>
+            </tr>
+        @empty 
+            @if($data)
+            <tr><td>Não há reservas registradas para {{ $data }}</td></tr>
+            @else
+            <tr><td>Não há reservas registradas com esse título.</td></tr>
+            @endif
         @endforelse
-    </div>
+    </tbody>
 </table>

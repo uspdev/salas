@@ -1,13 +1,14 @@
 <style>
-    .rectangle {
+    .rectangle 
+    {
     height: 50px;
     width: 50px;
     background-color: #ffffff;
     border: 2px solid #ffffff;
     border-radius: 5px;
-
     }
 </style>
+
 <div class="card">
     <div class="card-header">
         <b>{{ $reserva->nome }}</b>
@@ -43,12 +44,14 @@
         </table>
 
         @if($reserva->irmaos())
-            <b>Recorrências:</b>
+            <div class="card-body">
+                <b>Recorrências:</b>
                 @foreach($reserva->irmaos() as $reserva)
                     <a href="/reservas/{{ $reserva->id }}">{{ $reserva->data }}</a>,
                 @endforeach
+            </div>
         @endif
-
+        <br>
         @can('owner',$reserva)
             <form action="/reservas/{{  $reserva->id  }}" method="POST">
                 <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/edit" role="button">Editar</a>
@@ -61,9 +64,5 @@
             </form>
         @endcan
         <br>
-        <br>
-        <a class="btn btn-outline-dark" href="/reservas" role="button">
-            <i class="fas fa-arrow-left"></i> Voltar
-        </a>
     </div>
 </div>

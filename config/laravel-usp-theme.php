@@ -7,12 +7,12 @@ $admin = [
         'can' => 'admin',
     ],
     [
-        'text' => '<i class="fas fa-plus"></i> Nova Categoria',
+        'text' => 'Nova Categoria',
         'url' => config('app.url').'/categorias/create',
         'can' => 'admin',
     ],
     [
-        'text' => '<i class="fas fa-plus"></i> Nova Sala',
+        'text' => 'Nova Sala',
         'url' => config('app.url').'/salas/create',
         'can' => 'admin',
     ],
@@ -37,10 +37,6 @@ $menu = [
         'url' => config('app.url').'/',
     ],
     [
-        'text' => 'Buscar Reservas',
-        'url' => config('app.url').'/reservas',
-    ],
-    [
         'text' => 'Calendário por Sala',
         'url' => config('app.url').'/salas',
     ],
@@ -57,7 +53,7 @@ $menu = [
     [
         'text' => 'Administração',
         'submenu' => $admin,
-        'can' => 'logado',
+        'can' => 'admin',
     ],
 ];
 

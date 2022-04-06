@@ -1,10 +1,9 @@
 @extends('main')
-@section('title') Sistema de Reserva de Salas @endsection
+@section('title') 
+    Sistema de Reserva de Salas 
+@endsection
 @section('content')
-<div class="card">
-        <div class="card-header">
-            <h5 class="card-title">Índice de Salas</h5>
-        </div>
+    <div class="card">
         <div class="card-body">
             <form method="get" action="/salas">
                 <div class="row">
@@ -16,6 +15,7 @@
                     </div>
                 </div>
             </form><br>
+            {{ $salas->appends(request()->query())->links() }}
             <table class="table table-borderless">
                 <div class="table-responsive">
                     <tr>
@@ -34,7 +34,6 @@
                     @endforelse
                 </div>
             </table>
-            {{ $salas->appends(request()->query())->links() }}
+        </div>
     </div>
-</div>
 @endsection

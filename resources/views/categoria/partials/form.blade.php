@@ -1,7 +1,7 @@
 <div class="card">
-  <div class="card-header">
-    <b>Nova Categoria</b>
-  </div>
+    <div class="card-header">
+        <b>Nova Categoria</b>
+    </div>
     <div class="card-body">
         <div class="row">
             <div class="col-sm form-group">  
