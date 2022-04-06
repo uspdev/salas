@@ -10,28 +10,53 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    // rota usada para reservas do dia apenas
-    public function home(Request $request)
+    public function search(Request $request)
     {
         $reservas = new Reserva();
+        $filter = $request->filter;
+        $busca_data = request()->busca_data;
+        $busca_nome = request()->busca_nome;
+        $data = null;
 
-        if (isset(request()->busca_data)) {
-            $data = $request->busca_data;
-            $data = Carbon::createFromFormat('d/m/Y', $data)->format('Y-m-d');
-        } else {
+        if (!isset($busca_nome) && !isset($busca_data) && !$filter) {
             $data = Carbon::today()->toDateString();
-        }
-
-        if ($request->filter) {
-            $salas = Sala::select('id')->whereIn('categoria_id', $request->filter)->pluck('id');
-
-            $reservas = Reserva::whereIn('sala_id', $salas->toArray())
-                                 ->where('data', 'LIKE', "%{$data}%")->paginate(20);
+            $reservas = $reservas->where('data', 'LIKE', "%{$data}%");
         } else {
-            $reservas = Reserva::where('data', 'LIKE', "%{$data}%")->paginate(20);
+            if ($filter) {
+                $salas = Sala::select('id')->whereIn('categoria_id', $filter)->pluck('id');
+                $reservas = $reservas->whereIn('sala_id', $salas->toArray());
+            }
+
+            if (isset($busca_nome)) {
+                $reservas = $reservas->where('nome', 'LIKE', "%{$busca_nome}%");
+            }
+
+            if (isset($busca_data)) {
+                $data = $busca_data;
+                $data = Carbon::createFromFormat('d/m/Y', $data)->format('Y-m-d');
+                $reservas = $reservas->where('data', 'LIKE', "%{$data}%");
+            }
         }
 
-        $data = Carbon::parse($data)->format('d/m/Y');
+        if (!empty($data)) {
+            $data = Carbon::parse($data)->format('d/m/Y');
+        } else {
+            $reservas = $reservas->orderBy('data', 'DESC');
+        }
+
+        $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
+
+        return [
+            'reservas' => $reservas,
+            'data' => $data,
+        ];
+    }
+
+    public function home(Request $request)
+    {
+        $result = $this->search($request);
+        $data = $result['data'];
+        $reservas = $result['reservas'];
 
         return view('home', [
             'categorias' => Categoria::all(),

@@ -18,26 +18,6 @@ class ReservaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function search(Request $request)
-    {
-        if (isset(request()->busca_nome)) {
-            $reservas = Reserva::where('nome', 'LIKE', "%{$request->busca_nome}%")->paginate(20);
-        } else {
-            $reservas = Reserva::orderBy('id', 'desc')->paginate(20);
-        }
-
-        return $reservas;
-    }
-
-    public function index(Request $request)
-    {
-        $reservas = $this->search($request);
-
-        return view('reserva.index', [
-            'reservas' => $reservas,
-        ]);
-    }
-
     public function my(Request $request)
     {
         $this->authorize('logado');
@@ -166,8 +146,8 @@ class ReservaController extends Controller
         }
 
         if ($reserva->parent_id != null) {
-            request()->session()->flash('alert-danger', '
-            Atenção: Essa reserva faz parte de grupo e você está editando somente essa instância');
+            request()->session()->flash('alert-warning', '
+            Atenção: Esta reserva faz parte de um grupo e você está editando somente esta instância');
         }
 
         return view('reserva.edit', [
