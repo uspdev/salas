@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Categoria;
+use Illuminate\Database\Seeder;
 
 class CategoriaSeeder extends Seeder
 {
@@ -17,8 +17,8 @@ class CategoriaSeeder extends Seeder
         $categoria = [
             'nome' => 'Filosofia',
         ];
-        
-    Categoria::create($categoria);
-    Categoria::factory(20)->create();
+
+        Categoria::create($categoria);
+        Categoria::factory(4)->create();
     }
 }

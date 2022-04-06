@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Sala;
-use App\Models\Categoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SalaFactory extends Factory
@@ -23,9 +22,9 @@ class SalaFactory extends Factory
     public function definition()
     {
         return [
-            'nome'         => $this->faker->word(),
-            'categoria_id' => Categoria::factory()->create()->id,
-            'capacidade'   => $this->faker->randomDigit(), 
+            'nome' => $this->faker->word(),
+            'categoria_id' => $this->faker->numberBetween($min = 1, $max = 5),
+            'capacidade' => $this->faker->randomDigit(),
         ];
     }
 }

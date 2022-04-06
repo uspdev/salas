@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Reserva;
-use App\Models\Sala;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReservaFactory extends Factory
@@ -21,16 +20,16 @@ class ReservaFactory extends Factory
      * @return array
      */
     public function definition()
-    {   
+    {
         return [
-            'nome'           => $this->faker->word(),
-            'data'           => $this->faker->date($format = 'd/m/Y'),
+            'nome' => $this->faker->word(),
+            'data' => $this->faker->date($format = 'd/m/Y'),
             'horario_inicio' => $this->faker->time($format = 'H:i'),
-            'horario_fim'    => $this->faker->time($format = 'H:i'),
-            'cor'            => $this->faker->hexcolor,
-            'sala_id'        => Sala::factory()->create()->id,
-            'descricao'      => $this->faker->sentence(4),
-            'user_id'        => 1
+            'horario_fim' => $this->faker->time($format = 'H:i'),
+            'cor' => $this->faker->hexcolor,
+            'sala_id' => $this->faker->numberBetween($min = 1, $max = 5),
+            'descricao' => $this->faker->sentence(4),
+            'user_id' => 1,
         ];
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Recurso;
+use Illuminate\Database\Seeder;
 
 class RecursoSeeder extends Seeder
 {
@@ -17,9 +17,8 @@ class RecursoSeeder extends Seeder
         $recurso = [
             'nome' => 'Projetor',
         ];
-        
-    Recurso::create($recurso);
-    Recurso::factory(20)->create();
 
+        Recurso::create($recurso);
+        Recurso::factory(5)->create();
     }
 }
