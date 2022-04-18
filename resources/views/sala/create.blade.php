@@ -3,7 +3,7 @@
 @section('content')
     <form method="POST" action="/salas">
         @csrf
-        @include('sala.partials.form')
+        @include('sala.partials.form', ['title' => "Nova"])
     </form>
 @endsection
 

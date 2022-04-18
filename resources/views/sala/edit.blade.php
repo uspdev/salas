@@ -3,7 +3,7 @@
     <form method="POST" action="/salas/{{ $sala->id }}">
         @csrf
         @method('patch')
-        @include('sala.partials.form')
+        @include('sala.partials.form', ['title' => "Editar"])
     </form>
 @endsection
 

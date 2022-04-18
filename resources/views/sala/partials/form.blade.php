@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <b>Nova Sala</b>
+        <b>{{ $title }} Sala</b>
     </div>
     <div class="card-body">
         <div class="row">
