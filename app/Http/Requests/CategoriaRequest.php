@@ -30,8 +30,8 @@ class CategoriaRequest extends FormRequest
 
     public function messages()
     {
-    return [
-        'nome.required' => 'O nome não pode ficar em branco.',
+        return [
+        'nome.required' => 'O título não pode ficar em branco.',
     ];
     }
 }
