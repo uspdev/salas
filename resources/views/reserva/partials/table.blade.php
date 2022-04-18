@@ -22,10 +22,10 @@
                 <td>{{ $reserva->descricao }}</td>
             </tr>
         @empty 
-            @if($data)
+            @if(isset($data))
             <tr><td>Não há reservas registradas para {{ $data }}</td></tr>
             @else
-            <tr><td>Não há reservas registradas com esse título.</td></tr>
+            <tr><td>Não há reservas registradas.</td></tr>
             @endif
         @endforelse
     </tbody>

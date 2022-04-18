@@ -58,6 +58,7 @@ class ReservaController extends Controller
         }
 
         return view('reserva.create', [
+            'irmaos' => false,
             'reserva' => new Reserva(),
             'salas' => $salas,
             'settings' => $settings,
@@ -100,7 +101,7 @@ class ReservaController extends Controller
             }
         }
 
-        request()->session()->flash('alert-info', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
+        request()->session()->flash('alert-success', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
 
         return redirect("/salas/{$reserva->sala->id}");
     }
@@ -146,13 +147,22 @@ class ReservaController extends Controller
         }
 
         if ($reserva->parent_id != null) {
-            request()->session()->flash('alert-warning', '
-            Atenção: Esta reserva faz parte de um grupo e você está editando somente esta instância');
+            request()->session()->flash('alert-warning', 'Atenção: Esta reserva faz parte de um grupo e você está editando somente esta instância');
         }
 
         return view('reserva.edit', [
             'reserva' => $reserva,
             'salas' => $salas,
+            'settings' => $settings,
+        ]);
+    }
+
+    public function editAll(Reserva $reserva, GeneralSettings $settings)
+    {
+        $this->authorize('owner', $reserva);
+
+        return view('reserva.editAll', [
+            'reserva' => $reserva,
             'settings' => $settings,
         ]);
     }
@@ -171,7 +181,32 @@ class ReservaController extends Controller
 
         $validated = $request->validated();
         $reserva->update($validated);
-        request()->session()->flash('alert-info', 'Reserva atualizada com sucesso');
+
+        request()->session()->flash('alert-success', 'Reserva atualizada com sucesso');
+
+        return redirect("/reservas/{$reserva->id}");
+    }
+
+    public function updateAll(Request $request, Reserva $reserva)
+    {
+        $this->authorize('owner', $reserva);
+
+        $irmaos = $reserva->irmaos();
+        $request->validate([
+                'nome' => 'required',
+            ],
+            [
+                'nome.required' => 'O título não pode ficar em branco.',
+            ]);
+
+        $irmaos->each(function ($item) use ($request) {
+            $item['nome'] = $request->nome;
+            $item['cor'] = $request->cor;
+            $item['descricao'] = $request->descricao;
+            $item->update();
+        });
+
+        request()->session()->flash('alert-success', 'Reservas atualizadas com sucesso');
 
         return redirect("/reservas/{$reserva->id}");
     }
@@ -189,12 +224,12 @@ class ReservaController extends Controller
 
         if ($request->tipo == 'one') {
             $reserva->delete();
-            request()->session()->flash('alert-info', 'Reserva excluída com sucesso.');
+            request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
         } elseif ($request->tipo == 'all') {
             Reserva::where('parent_id', $reserva->parent_id)->delete();
-            request()->session()->flash('alert-info', 'Todas Instâncias foram excluídas com sucesso.');
+            request()->session()->flash('alert-success', 'Todas Instâncias foram excluídas com sucesso.');
         }
 
-        return redirect('/reservas');
+        return redirect('/');
     }
 }

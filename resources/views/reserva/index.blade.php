@@ -27,7 +27,7 @@
             </div>
         </form>
         <br>
-        {{ $reservas->links() }}
+        {{ $reservas->appends(request()->except('page'))->links() }}
         @include('reserva.partials.table')
     </div>
 </div>

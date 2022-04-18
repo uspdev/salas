@@ -4,7 +4,7 @@
     <form method="POST" action="/reservas/{{ $reserva->id }}">
         @csrf
         @method('patch')
-        @include('reserva.partials.form', ['title' => "Editar"])
+        @include('reserva.partials.form', ['title' => "Editar reserva", 'editOne' => true])
     </form>
 @endsection
 
