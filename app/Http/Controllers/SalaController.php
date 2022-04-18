@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sala;
-use App\Models\Categoria;
-use Illuminate\Http\Request;
 use App\Http\Requests\SalaRequest;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Categoria;
+use App\Models\Sala;
+use Illuminate\Http\Request;
 
 class SalaController extends Controller
 {
@@ -17,16 +16,10 @@ class SalaController extends Controller
      */
     public function index(Request $request)
     {
-        if(isset(request()->search)){
-            $salas = Sala::where('nome', 'LIKE',"%{$request->search}%")->paginate(5);
-        }
+        $categorias = Categoria::all();
 
-        else{
-        $salas = Sala::orderBy('nome', 'asc')->paginate(20);
-        }
-
-        return view('sala.index',[
-            'salas' => $salas
+        return view('sala.index', [
+            'categorias' => $categorias,
         ]);
     }
 
@@ -36,19 +29,20 @@ class SalaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {   
+    {
         $this->authorize('admin');
 
         return view('sala.create', [
-            'sala' => new Sala,
-            'categorias' => Categoria::all()
+            'sala' => new Sala(),
+            'categorias' => Categoria::all(),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(SalaRequest $request)
@@ -57,22 +51,22 @@ class SalaController extends Controller
 
         $validated = $request->validated();
         $sala = Sala::create($validated);
-        request()->session()->flash('alert-info', 'Sala criada com sucesso.');
+        request()->session()->flash('alert-success', 'Sala criada com sucesso.');
+
         return redirect("/salas/{$sala->id}");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Sala  $sala
      * @return \Illuminate\Http\Response
      */
     public function show(Sala $sala)
     {
-        # pegando as reservas das salas
+        // pegando as reservas das salas
         $events = [];
 
-        foreach($sala->reservas as $reserva) {
+        foreach ($sala->reservas as $reserva) {
             $events[] = \Calendar::event(
                 $reserva->nome,
                 false, //full day event?
@@ -81,7 +75,7 @@ class SalaController extends Controller
                 0, //optionally, you can specify an event ID,
                 [
                     'color' => $reserva->cor,
-                    'url' => '/reservas/' . $reserva->id ,
+                    'url' => '/reservas/'.$reserva->id,
                 ],
             );
         }
@@ -89,19 +83,18 @@ class SalaController extends Controller
         $calendar = \Calendar::addEvents($events)
             ->setOptions([
                 'firstDay' => 1,
-                'defaultView' => 'agendaWeek'
+                'defaultView' => 'agendaWeek',
         ]);
 
-        return view('sala.show',[
-            'sala'     => $sala,
-            'calendar' => $calendar
+        return view('sala.show', [
+            'sala' => $sala,
+            'calendar' => $calendar,
             ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Sala  $sala
      * @return \Illuminate\Http\Response
      */
     public function edit(Sala $sala)
@@ -110,15 +103,15 @@ class SalaController extends Controller
 
         return view('sala.edit', [
             'sala' => $sala,
-            'categorias' => Categoria::all()
+            'categorias' => Categoria::all(),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Sala  $sala
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(SalaRequest $request, Sala $sala)
@@ -127,22 +120,23 @@ class SalaController extends Controller
 
         $validated = $request->validated();
         $sala->update($validated);
-        request()->session()->flash('alert-info', 'Sala atualizada com sucesso.');
+        request()->session()->flash('alert-success', 'Sala atualizada com sucesso.');
+
         return redirect("/salas/{$sala->id}");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Sala  $sala
      * @return \Illuminate\Http\Response
      */
     public function destroy(Sala $sala)
     {
         $this->authorize('admin');
-        
+
         $sala->delete();
-        request()->session()->flash('alert-info', 'Sala excluída com sucesso.');
+        request()->session()->flash('alert-success', 'Sala excluída com sucesso.');
+
         return redirect('/salas');
     }
 }
