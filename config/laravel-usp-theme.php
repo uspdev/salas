@@ -2,11 +2,6 @@
 
 $admin = [
     [
-        'text' => '<i class="fas fa-list"></i> Índice de categorias',
-        'url' => config('app.url').'/categorias',
-        'can' => 'admin',
-    ],
-    [
         'text' => 'Nova Categoria',
         'url' => config('app.url').'/categorias/create',
         'can' => 'admin',
@@ -14,6 +9,11 @@ $admin = [
     [
         'text' => 'Nova Sala',
         'url' => config('app.url').'/salas/create',
+        'can' => 'admin',
+    ],
+    [
+        'text' => 'Recursos',
+        'url' => config('app.url').'/recursos',
         'can' => 'admin',
     ],
 ];

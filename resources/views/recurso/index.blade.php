@@ -1,11 +1,30 @@
 @extends('main')
-@section('title') 
-    Sistema de Reserva de Salas 
-@endsection
 @section('content')
+<div class="card">
+    <div class="card-header">
+        <b>Recursos</b>
+    </div>
+    <div class="card-body">
+    @include('recurso.partials.form')
+    <br>
     @forelse($recursos as $recurso)
-        @include('recurso.partials.fields')
+        <ul class="list-group">
+            <li class="list-group-item" style="display: flex; justify-content: space-between;">    
+                {{ $recurso->nome }}
+                <form method="POST" action="/recursos/{{ $recurso->id }}">
+                    @csrf
+                    @method('delete')
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza?');">
+                        <i class="fa fa-trash" ></i>
+                    </button>
+                </form>
+            </li>
+        </ul>
     @empty
-        <p>Não há recursos cadastrados ainda.</p>
+        Ainda não há recursos cadastrados.
     @endforelse
+
+    </div>
+</div>
+<br>
 @endsection
