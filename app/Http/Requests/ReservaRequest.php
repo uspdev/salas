@@ -57,6 +57,8 @@ class ReservaRequest extends FormRequest
             'data.required' => 'A data não pode ficar em branco.',
             'horario_inicio.required' => 'O horário de início não pode ficar em branco.',
             'horario_fim.required' => 'O horário de fim não pode ficar em branco.',
+            'horario_inicio.date_format' => 'Digite o horário no formato 0:00. Exemplo: 9:00',
+            'horario_fim.date_format' => 'Digite o horário no formato 0:00. Exemplo: 9:00',
             'sala_id.required' => 'Selecione uma sala.',
             'repeat_until.required_with' => 'Selecione uma data para o fim da repetição.',
         ];
