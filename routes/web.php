@@ -8,25 +8,30 @@ use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
 
+// Reservas
 Route::get('/reservas/my', [ReservaController::class, 'my']);
 Route::resource('/reservas', ReservaController::class);
 Route::get('/reservas/{reserva}/editAll', [ReservaController::class, 'editAll']);
 Route::post('/reservas/updateAll/{reserva}', [ReservaController::class, 'updateAll']);
 
+// Salas
 Route::resource('/salas', SalaController::class);
 
-Route::resource('/recursos', RecursoController::class);
+// Recursos
+Route::resource('/recursos', RecursoController::class)->only(['index', 'store', 'destroy']);
 
-Route::resource('/categorias', CategoriaController::class);
+// Categorias
+Route::resource('/categorias', CategoriaController::class)->except(['index']);
 Route::post('/categorias/adduser/{categoria}', [CategoriaController::class, 'addUser']);
 Route::delete('/categorias/removeuser/{categoria}/{user}', [CategoriaController::class, 'removeUser']);
 
 // Logs
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->middleware('can:admin');
 
-// settings
+// Settings
 Route::get('/settings', [GeneralSettingsController::class, 'show']);
 Route::post('/settings', [GeneralSettingsController::class, 'update']);
 
-// index:
+// Home
 Route::get('/', [IndexController::class, 'home']);
+Route::get('/search', [IndexController::class, 'search']);

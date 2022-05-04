@@ -49,11 +49,10 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        $validated = $request->validated();
-        $sala = Sala::create($validated);
-        request()->session()->flash('alert-success', 'Sala criada com sucesso.');
+        $sala = Sala::create($request->validated());
 
-        return redirect("/salas/{$sala->id}");
+        return redirect("/salas/{$sala->id}")
+            ->with('alert-sucess', 'Sala criada com sucesso');
     }
 
     /**
@@ -118,11 +117,10 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        $validated = $request->validated();
-        $sala->update($validated);
-        request()->session()->flash('alert-success', 'Sala atualizada com sucesso.');
+        $sala->update($request->validated());
 
-        return redirect("/salas/{$sala->id}");
+        return redirect("/salas/{$sala->id}")
+            ->with('alert-sucess', 'Sala atualizada com sucesso');
     }
 
     /**
@@ -135,8 +133,8 @@ class SalaController extends Controller
         $this->authorize('admin');
 
         $sala->delete();
-        request()->session()->flash('alert-success', 'Sala excluída com sucesso.');
 
-        return redirect('/salas');
+        return redirect("/salas/{$sala->id}")
+            ->with('alert-sucess', 'Sala excluída com sucesso');
     }
 }

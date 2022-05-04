@@ -101,9 +101,8 @@ class ReservaController extends Controller
             }
         }
 
-        request()->session()->flash('alert-success', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
-
-        return redirect("/salas/{$reserva->sala->id}");
+        return redirect("/salas/{$reserva->sala->id}")
+            ->with('alert-sucess', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
     }
 
     /**
@@ -179,12 +178,10 @@ class ReservaController extends Controller
     {
         $this->authorize('owner', $reserva);
 
-        $validated = $request->validated();
-        $reserva->update($validated);
+        $reserva->update($request->validated());
 
-        request()->session()->flash('alert-success', 'Reserva atualizada com sucesso');
-
-        return redirect("/reservas/{$reserva->id}");
+        return redirect("/reservas/{$reserva->id}")
+            ->with('alert-sucess', 'Reserva atualizada com sucesso');
     }
 
     public function updateAll(Request $request, Reserva $reserva)
@@ -206,9 +203,8 @@ class ReservaController extends Controller
             $item->update();
         });
 
-        request()->session()->flash('alert-success', 'Reservas atualizadas com sucesso');
-
-        return redirect("/reservas/{$reserva->id}");
+        return redirect("/reservas/{$reserva->id}")
+            ->with('alert-sucess', 'Reserva atualizadas com sucesso');
     }
 
     /**

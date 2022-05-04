@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-body">
-        <form method="GET" action="/">
+        <form method="GET" action="/search">
             <div class="row">
                 @foreach($categorias as $categoria)
                     <div class="form-group col-md-3">

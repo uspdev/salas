@@ -35,11 +35,10 @@ class CategoriaController extends Controller
     {
         $this->authorize('admin');
 
-        $validated = $request->validated();
-        $categoria = Categoria::create($validated);
-        request()->session()->flash('alert-sucess', 'Categoria criada com sucesso.');
+        $categoria = Categoria::create($request->validated());
 
-        return redirect("/categorias/{$categoria->id}");
+        return redirect("/categorias/{$categoria->id}")
+            ->with('alert-sucess', 'Categoria criada com sucesso.');
     }
 
     /**
@@ -79,11 +78,10 @@ class CategoriaController extends Controller
     {
         $this->authorize('admin');
 
-        $validated = $request->validated();
-        $categoria->update($validated);
-        request()->session()->flash('alert-success', 'Categoria atualizada com sucesso.');
+        $categoria->update($request->validated());
 
-        return redirect("/categorias/{$categoria->id}");
+        return redirect("/categorias/{$categoria->id}")
+            ->with('alert-sucess', 'Categoria atualizada com sucesso.');
     }
 
     /**
@@ -96,9 +94,9 @@ class CategoriaController extends Controller
         $this->authorize('admin');
 
         $categoria->delete();
-        request()->session()->flash('alert-success', 'Categoria excluída com sucesso.');
 
-        return redirect('/salas');
+        return redirect('/salas')
+            ->with('alert-sucess', 'Categoria excluída com sucesso.');
     }
 
     public function addUser(Request $request, Categoria $categoria)
@@ -107,22 +105,18 @@ class CategoriaController extends Controller
 
         // é um número USP válido?
         $pessoa = Pessoa::dump($request->codpes);
+
         if (!$pessoa) {
-            /* dd('Não encontrei ess apessoa chara') */
-            request()->session()->flash('alert-danger', 'Número USP inválido');
-
-            return redirect("/categorias/{$categoria->id}");
+            return redirect("/categorias/{$categoria->id}")
+                ->with('alert-danger', 'Número USP inválido');
         }
 
-        // Cria um objeto para o usuário em questão
-        $user = User::where('codpes', $request->codpes)->first();
-        if (!$user) {
-            $user = new User();
-            $user->codpes = $request->codpes;
-            $user->name = $pessoa['nompes'];
-            $user->email = Pessoa::emailusp($request->codpes);
-            $user->save();
-        }
+        // Cria um objeto User para $pessoa
+        $user = User::firstOrCreate([
+            'codpes' => $pessoa['codpes'],
+            'name' => $pessoa['nompes'],
+            'email' => Pessoa::emailusp($pessoa['codpes']),
+        ]);
 
         // não pode existir na tabela categoria_users uma instância
         // com o user_id e a categoria_id solicitados.
@@ -141,8 +135,8 @@ class CategoriaController extends Controller
         $this->authorize('admin');
 
         $categoria->users()->detach($user->id);
-        request()->session()->flash('alert-success', "{$user->name} foi excluído(a) de {$categoria->nome}");
 
-        return redirect("/categorias/{$categoria->id}");
+        return redirect("/categorias/{$categoria->id}")
+            ->with('alert-sucess', "{$user->name} foi excluído(a) de {$categoria->nome}");
     }
 }

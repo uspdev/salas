@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RecursoRequest;
 use App\Models\Recurso;
-use Illuminate\Http\Request;
 
 class RecursoController extends Controller
 {
@@ -33,11 +32,11 @@ class RecursoController extends Controller
     public function store(RecursoRequest $request)
     {
         $this->authorize('admin');
-        $validated = $request->validated();
-        $recurso = Recurso::create($validated);
-        request()->session()->flash('alert-success', 'Recurso criado com sucesso.');
 
-        return redirect('/recursos');
+        $recurso = Recurso::create($request->validated());
+
+        return redirect('/recursos')
+            ->with('alert-sucess', 'Recurso criado com sucesso.');
     }
 
     /**
@@ -49,8 +48,8 @@ class RecursoController extends Controller
     {
         $this->authorize('admin');
         $recurso->delete();
-        request()->session()->flash('alert-success', 'Recurso excluído com sucesso.');
 
-        return redirect('/recursos');
+        return redirect('/recursos')
+            ->with('alert-sucess', 'Recurso excluído com sucesso.');
     }
 }

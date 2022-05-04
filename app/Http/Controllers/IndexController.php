@@ -12,57 +12,37 @@ class IndexController extends Controller
 {
     public function search(Request $request)
     {
-        $reservas = new Reserva();
-        $filter = $request->filter;
-        $busca_data = request()->busca_data;
-        $busca_nome = request()->busca_nome;
-        $data = null;
-
-        if (!isset($busca_nome) && !isset($busca_data) && !$filter) {
-            $data = Carbon::today()->toDateString();
-            $reservas = $reservas->where('data', 'LIKE', "%{$data}%");
-        } else {
-            if ($filter) {
-                $salas = Sala::select('id')->whereIn('categoria_id', $filter)->pluck('id');
-                $reservas = $reservas->whereIn('sala_id', $salas->toArray());
-            }
-
-            if (isset($busca_nome)) {
-                $reservas = $reservas->where('nome', 'LIKE', "%{$busca_nome}%");
-            }
-
-            if (isset($busca_data)) {
-                $data = $busca_data;
-                $data = Carbon::createFromFormat('d/m/Y', $data)->format('Y-m-d');
-                $reservas = $reservas->where('data', 'LIKE', "%{$data}%");
-            }
-        }
-
-        if (!empty($data)) {
-            $data = Carbon::parse($data)->format('d/m/Y');
-        } else {
-            $reservas = $reservas->orderBy('data', 'DESC');
-        }
+        $reservas = Reserva::make()
+            ->when($request->busca_nome, function ($query) use ($request) {
+                $query->where('nome', 'LIKE', '%'.$request->busca_nome.'%')
+                    ->orderBy('data', 'DESC');
+            })
+            ->when($request->busca_data, function ($query) use ($request) {
+                $query->whereDate('data', Carbon::createFromFormat('d/m/Y', $request->busca_data)->format('Y-m-d'));
+            })
+            ->when($request->filter, function ($query) use ($request) {
+                $salas = Sala::select('id')->whereIn('categoria_id', $request->filter)->pluck('id');
+                $query->whereIn('sala_id', $salas->toArray());
+            });
 
         $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
-
-        return [
-            'reservas' => $reservas,
-            'data' => $data,
-        ];
-    }
-
-    public function home(Request $request)
-    {
-        $result = $this->search($request);
-        $data = $result['data'];
-        $reservas = $result['reservas'];
 
         return view('home', [
             'categorias' => Categoria::all(),
             'filter' => ($request->filter) ?: [],
             'reservas' => $reservas,
-            'data' => $data,
+        ]);
+    }
+
+    public function home(Request $request)
+    {
+        $data = today();
+        $reservas = Reserva::whereDate('data', $data)->orderBy('horario_inicio', 'ASC')->paginate(20);
+
+        return view('home', [
+            'categorias' => Categoria::all(),
+            'filter' => ($request->filter) ?: [],
+            'reservas' => $reservas,
         ]);
     }
 }
