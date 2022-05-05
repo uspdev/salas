@@ -32,7 +32,6 @@ class RecursoController extends Controller
     public function store(RecursoRequest $request)
     {
         $this->authorize('admin');
-
         $recurso = Recurso::create($request->validated());
 
         return redirect('/recursos')
