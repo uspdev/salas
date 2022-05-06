@@ -104,10 +104,11 @@ class CategoriaController extends Controller
         $this->authorize('admin');
 
         $request->validate([
-            'codpes' => 'required',
+            'codpes' => 'required|integer',
         ],
         [
             'codpes.required' => 'Entre com o número USP.',
+            'codpes.integer' => 'O número USP precisa ser inteiro.',
         ]);
 
         // é um número USP válido?
