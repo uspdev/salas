@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
-
 use App\Models\Sala;
 use App\Rules\verifyRoomAvailability;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class ReservaRequest extends FormRequest
@@ -28,25 +26,25 @@ class ReservaRequest extends FormRequest
      */
     public function rules()
     {
-        /**
+        /*
          * A validação da disponibilidade será customizada
          */
-        if ($this->method() == 'PATCH' || $this->method() == 'PUT'){
+        if ($this->method() == 'PATCH' || $this->method() == 'PUT') {
             $id = $this->reserva->id;
         } else {
-            $id = 0; 
+            $id = 0;
         }
 
         $rules = [
-            'nome'           => 'required',
+            'nome' => 'required',
             'horario_inicio' => 'required|date_format:G:i|',
-			'horario_fim'    => 'required|date_format:G:i|after:horario_inicio|',
-            'cor'            => 'nullable',
-            'sala_id'        => ['required',Rule::in(Sala::pluck('id')->toArray())],
-            'descricao'      => 'nullable',
-            'repeat_until'   => ['required_with:repeat_days','nullable','date_format:d/m/Y'],
-            'repeat_days.*'  => 'integer|between:0,6',
-            'data'           => ['required','date_format:d/m/Y',new verifyRoomAvailability($this,$id)], 
+            'horario_fim' => 'required|date_format:G:i|after:horario_inicio|',
+            'cor' => 'nullable',
+            'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray())],
+            'descricao' => 'nullable',
+            'repeat_until' => ['required_with:repeat_days', 'nullable', 'date_format:d/m/Y'],
+            'repeat_days.*' => 'integer|between:0,6',
+            'data' => ['required', 'date_format:d/m/Y', new verifyRoomAvailability($this, $id)],
         ];
 
         return $rules;
@@ -55,13 +53,14 @@ class ReservaRequest extends FormRequest
     public function messages()
     {
         return [
-            'nome.required'              => 'O nome não pode ficar em branco.',
-            'data.required'              => 'A data não pode ficar em branco.',
-            'horario_inicio.required'    => 'O horário de início não pode ficar em branco.',
-            'horario_fim.required'       => 'O horário de fim não pode ficar em branco.',
-            'sala_id.required'           => 'Selecione uma sala.',
+            'nome.required' => 'O título não pode ficar em branco.',
+            'data.required' => 'A data não pode ficar em branco.',
+            'horario_inicio.required' => 'O horário de início não pode ficar em branco.',
+            'horario_fim.required' => 'O horário de fim não pode ficar em branco.',
+            'horario_inicio.date_format' => 'Digite o horário no formato 0:00. Exemplo: 9:00',
+            'horario_fim.date_format' => 'Digite o horário no formato 0:00. Exemplo: 9:00',
+            'sala_id.required' => 'Selecione uma sala.',
             'repeat_until.required_with' => 'Selecione uma data para o fim da repetição.',
         ];
     }
-
 }

@@ -13,7 +13,9 @@
                     <form method="POST" action="/categorias/removeuser/{{ $categoria->id }}/{{ $user->id }}">
                         @csrf
                         @method('delete')
-                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza?');">
+                            <i class="fa fa-trash" ></i>
+                        </button>
                     </form>
                 </li>
             @empty

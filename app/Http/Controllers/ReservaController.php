@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sala;
-use App\Models\Reserva;
-use Illuminate\Http\Request;
 use App\Http\Requests\ReservaRequest;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Reserva;
+use App\Models\Sala;
+use App\Service\GeneralSettings;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use App\Service\GeneralSettings;
 
 class ReservaController extends Controller
 {
@@ -19,46 +18,20 @@ class ReservaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function search(Request $request) 
-    {
-        if(isset(request()->busca_nome)) {
-            $reservas = Reserva::where('nome', 'LIKE',"%{$request->busca_nome}%")->paginate(20);
-
-        } else if(isset(request()->busca_data)) {
-            $data = $request->busca_data;
-            $data = Carbon::createFromFormat('d/m/Y', $data)->format('Y-m-d');
-            $reservas = Reserva::where('data', 'LIKE',"%{$data}%")->paginate(20);
-
-        } else {
-            $reservas = Reserva::orderBy('id', 'desc')->paginate(20);  
-        }
-        /* dd($reservas); */
-        return $reservas;
-    } 
-
-    public function index(Request $request)
-    {  
-        $reservas =  $this->search($request); 
-        return view('reserva.index',[
-            'reservas' => $reservas
-        ]);
-    }
-
     public function my(Request $request)
-    {  
+    {
         $this->authorize('logado');
-        $reservas = Reserva::where('user_id',auth()->user()->id);
+        $reservas = Reserva::where('user_id', auth()->user()->id);
 
         // Só estamos interessado nas reservas de maior hierarquia
-        $reservas->where(function($query) {
-            $query->whereNull('parent_id')->orWhereColumn('parent_id','id');
+        $reservas->where(function ($query) {
+            $query->whereNull('parent_id')->orWhereColumn('parent_id', 'id');
         });
 
         $reservas->orderBy('data');
-        
-        return view('reserva.my',[
-            'reservas' => $reservas->get()
+
+        return view('reserva.my', [
+            'reservas' => $reservas->get(),
         ]);
     }
 
@@ -73,21 +46,21 @@ class ReservaController extends Controller
 
         if (Gate::allows('admin')) {
             $salas = Sala::all();
-
         } else {
             $categorias = auth()->user()->categorias;
             $salas = collect();
-    
-            foreach($categorias as $categoria){
-                foreach($categoria->salas as $sala){
+
+            foreach ($categorias as $categoria) {
+                foreach ($categoria->salas as $sala) {
                     $salas->push($sala);
                 }
             }
         }
 
         return view('reserva.create', [
-            'reserva' => new Reserva,
-            'salas'   => $salas,
+            'irmaos' => false,
+            'reserva' => new Reserva(),
+            'salas' => $salas,
             'settings' => $settings,
         ]);
     }
@@ -95,19 +68,20 @@ class ReservaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(ReservaRequest $request)
-    {   
+    {
         $validated = $request->validated();
         $validated['user_id'] = auth()->user()->id;
 
-        $this->authorize('members',$validated['sala_id']);
+        $this->authorize('members', $validated['sala_id']);
 
         $reserva = Reserva::create($validated);
         $created = '';
-        if (array_key_exists("repeat_days", $validated) && array_key_exists("repeat_until", $validated)) {
+        if (array_key_exists('repeat_days', $validated) && array_key_exists('repeat_until', $validated)) {
             $reserva->parent_id = $reserva->id;
             $reserva->save();
 
@@ -117,7 +91,7 @@ class ReservaController extends Controller
             $period = CarbonPeriod::between($inicio, $fim);
 
             foreach ($period as $date) {
-                if(in_array($date->dayOfWeek, $validated['repeat_days'])) {
+                if (in_array($date->dayOfWeek, $validated['repeat_days'])) {
                     $new = $reserva->replicate();
                     $new->parent_id = $reserva->id;
                     $new->data = $date->format('d/m/Y');
@@ -127,56 +101,67 @@ class ReservaController extends Controller
             }
         }
 
-        request()->session()->flash('alert-info', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
-        return redirect("/salas/{$reserva->sala->id}");
+        return redirect("/salas/{$reserva->sala->id}")
+            ->with('alert-sucess', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Reserva  $reserva
+     * @param \App\Reserva $reserva
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Reserva $reserva)
     {
-        #$this->authorize('members',$reserva->sala_id);
+        //$this->authorize('members',$reserva->sala_id);
 
-        return view('reserva.show',[
-            'reserva' => $reserva
+        return view('reserva.show', [
+            'reserva' => $reserva,
             ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Reserva  $reserva
+     * @param \App\Reserva $reserva
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Reserva $reserva, GeneralSettings $settings)
     {
-        $this->authorize('owner',$reserva);
+        $this->authorize('owner', $reserva);
 
         if (Gate::allows('admin')) {
             $salas = Sala::all();
-
         } else {
             $categorias = auth()->user()->categorias;
             $salas = collect();
-    
-            foreach($categorias as $categoria){
-                foreach($categoria->salas as $sala){
+
+            foreach ($categorias as $categoria) {
+                foreach ($categoria->salas as $sala) {
                     $salas->push($sala);
                 }
             }
         }
 
-        if($reserva->parent_id !=null) {
-            request()->session()->flash('alert-danger', "
-            Atenção: Essa reserva faz parte de grupo e você está editando somente essa instância");
+        if ($reserva->parent_id != null) {
+            request()->session()->flash('alert-warning', 'Atenção: Esta reserva faz parte de um grupo e você está editando somente esta instância');
         }
+
         return view('reserva.edit', [
-            'reserva'  => $reserva,
-            'salas'    => $salas,
+            'reserva' => $reserva,
+            'salas' => $salas,
+            'settings' => $settings,
+        ]);
+    }
+
+    public function editAll(Reserva $reserva, GeneralSettings $settings)
+    {
+        $this->authorize('owner', $reserva);
+
+        return view('reserva.editAll', [
+            'reserva' => $reserva,
             'settings' => $settings,
         ]);
     }
@@ -184,38 +169,63 @@ class ReservaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Reserva  $reserva
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Reserva             $reserva
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(ReservaRequest $request, Reserva $reserva)
     {
-        $this->authorize('owner',$reserva);
+        $this->authorize('owner', $reserva);
 
-        $validated = $request->validated();
-        $reserva->update($validated);
-        request()->session()->flash('alert-info', "Reserva atualizada com sucesso");
-        return redirect("/reservas/{$reserva->id}");
+        $reserva->update($request->validated());
+
+        return redirect("/reservas/{$reserva->id}")
+            ->with('alert-sucess', 'Reserva atualizada com sucesso');
+    }
+
+    public function updateAll(Request $request, Reserva $reserva)
+    {
+        $this->authorize('owner', $reserva);
+
+        $irmaos = $reserva->irmaos();
+        $request->validate([
+                'nome' => 'required',
+            ],
+            [
+                'nome.required' => 'O título não pode ficar em branco.',
+            ]);
+
+        $irmaos->each(function ($item) use ($request) {
+            $item['nome'] = $request->nome;
+            $item['cor'] = $request->cor;
+            $item['descricao'] = $request->descricao;
+            $item->update();
+        });
+
+        return redirect("/reservas/{$reserva->id}")
+            ->with('alert-sucess', 'Reserva atualizadas com sucesso');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Reserva  $reserva
+     * @param \App\Reserva $reserva
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Reserva $reserva)
     {
-        $this->authorize('owner',$reserva);
+        $this->authorize('owner', $reserva);
 
-        if($request->tipo == 'one'){
+        if ($request->tipo == 'one') {
             $reserva->delete();
-            request()->session()->flash('alert-info', 'Reserva excluída com sucesso.');
-        } else if($request->tipo == 'all'){
-            Reserva::where('parent_id',$reserva->parent_id)->delete();
-            request()->session()->flash('alert-info', 'Todas Instâncias foram excluídas com sucesso.');
+            request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
+        } elseif ($request->tipo == 'all') {
+            Reserva::where('parent_id', $reserva->parent_id)->delete();
+            request()->session()->flash('alert-success', 'Todas Instâncias foram excluídas com sucesso.');
         }
 
-        return redirect('/reservas');
+        return redirect('/');
     }
 }

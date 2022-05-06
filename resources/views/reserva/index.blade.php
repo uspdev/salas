@@ -1,32 +1,33 @@
-@extends('main')
-@section('title') Sistema de Reserva de Salas @endsection
-@section('content')
 <div class="card">
     <div class="card-body">
-        <form method="get" action="/reservas">
+        <form method="GET" action="/search">
             <div class="row">
-                <div class=" col-sm input-group">
-                    <div class="d-grid gap-2 d-md-block">
-                        <span><b>Busca por</b></span>
-                        <select class="form-select" aria-label="Default select example">
-                            <option onclick="disable('input_busca_data', 'input_busca_nome')" selected>Reserva</option>
-                            <option onclick="disable('input_busca_nome', 'input_busca_data')">Data</option>
-                        </select>
+                @foreach($categorias as $categoria)
+                    <div class="form-group col-md-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="{{ $categoria->id }}" id="inlineCheckbox{{ $categoria->id }}" name="filter[]" @if(in_array($categoria->id, $filter))  checked  @endif/>
+                            <label class="form-check-label" for="inlineCheckbox{{ $categoria->id }}">{{ $categoria->nome }}</label>
+                        </div>
                     </div>
-                </div>
-            </div><br>
+                @endforeach
+            </div>
+            <div class="row">
+                <div class="col-sm input-group">
+                    <input type="text" class="datepicker" id="input_busca_data" name="busca_data" type="text" placeholder="Data" value="{{ request()->busca_data ?? '' }}">      
+                    <input type="text" class="form-control" id="input_busca_nome" name="busca_nome" type="text" placeholder="Título" value="{{ request()->busca_nome }}" style="margin-left: 1%;">
+                </div>                 
+            </div>
+            <br>
             <div class="row">
                 <div class=" col-sm input-group">
-                    <input type="text" class="form-control" id="input_busca_nome" name="busca_nome" type="text" placeholder="Reserva" value="{{ request()->busca_nome }}">
-                    <input type="text" class="datepicker" id="input_busca_data" name="busca_data" type="text" placeholder="Data" value="{{ request()->busca_data }}" disabled>
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-success"> Buscar </button>
-                    </span>
+                    </span>      
                 </div>
             </div>
-        </form><br>
+        </form>
+        <br>
+        {{ $reservas->appends(request()->except('page'))->links() }}
         @include('reserva.partials.table')
-        {{ $reservas->appends(request()->query())->links() }}
     </div>
 </div>
-@endsection
