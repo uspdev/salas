@@ -43,18 +43,10 @@ class ReservaController extends Controller
     public function create(GeneralSettings $settings)
     {
         $this->authorize('logado');
-
         if (Gate::allows('admin')) {
             $salas = Sala::all();
         } else {
-            $categorias = auth()->user()->categorias;
-            $salas = collect();
-
-            foreach ($categorias as $categoria) {
-                foreach ($categoria->salas as $sala) {
-                    $salas->push($sala);
-                }
-            }
+            $salas = auth()->user()->salas;
         }
 
         return view('reserva.create', [
@@ -135,14 +127,7 @@ class ReservaController extends Controller
         if (Gate::allows('admin')) {
             $salas = Sala::all();
         } else {
-            $categorias = auth()->user()->categorias;
-            $salas = collect();
-
-            foreach ($categorias as $categoria) {
-                foreach ($categoria->salas as $sala) {
-                    $salas->push($sala);
-                }
-            }
+            $salas = auth()->user()->salas;
         }
 
         if ($reserva->parent_id != null) {

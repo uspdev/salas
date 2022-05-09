@@ -50,4 +50,17 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Categoria', 'categoria_user')->withTimestamps();
     }
+
+    public function salas()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Sala',
+            'App\Models\CategoriaUser',
+            'user_id',
+            'categoria_id',
+            'id',
+            'categoria_id'
+        );
+    }
+
 }

@@ -19,4 +19,5 @@ class Categoria extends Model
     {
         return $this->belongsToMany('App\Models\User', 'categoria_user')->withTimestamps();
     }
+
 }
