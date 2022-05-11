@@ -16,6 +16,7 @@ Route::post('/reservas/updateAll/{reserva}', [ReservaController::class, 'updateA
 
 // Salas
 Route::resource('/salas', SalaController::class);
+Route::post('/salas/redirect', [SalaController::class, 'redirect']);
 
 // Recursos
 Route::resource('/recursos', RecursoController::class)->only(['index', 'store', 'destroy']);

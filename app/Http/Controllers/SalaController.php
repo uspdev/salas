@@ -14,13 +14,40 @@ class SalaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $categorias = Categoria::all();
+        $salas = Sala::all()->pluck('nome')->toArray();
 
         return view('sala.index', [
             'categorias' => $categorias,
+            'salas' => $salas,
         ]);
+    }
+
+    public function redirect(Request $request)
+    {
+        $request->validate([
+            'sala' => 'required',
+        ],
+        [
+            'sala.required' => 'Insira a sala.',
+        ]);
+
+        $sala = Sala::where('nome', $request->sala)->get();
+        $sala_array = $sala->toArray();
+        if (count($sala_array) > 1) {
+            return view('sala.redirect', [
+                'salas' => $sala,
+            ]);
+        } elseif (count($sala_array) == 1) {
+            $id = $sala[0]['id'];
+
+            return redirect("/salas/{$id}");
+        }
+
+        return redirect('/salas')
+            ->with('alert-danger', 'Sala '.$request->sala.' não existe!');
     }
 
     /**
