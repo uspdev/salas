@@ -41,7 +41,7 @@ class SalaController extends Controller
                 'salas' => $sala,
             ]);
         } elseif (count($sala_array) == 1) {
-            $id = $sala[0]['id'];
+            $id = $sala->first()->id;
 
             return redirect("/salas/{$id}");
         }
