@@ -14,7 +14,7 @@
             <tr>
                 <td>{{ $reserva->data }}</td>
                 <td>{{ $reserva->horario_inicio }} - {{$reserva->horario_fim}}</td>
-                <td>{{ $reserva->sala->nome }}</td>
+                <td><a href="/salas/{{ $reserva->sala_id }}">{{ $reserva->sala->nome }}</a></td>
                 <td>{{ $reserva->sala->categoria->nome }}</td>
                 <td><div class="dot" style="background-color: {{$reserva->cor}};"></div></td>
                 <td><a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a></td>
