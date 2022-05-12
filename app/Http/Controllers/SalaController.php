@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
 use App\Models\Sala;
-use Illuminate\Http\Request;
 
 class SalaController extends Controller
 {
@@ -17,37 +16,12 @@ class SalaController extends Controller
     public function index()
     {
         $categorias = Categoria::all();
-        $salas = Sala::all()->pluck('nome')->toArray();
+        $salas = Sala::all();
 
         return view('sala.index', [
             'categorias' => $categorias,
             'salas' => $salas,
         ]);
-    }
-
-    public function redirect(Request $request)
-    {
-        $request->validate([
-            'sala' => 'required',
-        ],
-        [
-            'sala.required' => 'Insira a sala.',
-        ]);
-
-        $sala = Sala::where('nome', $request->sala)->get();
-        $sala_array = $sala->toArray();
-        if (count($sala_array) > 1) {
-            return view('sala.redirect', [
-                'salas' => $sala,
-            ]);
-        } elseif (count($sala_array) == 1) {
-            $id = $sala->first()->id;
-
-            return redirect("/salas/{$id}");
-        }
-
-        return redirect('/salas')
-            ->with('alert-danger', 'Sala '.$request->sala.' não existe!');
     }
 
     /**
