@@ -1,6 +1,6 @@
 @extends('main')
-@section('title') 
-    Sistema de Reserva de Salas 
+@section('title')
+    Sistema de Reserva de Salas
 @endsection
 @section('styles')
     <style>
@@ -13,15 +13,19 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">   
+        <div class="card-header">
             <h5 class="card-title">Calendário por Sala</h5>
         </div>
         <div class="card-body">
             <div class="input-group">
                 <select id="select-salas" class="form-control" name="sala" onchange="changeUrlFromSalaId()">
-                    @foreach($salas as $sala)
-                        <option value="{{ $sala->id }}">{{ $sala->nome }} - {{ $sala->categoria->nome }}</option>
-                    @endforeach
+                   @foreach($categorias as $categoria)
+                     <optgroup label="{{ $categoria->nome }}">
+                       @foreach($categoria->salas as $sala)
+                        <option value="{{ $sala->id }}">{{ $sala->nome }}</option>
+                       @endforeach
+                     </optgroup>
+                   @endforeach
                 </select>
                 <a id="a-salas" class="btn btn-outline-success"><i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -48,7 +52,7 @@
                 </li>
                 @endforeach
             </ul>
-        </div>  
+        </div>
     </div>
 @endsection
 
@@ -60,10 +64,9 @@
 
         function changeUrlFromSalaId() {
             var sel = document.getElementById('select-salas');
-            var a = document.getElementById('a-salas'); 
+            var a = document.getElementById('a-salas');
             var value = sel.value
             a.href = "/salas/" + value;
-            console.log(value);
         }
 
         window.onload = changeUrlFromSalaId;

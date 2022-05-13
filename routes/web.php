@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 // Reservas
 Route::get('/reservas/my', [ReservaController::class, 'my']);
-Route::resource('/reservas', ReservaController::class);
+Route::resource('/reservas', ReservaController::class)->except(['index']);
 Route::get('/reservas/{reserva}/editAll', [ReservaController::class, 'editAll']);
 Route::post('/reservas/updateAll/{reserva}', [ReservaController::class, 'updateAll']);
 

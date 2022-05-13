@@ -15,12 +15,10 @@ class SalaController extends Controller
      */
     public function index()
     {
-        $categorias = Categoria::all();
-        $salas = Sala::all();
+        $categorias = Categoria::with(['salas'])->get();
 
         return view('sala.index', [
-            'categorias' => $categorias,
-            'salas' => $salas,
+            'categorias' => $categorias
         ]);
     }
 
