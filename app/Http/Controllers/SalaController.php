@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
 use App\Models\Sala;
-use Illuminate\Http\Request;
 
 class SalaController extends Controller
 {
@@ -14,12 +13,12 @@ class SalaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $categorias = Categoria::all();
+        $categorias = Categoria::with(['salas'])->get();
 
         return view('sala.index', [
-            'categorias' => $categorias,
+            'categorias' => $categorias
         ]);
     }
 
