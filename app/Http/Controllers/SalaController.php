@@ -130,10 +130,9 @@ class SalaController extends Controller
     public function destroy(Sala $sala)
     {
         dd("Função desativada");
+
         $this->authorize('admin');
-
         $sala->delete();
-
         return redirect("/salas/{$sala->id}")
             ->with('alert-success', 'Sala excluída com sucesso');
     }
