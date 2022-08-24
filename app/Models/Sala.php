@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Reserva;
 use App\Models\Categoria;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Sala extends Model
+class Sala extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+    
     use HasFactory;
     protected $guarded = ['id'];
 

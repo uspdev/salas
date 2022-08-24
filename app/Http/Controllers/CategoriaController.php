@@ -93,9 +93,14 @@ class CategoriaController extends Controller
     {
         $this->authorize('admin');
 
+        if($categoria->salas->isNotEmpty()){
+            return redirect("/categorias/{$categoria->id}")
+                ->with('alert-danger', 'Não é possível deletar essa categoria pois ela contém salas');   
+        }
+
         $categoria->delete();
 
-        return redirect('/salas')
+        return redirect('/')
             ->with('alert-sucess', 'Categoria excluída com sucesso.');
     }
 

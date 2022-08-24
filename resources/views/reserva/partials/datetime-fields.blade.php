@@ -24,11 +24,11 @@
             @foreach ($salas as $sala)
                 @if (old('sala_id') == '')
                     <option value="{{ $sala->id }}" {{ ($reserva->sala_id == $sala->id) ? 'selected' : ''}}>
-                        {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
+                    {{ $sala->categoria->nome }}: {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
                     </option>
                 @else
                     <option value="{{ $sala->id }}" {{ (old('sala_id') == $sala->id) ? 'selected' : ''}}>
-                        {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
+                    {{ $sala->categoria->nome }}: {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
                     </option>
                 @endif
             @endforeach
