@@ -131,9 +131,12 @@ class SalaController extends Controller
     {
         dd("Função desativada");
 
-        $this->authorize('admin');
+        if($sala->reservas->isNotEmpty()){
+            return redirect("/salas/{$sala->id}")
+            ->with('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');   
+        }
+
         $sala->delete();
-        return redirect("/salas/{$sala->id}")
-            ->with('alert-success', 'Sala excluída com sucesso');
+        return redirect("/")->with('alert-sucess', 'Sala excluída com sucesso');
     }
 }
