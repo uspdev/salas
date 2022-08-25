@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Mail\CreateReservaMail;
 use App\Mail\DeleteReservaMail;
+use App\Mail\UpdateReservaMail;
 use Illuminate\Support\Facades\Mail;
 
 class ReservaController extends Controller
@@ -170,6 +171,8 @@ class ReservaController extends Controller
 
         $reserva->update($request->validated());
 
+        Mail::queue(new UpdateReservaMail($reserva));
+
         return redirect("/reservas/{$reserva->id}")
             ->with('alert-sucess', 'Reserva atualizada com sucesso');
     }
@@ -192,6 +195,8 @@ class ReservaController extends Controller
             $item['descricao'] = $request->descricao;
             $item->update();
         });
+
+        Mail::queue(new UpdateReservaMail($reserva));
 
         return redirect("/reservas/{$reserva->id}")
             ->with('alert-sucess', 'Reserva atualizadas com sucesso');

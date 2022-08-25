@@ -34,7 +34,7 @@ class DeleteReservaMail extends Mailable
     {
         $user = User::find($this->reserva->user_id);
         return $this->view('emails.delete_reserva')
-                    ->subject('Exclusão de reserva - Sistema Reserva de Salas')
+                    ->subject('Exclusão de reserva — Sistema Reserva de Salas')
                     ->to($user->email)
                     ->with([
                         'reserva' => $this->reserva,

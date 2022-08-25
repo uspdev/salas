@@ -10,7 +10,7 @@ use App\Models\Reserva;
 use App\Models\User;
 use App\Models\Sala;
 
-class CreateReservaMail extends Mailable
+class UpdateReservaMail extends Mailable
 {
     use Queueable, SerializesModels;
     private $reserva;
@@ -33,8 +33,8 @@ class CreateReservaMail extends Mailable
     public function build()
     {
         $user = User::find($this->reserva->user_id);
-        return $this->view('emails.create_reserva')
-                    ->subject('Novo cadastro de reserva de sala — Sistema Reserva de Salas')
+        return $this->view('emails.update_reserva')
+                    ->subject('Reserva modificada - Sistema Reserva de Salas')
                     ->to($user->email)
                     ->with([
                         'reserva' => $this->reserva,
