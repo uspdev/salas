@@ -129,6 +129,8 @@ class SalaController extends Controller
      */
     public function destroy(Sala $sala)
     {
+        $this->authorize('admin');
+        
         if($sala->reservas->isNotEmpty()){
             return redirect("/salas/{$sala->id}")
             ->with('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');   
