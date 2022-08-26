@@ -10,6 +10,10 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Mail\CreateReservaMail;
+use App\Mail\DeleteReservaMail;
+use App\Mail\UpdateReservaMail;
+use Illuminate\Support\Facades\Mail;
 
 class ReservaController extends Controller
 {
@@ -92,9 +96,11 @@ class ReservaController extends Controller
                 }
             }
         }
+        //enviar e-mail
+        Mail::queue(new CreateReservaMail($reserva));
 
         return redirect("/salas/{$reserva->sala->id}")
-            ->with('alert-sucess', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
+            ->with('alert-success', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
     }
 
     /**
@@ -165,6 +171,8 @@ class ReservaController extends Controller
 
         $reserva->update($request->validated());
 
+        Mail::queue(new UpdateReservaMail($reserva));
+
         return redirect("/reservas/{$reserva->id}")
             ->with('alert-sucess', 'Reserva atualizada com sucesso');
     }
@@ -188,6 +196,8 @@ class ReservaController extends Controller
             $item->update();
         });
 
+        Mail::queue(new UpdateReservaMail($reserva));
+
         return redirect("/reservas/{$reserva->id}")
             ->with('alert-sucess', 'Reserva atualizadas com sucesso');
     }
@@ -202,6 +212,8 @@ class ReservaController extends Controller
     public function destroy(Request $request, Reserva $reserva)
     {
         $this->authorize('owner', $reserva);
+
+        Mail::queue(new DeleteReservaMail($reserva));
 
         if ($request->tipo == 'one') {
             $reserva->delete();
