@@ -99,7 +99,7 @@ class ReservaController extends Controller
         //enviar e-mail
         Mail::queue(new CreateReservaMail($reserva));
 
-        return redirect("/salas/{$reserva->sala->id}")
+        return redirect("/reservas/{$reserva->id}")
             ->with('alert-success', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
     }
 
