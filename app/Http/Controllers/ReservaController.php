@@ -27,12 +27,12 @@ class ReservaController extends Controller
         $this->authorize('logado');
         $reservas = Reserva::where('user_id', auth()->user()->id);
 
-        // Só estamos interessado nas reservas de maior hierarquia
+        // Só estamos interessados nas reservas de maior hierarquia
         $reservas->where(function ($query) {
             $query->whereNull('parent_id')->orWhereColumn('parent_id', 'id');
         });
-
-        $reservas->orderBy('data');
+        
+        $reservas->orderBy('data','desc');
 
         return view('reserva.my', [
             'reservas' => $reservas->get(),
