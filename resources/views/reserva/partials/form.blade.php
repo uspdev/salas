@@ -28,6 +28,6 @@
                 <br>
             </div>
         </div>
-        <button type="submit" class="btn btn-success">Enviar</button>
+        <button id="b-reservas" type="submit" class="btn btn-success">Enviar</button>
     </div>
 </div>

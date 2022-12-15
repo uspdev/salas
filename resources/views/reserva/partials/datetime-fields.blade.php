@@ -19,19 +19,14 @@
     <div class="col-sm form-group">     
         <label for="" class="required"><b>Sala </b></label>
         <br>
-        <select class="salas_select" name="sala_id">
-            <option value="" selected=""> -- Selecione  --</option>
-            @foreach ($salas as $sala)
-                @if (old('sala_id') == '')
-                    <option value="{{ $sala->id }}" {{ ($reserva->sala_id == $sala->id) ? 'selected' : ''}}>
-                    {{ $sala->categoria->nome }}: {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
-                    </option>
-                @else
-                    <option value="{{ $sala->id }}" {{ (old('sala_id') == $sala->id) ? 'selected' : ''}}>
-                    {{ $sala->categoria->nome }}: {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
-                    </option>
-                @endif
-            @endforeach
+        <select id="salas_select" class="form-control" name="sala_id" onchange="changeUrlFromSalaId()">
+        @foreach($categorias as $categoria)    
+            <optgroup label="{{ $categoria->nome }}">
+                @foreach($categoria->salas as $sala)
+                    <option value="{{ $sala->id }}">{{ $sala->nome }}</option>
+                @endforeach
+            </optgroup>
+        @endforeach    
         </select>
     </div>
 </div>
@@ -56,3 +51,20 @@
     </div>
     @include('reserva.partials.repeat')
 @endif 
+
+@section('javascripts_bottom')
+    <script>
+        $(document).ready(function() {
+            $('#salas_select').select2();
+        });
+
+        function changeUrlFromSalaId() {
+            var sel = document.getElementById('salas_select');
+            var a = document.getElementById('b-reservas');
+            var value = sel.value
+            a.href = "/reservas/create" + value;
+        }
+
+        window.onload = changeUrlFromSalaId;
+    </script>
+@endsection

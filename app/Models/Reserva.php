@@ -89,11 +89,6 @@ class Reserva extends Model implements Auditable
         return;
     }
 
-    public function sala()
-    {
-        return $this->belongsTo(Sala::class);
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
+use App\Models\Recurso;
+use App\Models\Reserva;
 use App\Models\Sala;
 
 class SalaController extends Controller
@@ -34,6 +36,7 @@ class SalaController extends Controller
         return view('sala.create', [
             'sala' => new Sala(),
             'categorias' => Categoria::all(),
+            'recursos' => Recurso::all(),
         ]);
     }
 
@@ -48,7 +51,11 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        $sala = Sala::create($request->validated());
+        $data = $request->validated();
+        //dd($data['recursos']);
+        $sala = Sala::create($data);
+
+        $sala->recursos()->sync($data['recursos']);
 
         return redirect("/salas/{$sala->id}")
             ->with('alert-sucess', 'Sala criada com sucesso');
@@ -99,9 +106,18 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
+        $sala->load('recursos');
+        //dd($sala);
+        //$recursos = Recurso::get()->map(function($recurso) use ($sala) {
+        //    $recurso->id = data_get($sala->recursos->firstWhere('id', $recurso->id)) ?? null;
+        //    return $recurso;
+        //});
+        //
+
         return view('sala.edit', [
             'sala' => $sala,
             'categorias' => Categoria::all(),
+            'recursos' => Recurso::all(),
         ]);
     }
 
@@ -116,7 +132,10 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        $sala->update($request->validated());
+        $validated = $request->validated();
+
+        $sala->update($validated);
+        $sala->recursos()->sync($this->mapRecursos($validated['recursos']));
 
         return redirect("/salas/{$sala->id}")
             ->with('alert-sucess', 'Sala atualizada com sucesso');
@@ -138,5 +157,12 @@ class SalaController extends Controller
 
         $sala->delete();
         return redirect("/")->with('alert-sucess', 'Sala excluída com sucesso');
+    }
+
+    private function mapRecursos($recursos)
+    {
+        return collect($recursos)->map(function ($i) {
+            return [$i];
+        });
     }
 }

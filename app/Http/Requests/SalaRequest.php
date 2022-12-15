@@ -27,7 +27,9 @@ class SalaRequest extends FormRequest
             'nome'         => 'required',
             'categoria_id' => 'required',
             'capacidade'   => 'required|integer',
+            'recursos' => 'nullable',
         ];
+        return $rules;
     }
 
     public function messages()

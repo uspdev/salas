@@ -9,6 +9,19 @@
                 <br>
                 <input class="form-control" type="text" name="nome" value="{{  old('nome', $sala->nome) }}" >
             </div>
+            <div class="col-sm form-group">
+                <b>Capacidade</b>
+                <br>
+                <input name="capacidade" class="form-control" type="number" min="0" value="{{  old('capacidade', $sala->capacidade) }}">
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm form-group">  
+                <b>Recursos</b>
+                <br>
+                @include('sala.partials.recurso')
+            </div>
             <div class="col-sm form-group">  
                 <b>Categoria</b>
                 <br>
@@ -27,10 +40,7 @@
                         @endforeach
                 </select>
             </div>
-            <div class="col-sm form-group">
-                <b>Capacidade</b><br>
-                <input name="capacidade" class="form-control" type="number" min="0" value="{{  old('capacidade', $sala->capacidade) }}">
-            </div>
+            
         </div>
         <button type="submit" class="btn btn-success"> Enviar </button>
         <br>

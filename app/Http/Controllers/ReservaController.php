@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ReservaRequest;
 use App\Models\Reserva;
 use App\Models\Sala;
+use App\Models\Categoria;
 use App\Service\GeneralSettings;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -58,6 +59,7 @@ class ReservaController extends Controller
             'reserva' => new Reserva(),
             'salas' => $salas,
             'settings' => $settings,
+            'categorias' => Categoria::all(),
         ]);
     }
 
@@ -174,14 +176,14 @@ class ReservaController extends Controller
         Mail::queue(new UpdateReservaMail($reserva));
 
         return redirect("/reservas/{$reserva->id}")
-            ->with('alert-sucess', 'Reserva atualizada com sucesso');
+            ->with('alert-success', 'Reserva atualizada com sucesso');
     }
 
     public function updateAll(Request $request, Reserva $reserva)
     {
         $this->authorize('owner', $reserva);
 
-        $irmaos = $reserva->irmaos();
+        $irmaos = $reserva->irmaos(); //delete irmãos antigos
         $request->validate([
                 'nome' => 'required',
             ],
@@ -199,7 +201,7 @@ class ReservaController extends Controller
         Mail::queue(new UpdateReservaMail($reserva));
 
         return redirect("/reservas/{$reserva->id}")
-            ->with('alert-sucess', 'Reserva atualizadas com sucesso');
+            ->with('alert-success', 'Reserva atualizadas com sucesso');
     }
 
     /**
