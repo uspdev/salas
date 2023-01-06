@@ -6,6 +6,7 @@ use App\Http\Requests\ReservaRequest;
 use App\Models\Reserva;
 use App\Models\Sala;
 use App\Models\Categoria;
+use App\Models\Recurso;
 use App\Service\GeneralSettings;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -50,6 +51,8 @@ class ReservaController extends Controller
         $this->authorize('logado');
         if (Gate::allows('admin')) {
             $salas = Sala::all();
+            $recursos = Recurso::all();
+            $selectedRecurso = Sala::first()->recurso_id;
         } else {
             $salas = auth()->user()->salas;
         }
@@ -60,6 +63,8 @@ class ReservaController extends Controller
             'salas' => $salas,
             'settings' => $settings,
             'categorias' => Categoria::all(),
+            'recursos' => $recursos,
+            'selectedRecurso' => $selectedRecurso,
         ]);
     }
 

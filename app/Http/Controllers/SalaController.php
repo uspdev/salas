@@ -51,11 +51,13 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        $data = $request->validated();
-        //dd($data['recursos']);
-        $sala = Sala::create($data);
+        $validated = $request->validated();
 
-        $sala->recursos()->sync($data['recursos']);
+        $sala = Sala::create($validated);
+        
+        if(array_key_exists('recursos', $validated)) {
+            $sala->recursos()->attach($validated['recursos']);
+        }
 
         return redirect("/salas/{$sala->id}")
             ->with('alert-sucess', 'Sala criada com sucesso');
@@ -94,6 +96,7 @@ class SalaController extends Controller
         return view('sala.show', [
             'sala' => $sala,
             'calendar' => $calendar,
+            'recursos' => Recurso::all(),
             ]);
     }
 
@@ -107,17 +110,16 @@ class SalaController extends Controller
         $this->authorize('admin');
 
         $sala->load('recursos');
-        //dd($sala);
-        //$recursos = Recurso::get()->map(function($recurso) use ($sala) {
-        //    $recurso->id = data_get($sala->recursos->firstWhere('id', $recurso->id)) ?? null;
-        //    return $recurso;
-        //});
-        //
+
+        $recursos = Recurso::get()->map(function($recurso) use ($sala) {
+            $recurso->checked = data_get($sala->recursos->firstWhere('id', $recurso->id), 'pivot.recurso_id') ?? null;
+            return $recurso;
+        });        
 
         return view('sala.edit', [
             'sala' => $sala,
             'categorias' => Categoria::all(),
-            'recursos' => Recurso::all(),
+            'recursos' => $recursos,
         ]);
     }
 
@@ -135,10 +137,20 @@ class SalaController extends Controller
         $validated = $request->validated();
 
         $sala->update($validated);
-        $sala->recursos()->sync($this->mapRecursos($validated['recursos']));
+              
+        if(array_key_exists('recursos', $validated)) {
+            $sala->recursos()->sync($validated['recursos']);
+        } 
+        else {
+            $recurso_ids = [];
+            foreach($sala->recursos as $recurso) {
+                $recurso_ids[] = $recurso->id;
+            }
+            $sala->recursos()->detach($recurso_ids);
+        }
 
         return redirect("/salas/{$sala->id}")
-            ->with('alert-sucess', 'Sala atualizada com sucesso');
+            ->with('alert-success', 'Sala atualizada com sucesso');
     }
 
     /**

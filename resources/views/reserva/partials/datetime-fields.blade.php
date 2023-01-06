@@ -23,11 +23,20 @@
         @foreach($categorias as $categoria)    
             <optgroup label="{{ $categoria->nome }}">
                 @foreach($categoria->salas as $sala)
-                    <option value="{{ $sala->id }}">{{ $sala->nome }}</option>
+                    <option value="{{ $sala->id }}">{{ $sala->nome }} ->
+                        @if($sala->recursos)
+                          |
+                                @foreach($sala->recursos as $recurso)
+                                        {{ $recurso->nome }} |
+                                    @endforeach
+
+                        @endif
+                    </option>
                 @endforeach
             </optgroup>
         @endforeach    
         </select>
+
     </div>
 </div>
 
@@ -57,14 +66,5 @@
         $(document).ready(function() {
             $('#salas_select').select2();
         });
-
-        function changeUrlFromSalaId() {
-            var sel = document.getElementById('salas_select');
-            var a = document.getElementById('b-reservas');
-            var value = sel.value
-            a.href = "/reservas/create" + value;
-        }
-
-        window.onload = changeUrlFromSalaId;
     </script>
 @endsection

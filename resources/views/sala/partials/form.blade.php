@@ -14,14 +14,6 @@
                 <br>
                 <input name="capacidade" class="form-control" type="number" min="0" value="{{  old('capacidade', $sala->capacidade) }}">
             </div>
-            
-        </div>
-        <div class="row">
-            <div class="col-sm form-group">  
-                <b>Recursos</b>
-                <br>
-                @include('sala.partials.recurso')
-            </div>
             <div class="col-sm form-group">  
                 <b>Categoria</b>
                 <br>
@@ -39,6 +31,21 @@
                             @endif
                         @endforeach
                 </select>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm form-group">  
+                <b>Recursos</b>
+                <br>
+                <table>
+                    @foreach($recursos as $recurso)
+                        <tr>
+                            <td><input {{ $recurso->checked ? 'checked' : null }} type="checkbox" class="recurso" name="recursos[]" value="{{ $recurso->id }}"></td>
+                            <td>{{ $recurso->nome }}</td>
+                        </tr>
+                    @endforeach
+                </table>
             </div>
             
         </div>
