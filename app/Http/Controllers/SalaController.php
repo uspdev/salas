@@ -54,7 +54,7 @@ class SalaController extends Controller
         $validated = $request->validated();
 
         $sala = Sala::create($validated);
-        
+
         if(array_key_exists('recursos', $validated)) {
             $sala->recursos()->attach($validated['recursos']);
         }
@@ -114,7 +114,7 @@ class SalaController extends Controller
         $recursos = Recurso::get()->map(function($recurso) use ($sala) {
             $recurso->checked = data_get($sala->recursos->firstWhere('id', $recurso->id), 'pivot.recurso_id') ?? null;
             return $recurso;
-        });        
+        });
 
         return view('sala.edit', [
             'sala' => $sala,
@@ -137,10 +137,10 @@ class SalaController extends Controller
         $validated = $request->validated();
 
         $sala->update($validated);
-              
+
         if(array_key_exists('recursos', $validated)) {
             $sala->recursos()->sync($validated['recursos']);
-        } 
+        }
         else {
             $recurso_ids = [];
             foreach($sala->recursos as $recurso) {
@@ -161,10 +161,10 @@ class SalaController extends Controller
     public function destroy(Sala $sala)
     {
         $this->authorize('admin');
-        
+
         if($sala->reservas->isNotEmpty()){
             return redirect("/salas/{$sala->id}")
-            ->with('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');   
+            ->with('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');
         }
 
         $sala->delete();

@@ -8,11 +8,11 @@
         <tr>
             <td> {{ $sala->categoria->nome }} </td>
             <td>{{  $sala->capacidade ?? ''  }}</td>
-            @foreach($recursos as $recurso)
-                @if($sala->recursos->firstWhere('id', $recurso->id))
-                    <td>{{ $recurso->nome }}</td>  
-                @endif
-            @endforeach
+            <td>
+              @foreach($sala->recursos as $recurso)
+                <p>{{ $recurso->nome }}</p>
+              @endforeach
+            </td>
         </tr>
     </div>
 </table>

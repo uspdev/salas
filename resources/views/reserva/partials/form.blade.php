@@ -4,10 +4,10 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-sm form-group">     
+            <div class="col-sm form-group">
                 <label for="" class="required"><b>Título</b></label>
                 <br>
-                <input type="text" class="form-control"  name="nome" value="{{  old('nome', $reserva->nome) }}"> 
+                <input type="text" class="form-control"  name="nome" value="{{  old('nome', $reserva->nome) }}">
             </div>
             <div class="col-sm form-group">
                 <label for="" class="required"><b>Cor</b></label>
@@ -19,7 +19,7 @@
         @if($editOne)
             @include('reserva.partials.datetime-fields')
         @endif
-        
+
         <div class="row">
             <div class="col-sm form-group">
                 <label for="" class="required"><b>Descrição</b></label>

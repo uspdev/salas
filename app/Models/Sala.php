@@ -12,7 +12,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Sala extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    
+
     use HasFactory;
     protected $guarded = ['id'];
 
@@ -20,7 +20,7 @@ class Sala extends Model implements Auditable
     {
         return $this->hasMany(Reserva::class);
     }
-    
+
     public function recursos()
     {
         return $this->belongsToMany(Recurso::class)

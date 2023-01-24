@@ -9,32 +9,38 @@
         <br>
         <input class="form-control" type="text" name="horario_inicio" value="{{ old('horario_inicio', $reserva->horario_inicio) }}">
         <small class="form-text text-muted">Formato: 9:00 </small>
-    </div>        
+    </div>
     <div class="col-sm form-group">
         <label for="" class="required"><b>Horário de fim </b></label>
         <br>
         <input class="form-control" type="text" name="horario_fim" value="{{ old('horario_fim', $reserva->horario_fim) }}">
         <small class="form-text text-muted">Formato: 9:00 </small>
     </div>
-    <div class="col-sm form-group">     
+    <div class="col-sm form-group">
         <label for="" class="required"><b>Sala </b></label>
         <br>
         <select id="salas_select" class="form-control" name="sala_id" onchange="changeUrlFromSalaId()">
-        @foreach($categorias as $categoria)    
+        @foreach($categorias as $categoria)
             <optgroup label="{{ $categoria->nome }}">
-                @foreach($categoria->salas as $sala)
-                    <option value="{{ $sala->id }}">{{ $sala->nome }} ->
-                        @if($sala->recursos)
-                          |
-                                @foreach($sala->recursos as $recurso)
-                                        {{ $recurso->nome }} |
-                                    @endforeach
+              @foreach($categoria->salas as $sala)
+                <option value="{{ $sala->id }}">{{ $sala->nome }} [ Capacidade: {{
+                $sala->capacidade }} ]
+                  @forelse($sala->recursos as $recurso)
+                    @if ($loop->first)
+                      [ Recurso: {{ $recurso->nome }}
+                    @else
+                      - {{ $recurso->nome }}
+                    @endif
+                    @if ($loop->last)
+                      ]
+                    @endif
+                  @empty
+                  @endforelse
 
-                        @endif
-                    </option>
-                @endforeach
+                </option>
+              @endforeach
             </optgroup>
-        @endforeach    
+        @endforeach
         </select>
 
     </div>
@@ -42,7 +48,7 @@
 
 @if($reserva->id == null)
     <div class="row">
-        <div class="col-sm form-group"> 
+        <div class="col-sm form-group">
             <b>Repetição</b>
             <div class="checkFlex">
                 <div class="card">
@@ -59,7 +65,7 @@
         </div>
     </div>
     @include('reserva.partials.repeat')
-@endif 
+@endif
 
 @section('javascripts_bottom')
     <script>

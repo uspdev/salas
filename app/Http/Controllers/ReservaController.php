@@ -33,7 +33,7 @@ class ReservaController extends Controller
         $reservas->where(function ($query) {
             $query->whereNull('parent_id')->orWhereColumn('parent_id', 'id');
         });
-        
+
         $reservas->orderBy('data','desc');
 
         return view('reserva.my', [
@@ -188,7 +188,7 @@ class ReservaController extends Controller
     {
         $this->authorize('owner', $reserva);
 
-        $irmaos = $reserva->irmaos(); //delete irmãos antigos
+        $irmaos = $reserva->irmaos();
         $request->validate([
                 'nome' => 'required',
             ],

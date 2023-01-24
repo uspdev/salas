@@ -18,6 +18,7 @@ class CreateSalasTable extends Migration
             $table->timestamps();
             $table->string('nome');
             $table->integer('capacidade');
+            $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
         });
     }
 
