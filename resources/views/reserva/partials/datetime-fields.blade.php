@@ -9,36 +9,46 @@
         <br>
         <input class="form-control" type="text" name="horario_inicio" value="{{ old('horario_inicio', $reserva->horario_inicio) }}">
         <small class="form-text text-muted">Formato: 9:00 </small>
-    </div>        
+    </div>
     <div class="col-sm form-group">
         <label for="" class="required"><b>Horário de fim </b></label>
         <br>
         <input class="form-control" type="text" name="horario_fim" value="{{ old('horario_fim', $reserva->horario_fim) }}">
         <small class="form-text text-muted">Formato: 9:00 </small>
     </div>
-    <div class="col-sm form-group">     
+    <div class="col-sm form-group">
         <label for="" class="required"><b>Sala </b></label>
         <br>
-        <select class="salas_select" name="sala_id">
-            <option value="" selected=""> -- Selecione  --</option>
-            @foreach ($salas as $sala)
-                @if (old('sala_id') == '')
-                    <option value="{{ $sala->id }}" {{ ($reserva->sala_id == $sala->id) ? 'selected' : ''}}>
-                    {{ $sala->categoria->nome }}: {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
-                    </option>
-                @else
-                    <option value="{{ $sala->id }}" {{ (old('sala_id') == $sala->id) ? 'selected' : ''}}>
-                    {{ $sala->categoria->nome }}: {{ $sala->nome }} - Capacidade: {{ $sala->capacidade }}
-                    </option>
-                @endif
-            @endforeach
+        <select id="salas_select" class="form-control" name="sala_id" onchange="changeUrlFromSalaId()">
+        @foreach($categorias as $categoria)
+            <optgroup label="{{ $categoria->nome }}">
+              @foreach($categoria->salas as $sala)
+                <option value="{{ $sala->id }}">{{ $sala->nome }} [ Capacidade: {{
+                $sala->capacidade }} ]
+                  @forelse($sala->recursos as $recurso)
+                    @if ($loop->first)
+                      [ Recurso: {{ $recurso->nome }}
+                    @else
+                      - {{ $recurso->nome }}
+                    @endif
+                    @if ($loop->last)
+                      ]
+                    @endif
+                  @empty
+                  @endforelse
+
+                </option>
+              @endforeach
+            </optgroup>
+        @endforeach
         </select>
+
     </div>
 </div>
 
 @if($reserva->id == null)
     <div class="row">
-        <div class="col-sm form-group"> 
+        <div class="col-sm form-group">
             <b>Repetição</b>
             <div class="checkFlex">
                 <div class="card">
@@ -55,4 +65,12 @@
         </div>
     </div>
     @include('reserva.partials.repeat')
-@endif 
+@endif
+
+@section('javascripts_bottom')
+    <script>
+        $(document).ready(function() {
+            $('#salas_select').select2();
+        });
+    </script>
+@endsection

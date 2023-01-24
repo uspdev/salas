@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
+use App\Models\Recurso;
+use App\Models\Reserva;
 use App\Models\Sala;
 
 class SalaController extends Controller
@@ -34,6 +36,7 @@ class SalaController extends Controller
         return view('sala.create', [
             'sala' => new Sala(),
             'categorias' => Categoria::all(),
+            'recursos' => Recurso::all(),
         ]);
     }
 
@@ -48,7 +51,13 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        $sala = Sala::create($request->validated());
+        $validated = $request->validated();
+
+        $sala = Sala::create($validated);
+
+        if(array_key_exists('recursos', $validated)) {
+            $sala->recursos()->attach($validated['recursos']);
+        }
 
         return redirect("/salas/{$sala->id}")
             ->with('alert-sucess', 'Sala criada com sucesso');
@@ -87,6 +96,7 @@ class SalaController extends Controller
         return view('sala.show', [
             'sala' => $sala,
             'calendar' => $calendar,
+            'recursos' => Recurso::all(),
             ]);
     }
 
@@ -99,9 +109,17 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
+        $sala->load('recursos');
+
+        $recursos = Recurso::get()->map(function($recurso) use ($sala) {
+            $recurso->checked = data_get($sala->recursos->firstWhere('id', $recurso->id), 'pivot.recurso_id') ?? null;
+            return $recurso;
+        });
+
         return view('sala.edit', [
             'sala' => $sala,
             'categorias' => Categoria::all(),
+            'recursos' => $recursos,
         ]);
     }
 
@@ -116,10 +134,23 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        $sala->update($request->validated());
+        $validated = $request->validated();
+
+        $sala->update($validated);
+
+        if(array_key_exists('recursos', $validated)) {
+            $sala->recursos()->sync($validated['recursos']);
+        }
+        else {
+            $recurso_ids = [];
+            foreach($sala->recursos as $recurso) {
+                $recurso_ids[] = $recurso->id;
+            }
+            $sala->recursos()->detach($recurso_ids);
+        }
 
         return redirect("/salas/{$sala->id}")
-            ->with('alert-sucess', 'Sala atualizada com sucesso');
+            ->with('alert-success', 'Sala atualizada com sucesso');
     }
 
     /**
@@ -130,13 +161,20 @@ class SalaController extends Controller
     public function destroy(Sala $sala)
     {
         $this->authorize('admin');
-        
+
         if($sala->reservas->isNotEmpty()){
             return redirect("/salas/{$sala->id}")
-            ->with('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');   
+            ->with('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');
         }
 
         $sala->delete();
         return redirect("/")->with('alert-sucess', 'Sala excluída com sucesso');
+    }
+
+    private function mapRecursos($recursos)
+    {
+        return collect($recursos)->map(function ($i) {
+            return [$i];
+        });
     }
 }

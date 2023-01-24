@@ -10,7 +10,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Reserva extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    
+
     use HasFactory;
     protected $guarded = ['id'];
 

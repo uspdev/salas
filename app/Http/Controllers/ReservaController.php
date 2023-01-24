@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ReservaRequest;
 use App\Models\Reserva;
 use App\Models\Sala;
+use App\Models\Categoria;
+use App\Models\Recurso;
 use App\Service\GeneralSettings;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -31,7 +33,7 @@ class ReservaController extends Controller
         $reservas->where(function ($query) {
             $query->whereNull('parent_id')->orWhereColumn('parent_id', 'id');
         });
-        
+
         $reservas->orderBy('data','desc');
 
         return view('reserva.my', [
@@ -49,6 +51,8 @@ class ReservaController extends Controller
         $this->authorize('logado');
         if (Gate::allows('admin')) {
             $salas = Sala::all();
+            $recursos = Recurso::all();
+            $selectedRecurso = Sala::first()->recurso_id;
         } else {
             $salas = auth()->user()->salas;
         }
@@ -58,6 +62,9 @@ class ReservaController extends Controller
             'reserva' => new Reserva(),
             'salas' => $salas,
             'settings' => $settings,
+            'categorias' => Categoria::all(),
+            'recursos' => $recursos,
+            'selectedRecurso' => $selectedRecurso,
         ]);
     }
 
@@ -174,7 +181,7 @@ class ReservaController extends Controller
         Mail::queue(new UpdateReservaMail($reserva));
 
         return redirect("/reservas/{$reserva->id}")
-            ->with('alert-sucess', 'Reserva atualizada com sucesso');
+            ->with('alert-success', 'Reserva atualizada com sucesso');
     }
 
     public function updateAll(Request $request, Reserva $reserva)
@@ -199,7 +206,7 @@ class ReservaController extends Controller
         Mail::queue(new UpdateReservaMail($reserva));
 
         return redirect("/reservas/{$reserva->id}")
-            ->with('alert-sucess', 'Reserva atualizadas com sucesso');
+            ->with('alert-success', 'Reserva atualizadas com sucesso');
     }
 
     /**

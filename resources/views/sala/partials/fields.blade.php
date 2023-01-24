@@ -3,10 +3,16 @@
         <tr>
             <th>Categoria</th>
             <th>Capacidade</th>
+            <th>Recursos</th>
         </tr>
         <tr>
             <td> {{ $sala->categoria->nome }} </td>
             <td>{{  $sala->capacidade ?? ''  }}</td>
+            <td>
+              @foreach($sala->recursos as $recurso)
+                <p>{{ $recurso->nome }}</p>
+              @endforeach
+            </td>
         </tr>
     </div>
 </table>
