@@ -49,13 +49,20 @@ class ReservaController extends Controller
     public function create(GeneralSettings $settings)
     {
         $this->authorize('logado');
+        if (Gate::allows('admin')) {
+            $categorias = Categoria::with('salas')->get();
+        } else {
+            $categoria_id = auth()->user()->categorias->map(function ($item, $key) {
+                return $item->id;
+            });
+            $categorias = Categoria::with('salas')->find($categoria_id);
+        }
 
         return view('reserva.create', [
             'irmaos' => false,
             'reserva' => new Reserva(),
-            'salas' => Sala::with('recursos')->get(),
             'settings' => $settings,
-            'categorias' => Categoria::all(),
+            'categorias' => $categorias,
         ]);
     }
 

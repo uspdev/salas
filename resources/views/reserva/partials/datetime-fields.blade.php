@@ -66,11 +66,3 @@
     </div>
     @include('reserva.partials.repeat')
 @endif
-
-@section('javascripts_bottom')
-    <script>
-        $(document).ready(function() {
-            $('#salas_select').select2();
-        });
-    </script>
-@endsection
