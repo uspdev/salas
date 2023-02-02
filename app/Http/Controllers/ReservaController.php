@@ -50,12 +50,12 @@ class ReservaController extends Controller
     {
         $this->authorize('logado');
         if (Gate::allows('admin')) {
-            $categorias = Categoria::with('salas')->get();
+            $categorias = Categoria::with('salas.recursos')->get();
         } else {
             $categoria_id = auth()->user()->categorias->map(function ($item, $key) {
                 return $item->id;
             });
-            $categorias = Categoria::with('salas')->find($categoria_id);
+            $categorias = Categoria::with('salas.recursos')->find($categoria_id);
         }
 
         return view('reserva.create', [
@@ -136,9 +136,12 @@ class ReservaController extends Controller
         $this->authorize('owner', $reserva);
 
         if (Gate::allows('admin')) {
-            $salas = Sala::all();
+            $categorias = Categoria::with('salas.recursos')->get();
         } else {
-            $salas = auth()->user()->salas;
+            $categoria_id = auth()->user()->categorias->map(function ($item, $key) {
+                return $item->id;
+            });
+            $categorias = Categoria::with('salas.recursos')->find($categoria_id);
         }
 
         if ($reserva->parent_id != null) {
@@ -147,8 +150,8 @@ class ReservaController extends Controller
 
         return view('reserva.edit', [
             'reserva' => $reserva,
-            'salas' => $salas,
             'settings' => $settings,
+            'categorias' => $categorias,
         ]);
     }
 
