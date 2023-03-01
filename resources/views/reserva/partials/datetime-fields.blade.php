@@ -23,26 +23,43 @@
         @foreach($categorias as $categoria)
             <optgroup label="{{ $categoria->nome }}">
               @foreach($categoria->salas as $sala)
-                <option value="{{ $sala->id }}">{{ $sala->nome }} [ Capacidade: {{
-                $sala->capacidade }} ]
-                  @forelse($sala->recursos as $recurso)
-                    @if ($loop->first)
-                      [ Recurso: {{ $recurso->nome }}
-                    @else
-                      - {{ $recurso->nome }}
-                    @endif
-                    @if ($loop->last)
-                      ]
-                    @endif
-                  @empty
-                  @endforelse
-
-                </option>
+                @if( old('sala_id') == '' and isset($reserva->sala_id) )
+                  <option value="{{ $sala->id }}" {{ ($reserva->sala_id ==
+                  $sala->id) ? 'selected' : '' }} >{{ $sala->nome }} [ Capacidade: {{
+                    $sala->capacidade }} ]
+                      @forelse($sala->recursos as $recurso)
+                        @if ($loop->first)
+                          [ Recurso: {{ $recurso->nome }}
+                        @else
+                          - {{ $recurso->nome }}
+                        @endif
+                        @if ($loop->last)
+                          ]
+                        @endif
+                      @empty
+                      @endforelse
+                  </option>
+                @else
+                  <option value="{{ $sala->id }}"
+                    {{ ( old('sala_id') == $sala->id ) ? 'selected' : '' }}>
+                    {{ $sala->nome }} [ Capacidade: {{ $sala->capacidade }} ]
+                      @forelse($sala->recursos as $recurso)
+                        @if ($loop->first)
+                          [ Recurso: {{ $recurso->nome }}
+                        @else
+                          - {{ $recurso->nome }}
+                        @endif
+                        @if ($loop->last)
+                          ]
+                        @endif
+                      @empty
+                      @endforelse
+                  </option>
+                @endif
               @endforeach
             </optgroup>
         @endforeach
         </select>
-
     </div>
 </div>
 
