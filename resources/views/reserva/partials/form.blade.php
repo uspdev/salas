@@ -1,3 +1,17 @@
+@if ($reserva->parent_id != null and ($reserva->parent_id != $reserva->id))
+    <div class="alert alert-danger" role="alert">
+        Atenção: Esta reserva faz parte de um grupo e você está editando somente esta instância!<br><br>
+        Se deseja editar todas reservas do grupo simultaneamente
+        <a href="/reservas/{{ $reserva->parent_id }}/edit">clique aqui</a>
+    </div>
+@endif
+
+@if ($reserva->parent_id != null and ($reserva->parent_id == $reserva->id))
+    <div class="alert alert-danger" role="alert">
+        Atenção: Você está editando um grupo de reservas simultaneamente!
+    </div>
+@endif
+
 <div class="card">
     <div class="card-header">
         <b>{{ $title }}</b>
@@ -16,9 +30,7 @@
             </div>
         </div>
 
-        @if($editOne)
-            @include('reserva.partials.datetime-fields')
-        @endif
+        @include('reserva.partials.datetime-fields')
 
         <div class="row">
             <div class="col-sm form-group">

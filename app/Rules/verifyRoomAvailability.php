@@ -13,6 +13,8 @@ class verifyRoomAvailability implements Rule
     private $id;
     private $conflicts = '';
     private $n = 0;
+    private $message = 0;
+    private $quantidade_de_reservas = 1;
 
     /**
      * Create a new rule instance.
@@ -45,11 +47,19 @@ class verifyRoomAvailability implements Rule
             foreach ($period as $date) {
                 if (in_array($date->dayOfWeek, $this->reserva->repeat_days)) {
                     $this->check($date->format('d/m/Y'));
+                    $this->quantidade_de_reservas++;
                 }
             }
         }
 
+        if($this->quantidade_de_reservas > 200){
+            $this->message = "Reservas não foram criadas porque são mais de 200 reservas, 
+                              diminua o intervalo das reservas e tente novamente!";
+            return false;
+        }
+
         if ($this->n != 0) {
+            $this->message = "Reserva não foi criada porque conflita com: <ul>{$this->conflicts}</ul>";
             return false;
         }
 
@@ -63,7 +73,7 @@ class verifyRoomAvailability implements Rule
      */
     public function message()
     {
-        return "Reserva não foi criada porque conflita com: <ul>{$this->conflicts}</ul>";
+        return $this->message;
     }
 
     private function check($day)

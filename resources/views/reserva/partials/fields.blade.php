@@ -41,9 +41,6 @@
             @if($reserva->parent_id != null)
                 <div style="margin-left: 5%;">
                     <form action="/reservas/{{  $reserva->id  }}" method="POST">
-                        <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/editAll" role="button" data-bs-toggle="tooltip" title="Editar todas">
-                            <i class="fas fa-edit"></i>
-                        </a>
                         @csrf
                         @method('delete')
                         <button class="btn btn-danger" type="submit" name="tipo" value="all" data-bs-toggle="tooltip" title="Excluir todas" onclick="return confirm('Todas instâncias serão deletadas!');">

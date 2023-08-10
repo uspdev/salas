@@ -63,19 +63,23 @@
     </div>
 </div>
 
-@if($reserva->id == null)
+@if($reserva->id == null or ($reserva->parent_id != null and ($reserva->id == $reserva->parent_id )))
     <div class="row">
         <div class="col-sm form-group">
             <b>Repetição</b>
             <div class="checkFlex">
                 <div class="card">
                     <div class="card-body">
-                        <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool" @if (old('rep_bool') == 'Não') checked @endif><label for="rep_bool_Nao">Não</label>
+                        <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool" 
+                            @if (old('rep_bool') == 'Não') checked @endif>
+                            <label for="rep_bool_Nao">Não</label>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool" @if (old('rep_bool') == 'Sim') checked @endif><label for="rep_bool_Sim">Sim</label>
+                        <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool" 
+                          @if (old('rep_bool') == 'Sim' or ($reserva->parent_id != null and ($reserva->id == $reserva->parent_id ))) checked @endif>
+                          <label for="rep_bool_Sim">Sim</label>
                     </div>
                 </div>
             </div>

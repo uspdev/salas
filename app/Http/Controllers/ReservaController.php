@@ -144,24 +144,10 @@ class ReservaController extends Controller
             $categorias = Categoria::with('salas.recursos')->find($categoria_id);
         }
 
-        if ($reserva->parent_id != null) {
-            request()->session()->flash('alert-warning', 'Atenção: Esta reserva faz parte de um grupo e você está editando somente esta instância');
-        }
-
         return view('reserva.edit', [
             'reserva' => $reserva,
             'settings' => $settings,
             'categorias' => $categorias,
-        ]);
-    }
-
-    public function editAll(Reserva $reserva, GeneralSettings $settings)
-    {
-        $this->authorize('owner', $reserva);
-
-        return view('reserva.editAll', [
-            'reserva' => $reserva,
-            'settings' => $settings,
         ]);
     }
 
@@ -174,18 +160,6 @@ class ReservaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(ReservaRequest $request, Reserva $reserva)
-    {
-        $this->authorize('owner', $reserva);
-
-        $reserva->update($request->validated());
-
-        Mail::queue(new UpdateReservaMail($reserva));
-
-        return redirect("/reservas/{$reserva->id}")
-            ->with('alert-success', 'Reserva atualizada com sucesso');
-    }
-
-    public function updateAll(Request $request, Reserva $reserva)
     {
         $this->authorize('owner', $reserva);
 
@@ -206,8 +180,12 @@ class ReservaController extends Controller
 
         Mail::queue(new UpdateReservaMail($reserva));
 
+        $reserva->update($request->validated());
+
+        Mail::queue(new UpdateReservaMail($reserva));
+
         return redirect("/reservas/{$reserva->id}")
-            ->with('alert-success', 'Reserva atualizadas com sucesso');
+            ->with('alert-success', 'Reserva atualizada com sucesso');
     }
 
     /**
