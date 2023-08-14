@@ -28,27 +28,18 @@
         <div class="adm-icons">
             <div>
                 <form action="/reservas/{{  $reserva->id  }}" method="POST">
-                    <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/edit" role="button" data-bs-toggle="tooltip" title="Editar">
-                        <i class="fa fa-pen"></i>
-                    </a>
                     @csrf
                     @method('delete')
-                    <button class="btn btn-danger" type="submit" name="tipo" value="one" data-bs-toggle="tooltip" title="Excluir" onclick="return confirm('Tem certeza?');">
+                    <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/edit" title="Editar">
+                        <i class="fa fa-pen"></i>
+                    </a>
+
+                    <button class="btn btn-danger" type="submit" title="Excluir" 
+                        onclick="return confirm('Tem certeza que deseja excluir a(s) reserva(s)?');" >
                         <i class="fa fa-trash" ></i>
                     </button>
                 </form>
             </div>
-            @if($reserva->parent_id != null)
-                <div style="margin-left: 5%;">
-                    <form action="/reservas/{{  $reserva->id  }}" method="POST">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger" type="submit" name="tipo" value="all" data-bs-toggle="tooltip" title="Excluir todas" onclick="return confirm('Todas instâncias serão deletadas!');">
-                            <i class="fas fa-dumpster"></i>
-                        </button> 
-                    </form>    
-                </div>
-            @endif
         </div>
         @endcan
     </div>

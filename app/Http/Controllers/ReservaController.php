@@ -232,14 +232,25 @@ class ReservaController extends Controller
 
         Mail::queue(new DeleteReservaMail($reserva));
 
-        if ($request->tipo == 'one') {
-            $reserva->delete();
-            request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
-        } elseif ($request->tipo == 'all') {
-            Reserva::where('parent_id', $reserva->parent_id)->delete();
-            request()->session()->flash('alert-success', 'Todas Instâncias foram excluídas com sucesso.');
+        $parent_id = null;
+        if($reserva->parent_id != null) {
+            $parent_id = $reserva->parent_id;
         }
 
-        return redirect('/');
+        if($reserva->is_parent){
+            Reserva::where('parent_id', $reserva->parent_id)->delete();
+            request()->session()->flash('alert-success', 'Todas instâncias da reserva foram excluídas com sucesso.');
+            return redirect('/');
+        } else {
+            $reserva->delete();
+            request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
+        }
+
+        if($parent_id == null) {
+            return redirect('/');
+        } else {
+            return redirect('/reservas/' . $parent_id);
+        }
+        
     }
 }

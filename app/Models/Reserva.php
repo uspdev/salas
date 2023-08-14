@@ -98,4 +98,9 @@ class Reserva extends Model implements Auditable
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getIsParentAttribute()
+    {
+        return $this->parent_id === $this->id;
+    }
 }
