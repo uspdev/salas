@@ -36,15 +36,19 @@ class verifyRoomAvailability implements Rule
      * @return bool
      */
     public function passes($attribute, $value)
-    {
+    { 
+        // o campo $value é o dia/mês/ano da reserva 
         $this->check($value);
 
         if ($this->reserva->repeat_days && $this->reserva->repeat_until) {
             $inicio = Carbon::createFromFormat('d/m/Y', $value);
             $fim = Carbon::createFromFormat('d/m/Y', $this->reserva->repeat_until);
+
+            // array (objeto) com todos os dias entre as datas
             $period = CarbonPeriod::between($inicio, $fim);
 
             foreach ($period as $date) {
+                // Vamos passar por todos dias, mas só validar e criar a reserva nos dias da semana marcados em repeat_days
                 if (in_array($date->dayOfWeek, $this->reserva->repeat_days)) {
                     $this->check($date->format('d/m/Y'));
                     $this->quantidade_de_reservas++;
@@ -52,9 +56,9 @@ class verifyRoomAvailability implements Rule
             }
         }
 
-        if($this->quantidade_de_reservas > 200){
-            $this->message = "Reservas não foram criadas porque são mais de 200 reservas, 
-                              diminua o intervalo das reservas e tente novamente!";
+        if($this->quantidade_de_reservas > 300){
+            $this->message = "Reservas não foram criadas! porque ultrapassam 300 reservas, 
+                              diminua o intervalo das reservas e tente novamente.";
             return false;
         }
 
@@ -78,6 +82,9 @@ class verifyRoomAvailability implements Rule
 
     private function check($day)
     {
+        // 0. ignorar na validação as reservas filhas
+        $filhas = Reserva::find($this->id)->children()->pluck('id')->toArray();
+
         // 1. Vamos pegar as reservas que existem para o mesmo dia e mesmo horário
         $data = Carbon::createFromFormat('d/m/Y', $day);
         $reservas = Reserva::whereDate('data', '=', $data)->where('sala_id', $this->reserva->sala_id)->get();
@@ -97,7 +104,7 @@ class verifyRoomAvailability implements Rule
             $period = CarbonPeriod::between($reserva->inicio, $reserva->fim);
             if ($period->overlaps($desejado)) {
                 // vamos ignorar a própria reserva
-                if ($this->id != $reserva->id) {
+                if ($this->id != $reserva->id and !in_array($reserva->id,$filhas)) {
                     $this->conflicts .= "<li><a href='/reservas/{$reserva->id}'>$reserva->nome</a></li>";
                     ++$this->n;
                 }

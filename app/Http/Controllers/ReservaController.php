@@ -163,24 +163,55 @@ class ReservaController extends Controller
     {
         $this->authorize('owner', $reserva);
 
-        $irmaos = $reserva->irmaos();
-        $request->validate([
-                'nome' => 'required',
-            ],
-            [
-                'nome.required' => 'O título não pode ficar em branco.',
-            ]);
+        // 1 - caso de edição de reserva sem repetições
+        if(!isset($request->rep_bool) or empty($request->rep_bool)) {
+            $reserva->update($request->validated());
+        }
+        
+        // 2 - edição da reserva pai, caso com repeticões, entretanto, foi marcado Não, então as filhos serão excluídos
+        if(isset($request->rep_bool) and $request->rep_bool=='Não') {
+            $reserva->update($request->validated());
 
-        $irmaos->each(function ($item) use ($request) {
-            $item['nome'] = $request->nome;
-            $item['cor'] = $request->cor;
-            $item['descricao'] = $request->descricao;
-            $item->update();
-        });
+            foreach($reserva->children()->get() as $child) {
+                // não podemos apagar a reserva principal
+                if($child->parent_id != $child->id) $child->delete();
+                else {
+                    $child->parent_id = 0;
+                    $child->save();
+                }
+            }
 
-        Mail::queue(new UpdateReservaMail($reserva));
+            return redirect("/reservas/{$reserva->id}")
+                     ->with('alert-danger', 'Reserva atualizada com sucesso. <br> 
+                             Entretanto, foi selecionada a opção "Não" para repetição, e portanto 
+                             todas reservas filhas foram excluídas!');
+        }
 
-        $reserva->update($request->validated());
+        // 3 - edição da reserva pai, caso com repeticões, mas o padrão de repetição foi alterado
+        if(isset($request->rep_bool) and $request->rep_bool=='Sim') {
+            $validated = $request->validated();
+            $reserva->update($validated);
+            // deletar as filhas antigas
+            foreach($reserva->children()->get() as $child) {
+                // não podemos apagar a reserva principal
+                if($child->parent_id != $child->id) $child->delete();
+            }
+
+            // criar novas revervas
+            $inicio = Carbon::createFromFormat('d/m/Y', $validated['data'])->addDays(1);
+            $fim = Carbon::createFromFormat('d/m/Y', $validated['repeat_until']);
+
+            $period = CarbonPeriod::between($inicio, $fim);
+            foreach ($period as $date) {
+                if (in_array($date->dayOfWeek, $validated['repeat_days'])) {
+                    $new = $reserva->replicate();
+                    $new->parent_id = $reserva->id;
+                    $new->data = $date->format('d/m/Y');
+                    $new->save();
+                }
+            }
+
+        }
 
         Mail::queue(new UpdateReservaMail($reserva));
 

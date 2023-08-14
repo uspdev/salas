@@ -43,7 +43,7 @@ class ReservaRequest extends FormRequest
             'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray())],
             'descricao' => 'nullable',
             'repeat_until' => ['required_with:repeat_days', 'nullable', 'date_format:d/m/Y'],
-            'repeat_days.*' => 'integer|between:0,6',
+            'repeat_days.*' => 'integer|between:0,7',
             'data' => ['required', 'date_format:d/m/Y', new verifyRoomAvailability($this, $id)],
         ];
 

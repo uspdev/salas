@@ -83,8 +83,12 @@
         @if($reserva->irmaos())
             <div class="card-body">
                 <b>Recorrências:</b>
-                @foreach($reserva->irmaos() as $reserva)
-                    <a href="/reservas/{{ $reserva->id }}">{{ $reserva->data }}</a>,
+                @php 
+                    $reservas_array = $reserva->irmaos()->toArray();
+                @endphp
+                
+                @foreach($reservas_array as $key => $reserva)
+                    <a href="/reservas/{{ $reserva['id'] }}">{{ $reserva['data'] }}</a>@if( $key !== count($reservas_array) -1 ),@endif
                 @endforeach
             </div>
         @endif
