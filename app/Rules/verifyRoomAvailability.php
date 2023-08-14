@@ -83,7 +83,10 @@ class verifyRoomAvailability implements Rule
     private function check($day)
     {
         // 0. ignorar na validação as reservas filhas
-        $filhas = Reserva::find($this->id)->children()->pluck('id')->toArray();
+        $filhas = null; // caso de novas reservas
+        if(Reserva::find($this->id) != null){
+            $filhas = Reserva::find($this->id)->children()->pluck('id')->toArray();
+        }
 
         // 1. Vamos pegar as reservas que existem para o mesmo dia e mesmo horário
         $data = Carbon::createFromFormat('d/m/Y', $day);
