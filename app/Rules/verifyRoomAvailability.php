@@ -83,7 +83,7 @@ class verifyRoomAvailability implements Rule
     private function check($day)
     {
         // 0. ignorar na validação as reservas filhas
-        $filhas = null; // caso de novas reservas
+        $filhas = []; // caso de novas reservas
         if(Reserva::find($this->id) != null){
             $filhas = Reserva::find($this->id)->children()->pluck('id')->toArray();
         }
