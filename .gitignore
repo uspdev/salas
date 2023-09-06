@@ -13,3 +13,6 @@ yarn-error.log
 *.swp
 composer.lock
 /public/vendor/
+
+.lando.yml
+Dockerfile.custom
