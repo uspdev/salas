@@ -6562,16 +6562,16 @@
         },
         {
             "name": "uspdev/senhaunica-socialite",
-            "version": "4.3.1",
+            "version": "4.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/senhaunica-socialite.git",
-                "reference": "773129848337aa97220f13bae9bb4febd1d8da3f"
+                "reference": "bd96e18480acb020a397391eed96a6617f7c2d60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/senhaunica-socialite/zipball/773129848337aa97220f13bae9bb4febd1d8da3f",
-                "reference": "773129848337aa97220f13bae9bb4febd1d8da3f",
+                "url": "https://api.github.com/repos/uspdev/senhaunica-socialite/zipball/bd96e18480acb020a397391eed96a6617f7c2d60",
+                "reference": "bd96e18480acb020a397391eed96a6617f7c2d60",
                 "shasum": ""
             },
             "require": {
@@ -6579,7 +6579,7 @@
                 "laravel/socialite": "^5.0",
                 "php": ">=7.1.3",
                 "socialiteproviders/manager": "^3.4.2 | ^4.0",
-                "spatie/laravel-permission": "^4.2"
+                "spatie/laravel-permission": "^4.2 | ^5.0"
             },
             "type": "library",
             "extra": {
@@ -6590,12 +6590,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Uspdev\\SenhaunicaSocialite\\": "src/"
-                },
                 "files": [
                     "src/helpers.php"
-                ]
+                ],
+                "psr-4": {
+                    "Uspdev\\SenhaunicaSocialite\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -6612,9 +6612,9 @@
             "homepage": "https://github.com/uspdev/senhaunica-socialite",
             "support": {
                 "issues": "https://github.com/uspdev/senhaunica-socialite/issues",
-                "source": "https://github.com/uspdev/senhaunica-socialite/tree/4.3.1"
+                "source": "https://github.com/uspdev/senhaunica-socialite/tree/4.3.7"
             },
-            "time": "2021-11-29T11:42:02+00:00"
+            "time": "2023-09-12T00:05:00+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -9319,5 +9319,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
