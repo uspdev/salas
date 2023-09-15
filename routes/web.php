@@ -22,6 +22,7 @@ Route::resource('/recursos', RecursoController::class)->only(['index', 'store', 
 // Categorias
 Route::resource('/categorias', CategoriaController::class)->except(['index']);
 Route::post('/categorias/adduser/{categoria}', [CategoriaController::class, 'addUser']);
+Route::post('/categorias/alterar-vinculos/{categoria}', [CategoriaController::class, 'alterarVinculos'])->name('alterar-vinculos');
 Route::delete('/categorias/removeuser/{categoria}/{user}', [CategoriaController::class, 'removeUser']);
 
 // Logs

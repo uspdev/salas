@@ -143,6 +143,15 @@ class CategoriaController extends Controller
         return redirect("/categorias/{$categoria->id}");
     }
 
+    public function alterarVinculos(Request $request, Categoria $categoria){
+
+        $categoria->vinculos = $request->input('vinculo');
+        $categoria->save();
+
+        request()->session()->flash('alert-success', "Vínculos cadastrados em {$categoria->nome} alterados.");
+        return redirect()->route('categorias.show', ['categoria' => $categoria->id]);
+    }
+
     public function removeUser(Request $request, Categoria $categoria, User $user)
     {
         $this->authorize('admin');
