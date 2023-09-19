@@ -7,6 +7,7 @@ use App\Models\Categoria;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Uspdev\Replicado\Pessoa;
+use App\Utils\ReplicadoUtils;
 
 class CategoriaController extends Controller
 {
@@ -48,8 +49,11 @@ class CategoriaController extends Controller
      */
     public function show(Categoria $categoria)
     {
+        $sigla_unidade = ReplicadoUtils::dumpUnidade(config('salas.codUnidade'), ['sglund']);
+
         return view('categoria.show', [
             'categoria' => $categoria,
+            'sigla_unidade' => $sigla_unidade[0]['sglund']
         ]);
     }
 

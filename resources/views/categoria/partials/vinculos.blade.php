@@ -18,7 +18,7 @@
             <div class="form-check mb-3">
                 <input class="form-check-input radio-box" type="radio" name="vinculo" value="1" id="eca" {{$categoria->vinculos == 1 ? "checked" : ""}}>
                 <label class="form-check-label" for="eca">
-                  <b>ECA</b> (Todas as pessoas da unidade)
+                  <b>{{$sigla_unidade}}</b> (Todas as pessoas da unidade)
                 </label>
             </div>
             
