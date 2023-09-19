@@ -55,8 +55,19 @@ class ReservaController extends Controller
             $categoria_id = auth()->user()->categorias->map(function ($item, $key) {
                 return $item->id;
             });
-            $categorias = Categoria::with('salas.recursos')->find($categoria_id);
-        }
+            $categorias_list = Categoria::with('salas.recursos')->find($categoria_id);
+
+            $categorias_eca = $categorias_usp = collect();
+
+            if (Gate::allows('senhaunica.docente') || Gate::allows('senhaunica.servidor') || Gate::allows('senhaunica.estagiario'))
+                $categorias_eca = Categoria::where('vinculos', 1)->orWhere('vinculos', 2)->get();
+
+            elseif (Gate::allows('senhaunica.docenteusp') || Gate::allows('senhaunica.servidorusp') || Gate::allows('senhaunica.estagiariousp'))
+                $categorias_usp = Categoria::where('vinculos', 2)->get();
+
+        } 
+
+        $categorias = $categorias_list->merge($categorias_eca, $categorias_usp);
 
         return view('reserva.create', [
             'irmaos' => false,
