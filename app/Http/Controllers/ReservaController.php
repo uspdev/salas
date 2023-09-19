@@ -65,9 +65,8 @@ class ReservaController extends Controller
             elseif (Gate::allows('senhaunica.docenteusp') || Gate::allows('senhaunica.servidorusp') || Gate::allows('senhaunica.estagiariousp'))
                 $categorias_usp = Categoria::where('vinculos', 2)->get();
 
+            $categorias = $categorias_list->merge($categorias_eca, $categorias_usp);
         } 
-
-        $categorias = $categorias_list->merge($categorias_eca, $categorias_usp);
 
         return view('reserva.create', [
             'irmaos' => false,
