@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Mail\CreateReservaMail;
 use App\Mail\DeleteReservaMail;
 use App\Mail\UpdateReservaMail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
 
 class ReservaController extends Controller
@@ -57,7 +58,7 @@ class ReservaController extends Controller
             });
             $categorias_list = Categoria::with('salas.recursos')->find($categoria_id);
 
-            $categorias_eca = $categorias_usp = collect();
+            $categorias_eca = $categorias_usp = new Collection();
 
             if (Gate::allows('senhaunica.docente') || Gate::allows('senhaunica.servidor') || Gate::allows('senhaunica.estagiario'))
                 $categorias_eca = Categoria::where('vinculos', 1)->orWhere('vinculos', 2)->get();
@@ -65,7 +66,11 @@ class ReservaController extends Controller
             elseif (Gate::allows('senhaunica.docenteusp') || Gate::allows('senhaunica.servidorusp') || Gate::allows('senhaunica.estagiariousp'))
                 $categorias_usp = Categoria::where('vinculos', 2)->get();
 
-            $categorias = $categorias_list->merge($categorias_eca, $categorias_usp);
+            $categorias = new Collection();
+            $categorias = $categorias->merge($categorias_list);
+            $categorias = $categorias->merge($categorias_eca);
+            $categorias = $categorias->merge($categorias_usp);
+
         } 
 
         return view('reserva.create', [
