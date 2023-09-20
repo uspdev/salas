@@ -33,5 +33,5 @@ Route::get('/settings', [GeneralSettingsController::class, 'show']);
 Route::post('/settings', [GeneralSettingsController::class, 'update']);
 
 // Home
-Route::get('/', [IndexController::class, 'home']);
+Route::get('/', [IndexController::class, 'home'])->name('home');
 Route::get('/search', [IndexController::class, 'search']);

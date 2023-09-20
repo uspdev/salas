@@ -1,4 +1,4 @@
-<h2>Nova(s) <a href="https://salas.fflch.usp.br/reservas/{{ $reserva->id }}">reserva(s)</a> adicionada(s) no site <a href="https://salas.fflch.usp.br/" >salas.fflch.usp.br</a></h2>
+<h2>Nova(s) <a href="{{route('reservas.show', ['reserva' => $reserva->id])}}">reserva(s)</a> adicionada(s) no site <a href="{{route('home')}}" >{{route('home')}}</a></h2>
 
 <h3><b>Título:</b> {{$reserva->nome}} </h3>
 <p><b>Horário:</b> {{$reserva->horario_inicio}} </p>
@@ -15,4 +15,4 @@
 @endif
 
 <br>
-<p>Mensagem automática do sistema de reserva de salas: https://salas.fflch.usp.br</p>
+<p>Mensagem automática do sistema de reserva de salas: {{route('home')}}</p>
