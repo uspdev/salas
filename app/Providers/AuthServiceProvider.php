@@ -52,5 +52,19 @@ class AuthServiceProvider extends ServiceProvider
             }
             return false;
         });
+
+        /**
+         * Pessoas que possuem um dos três vínculos (Docente, Servidor ou Estagiário) ligadas à unidade.
+         */
+        Gate::define('pessoa.unidade', function(){
+            return Gate::allows('senhaunica.docente') || Gate::allows('senhaunica.servidor') || Gate::allows('senhaunica.estagiario');
+        });
+
+        /**
+         * Pessoas que possuem um dos três vínculos (Docente, Servidor ou Estagiário) ligadas à USP.
+         */
+        Gate::define('pessoa.usp', function(){
+            return Gate::allows('senhaunica.docenteusp') || Gate::allows('senhaunica.servidorusp') || Gate::allows('senhaunica.estagiariousp');
+        });
     }
 }

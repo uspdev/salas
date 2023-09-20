@@ -60,10 +60,10 @@ class ReservaController extends Controller
 
             $categorias_eca = $categorias_usp = new Collection();
 
-            if (Gate::allows('senhaunica.docente') || Gate::allows('senhaunica.servidor') || Gate::allows('senhaunica.estagiario'))
+            if (Gate::allows('pessoa.unidade'))
                 $categorias_eca = Categoria::where('vinculos', 1)->orWhere('vinculos', 2)->get();
 
-            elseif (Gate::allows('senhaunica.docenteusp') || Gate::allows('senhaunica.servidorusp') || Gate::allows('senhaunica.estagiariousp'))
+            elseif (Gate::allows('pessoa.usp'))
                 $categorias_usp = Categoria::where('vinculos', 2)->get();
 
             $categorias = new Collection();
