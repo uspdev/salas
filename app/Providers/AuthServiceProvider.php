@@ -45,6 +45,11 @@ class AuthServiceProvider extends ServiceProvider
          */
         Gate::define('members', function ($user, $sala_id) {
             if(Gate::allows('admin')) return true;
+
+            if(Gate::allows('pessoa.unidade')) return Sala::find($sala_id)->categoria->vinculos == 1;
+                
+            if(Gate::allows('pessoa.usp')) return Sala::find($sala_id)->categoria->vinculos == 2;
+
             /* o $user está numa categoria que tem a sala_id? */
             $sala = Sala::find($sala_id);
             foreach($user->categorias as $categoria){
