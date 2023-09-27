@@ -49,6 +49,45 @@
             </div>
 
         </div>
+        @if ($title == 'Editar')
+            <div class="row">
+                <div class="col-sm form-group">
+                    <b>Necessita de Aprovação?</b>
+                    <div class="form-check">
+                        <input name="aprovacao" type="radio" class="form-check-input radio-aprovacao" id="aprovacao-sim" value="1" {{$sala->aprovacao ? 'checked' : ''}}>
+                        <label for="aprovacao-sim">Sim</label>
+                    </div>
+                    <div class="form-check">
+                        <input name="aprovacao" type="radio" class="form-check-input radio-aprovacao" id="aprovacao-nao" value="0" {{!$sala->aprovacao ? 'checked' : ''}}>
+                        <label for="aprovacao-nao">Não</label>
+                    </div>
+                    <div id="responsavel-box" @if (!$sala->aprovacao) style="display: none" @endif>
+                        <b>Responsáveis</b>
+                        <div class="d-flex flex-inline form-group">
+                            <input name="codpes" type="text" placeholder="Número USP" class="w-25 form-control" id="numero-usp" form="form-add-responsavel" required> 
+                            <input name="sala" type="hidden" value="{{$sala->id}}" form="form-add-responsavel">
+                            <button class="btn btn-success ml-2" id="btn-inserir-responsavel" type="submit" form="form-add-responsavel">Inserir</button>
+                        </div>
+                        <div class="card form-group">
+                            <div class="card-header">Lista de Responsáveis</div>
+                            <ul class="list-group list-group-flush">
+                                @if (count($responsaveis) > 0)
+                                    @foreach ($responsaveis as $responsavel)
+                                        <li class="list-group-item d-inline-flex justify-content-between">{{$responsavel->user->codpes}} - {{$responsavel->user->name}}
+                                            <button id="btn-delete-responsavel" data-responsavel="{{$responsavel->id}}" class="btn btn-danger btn-sm" form="form-delete-responsavel">
+                                                <i class="fa fa-trash" ></i>
+                                            </button>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    <li class="list-group-item">Não há responsáveis cadastrados.</li>
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <button type="submit" class="btn btn-success"> Enviar </button>
         <br>
     </div>

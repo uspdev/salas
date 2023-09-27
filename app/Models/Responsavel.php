@@ -16,4 +16,9 @@ class Responsavel extends Model
     {
         return $this->belongsToMany(Sala::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

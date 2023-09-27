@@ -28,6 +28,7 @@ class SalaRequest extends FormRequest
             'categoria_id' => 'required',
             'capacidade'   => 'required|integer',
             'recursos'     => 'nullable',
+            'aprovacao'    => 'required|integer'
         ];
     }
 

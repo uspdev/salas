@@ -5,6 +5,7 @@ use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\RecursoController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\ResponsavelController;
 use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,9 @@ Route::resource('/reservas', ReservaController::class)->except(['index']);
 // Salas
 Route::resource('/salas', SalaController::class);
 Route::post('/salas/redirect', [SalaController::class, 'redirect']);
+
+// Responsáveis
+Route::resource('/responsaveis', ResponsavelController::class)->only(['store', 'destroy'])->parameters(['responsaveis' => 'responsavel']);
 
 // Recursos
 Route::resource('/recursos', RecursoController::class)->only(['index', 'store', 'destroy']);

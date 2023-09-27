@@ -120,6 +120,7 @@ class SalaController extends Controller
             'sala' => $sala,
             'categorias' => Categoria::all(),
             'recursos' => $recursos,
+            'responsaveis' => $sala->responsaveis
         ]);
     }
 
@@ -135,6 +136,9 @@ class SalaController extends Controller
         $this->authorize('admin');
 
         $validated = $request->validated();
+
+        if($validated['aprovacao'] && count($sala->responsaveis) < 1)
+            return redirect()->route('salas.edit', ['sala' => $sala->id])->with('alert-danger', 'A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.');
 
         $sala->update($validated);
 
