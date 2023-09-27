@@ -16,11 +16,11 @@ class ResponsavelController extends Controller
         $codpes = $request->input('codpes');
         $sala = Sala::find($request->input('sala'));
 
-        if(!User::where('codpes', $codpes))
+        if(count(User::where('codpes', $codpes)->get()) == 0)
         {
             $user = new User();
             $user->name = Pessoa::retornarNome($codpes);
-            $user->email = Pessoa::retornarEmailUsp($codpes);
+            $user->email = Pessoa::email($codpes);
             $user->codpes = $codpes;
             $user->save();
         }else{
