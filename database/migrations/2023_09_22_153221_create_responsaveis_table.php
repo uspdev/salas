@@ -15,8 +15,8 @@ class CreateResponsaveisTable extends Migration
     {
         Schema::create('responsaveis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sala_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('sala_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
