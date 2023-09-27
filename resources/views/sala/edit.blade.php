@@ -2,7 +2,7 @@
 @section('content')
     <form action="{{route('responsaveis.store')}}" method="POST" id='form-add-responsavel'>@csrf</form>
     <form method="POST" id="form-delete-responsavel">@csrf @method('DELETE')</form>
-    <form method="POST" action="/salas/{{ $sala->id }}">
+    <form method="POST" action="/salas/{{ $sala->id }}" id="form-update-sala">
         @csrf
         @method('patch')
         @include('sala.partials.form', ['title' => "Editar"])
@@ -11,6 +11,7 @@
 
 @section('javascripts_bottom')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -33,5 +34,19 @@
             form_delete_responsavel.attr('action', route);
             form_delete_responsavel.submit();
        });
+
+       $('#form-update-sala').validate({
+            submitHandler: function(form){
+                if($('#aprovacao-sim').is(':checked') && {{count($sala->responsaveis)}} < 1)
+                    alert("A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.");
+                else
+                    form.submit();
+            },
+            rules: {
+                aprovacao: {
+                    required: true,
+                }
+            }
+       })
     </script>
 @stop
