@@ -25,14 +25,16 @@
                 $('#responsavel-box').css('display', 'none');
        });
 
-       $('#btn-delete-responsavel').on('click', function(e) {
+       $('.btn-delete-responsavel').on('click', function(e) {
             e.preventDefault();
-            let form_delete_responsavel = $('#form-delete-responsavel');
-            let route = '{{route('responsaveis.destroy', ':responsavel')}}';
-            route = route.replace(':responsavel', $(this).data('responsavel'));
-            
-            form_delete_responsavel.attr('action', route);
-            form_delete_responsavel.submit();
+            if(confirm('Tem certeza que deseja remover ' + $(this).data('responsavel-name') + ' como responsável?')){
+                let form_delete_responsavel = $('#form-delete-responsavel');
+                let route = '{{route('responsaveis.destroy', ':responsavel')}}';
+                route = route.replace(':responsavel', $(this).data('responsavel-id'));
+                
+                form_delete_responsavel.attr('action', route);
+                form_delete_responsavel.submit();
+            }
        });
 
        $('#form-update-sala').validate({

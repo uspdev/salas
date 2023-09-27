@@ -74,7 +74,7 @@
                                 @if (count($responsaveis) > 0)
                                     @foreach ($responsaveis as $responsavel)
                                         <li class="list-group-item d-inline-flex justify-content-between">{{$responsavel->user->codpes}} - {{$responsavel->user->name}}
-                                            <button id="btn-delete-responsavel" data-responsavel="{{$responsavel->id}}" class="btn btn-danger btn-sm" form="form-delete-responsavel">
+                                            <button data-responsavel-name="{{$responsavel->user->name}}" data-responsavel-id="{{$responsavel->id}}" class="btn btn-danger btn-sm btn-delete-responsavel" form="form-delete-responsavel">
                                                 <i class="fa fa-trash" ></i>
                                             </button>
                                         </li>
