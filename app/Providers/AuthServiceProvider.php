@@ -72,5 +72,18 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('pessoa.usp', function(){
             return Gate::allows('senhaunica.docenteusp') || Gate::allows('senhaunica.servidorusp') || Gate::allows('senhaunica.estagiariousp');
         });
+
+        /**
+         * Pessoas que são responsáveis pela sala em questão.
+         */
+        Gate::define('responsavel', function($user, $sala_id){
+            $sala = Sala::find($sala_id);
+
+            foreach($sala->responsaveis as $responsavel){
+                if($responsavel->user->id == $user->id) return true;
+            }
+
+            return false;
+        });
     }
 }
