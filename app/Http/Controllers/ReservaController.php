@@ -95,6 +95,14 @@ class ReservaController extends Controller
 
         $this->authorize('members', $validated['sala_id']);
 
+        if(Sala::find($validated['sala_id'])->aprovacao)
+        {
+            $validated['status'] = 'pendente';
+            $mensagem = "Reserva(s) enviada(s) para análise com sucesso.";
+        }
+        else 
+            $mensagem = "Reserva(s) realizada(s) com sucesso.";
+
         $reserva = Reserva::create($validated);
         $created = '';
         if (array_key_exists('repeat_days', $validated) && array_key_exists('repeat_until', $validated)) {
@@ -120,7 +128,7 @@ class ReservaController extends Controller
         Mail::queue(new CreateReservaMail($reserva));
 
         return redirect("/reservas/{$reserva->id}")
-            ->with('alert-success', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
+            ->with('alert-success', $mensagem . " <ul>{$created}</ul>");
     }
 
     /**

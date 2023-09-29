@@ -65,7 +65,7 @@
                     </td>
                     <td>{{ $reserva->descricao ?: 'Sem descrição' }}</td>
                     <td>
-                    <div class="rectangle" style="background-color: {{  $reserva->cor ?? ''  }};"></div>
+                    <div class="rectangle" style="background-color: {{  $reserva->status = 'pendente' ? config('salas.corPendente') : ($reserva->cor ?? '')}};"></div>
                     </td>
                 </tr>
             </div>
