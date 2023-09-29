@@ -77,6 +77,8 @@ class AuthServiceProvider extends ServiceProvider
          * Pessoas que são responsáveis pela sala em questão.
          */
         Gate::define('responsavel', function($user, $sala_id){
+            if(Gate::allows('admin')) return true;
+
             $sala = Sala::find($sala_id);
 
             foreach($sala->responsaveis as $responsavel){
