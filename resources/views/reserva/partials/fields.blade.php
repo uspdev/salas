@@ -30,9 +30,11 @@
                 <form action="/reservas/{{  $reserva->id  }}" method="POST">
                     @csrf
                     @method('delete')
-                    <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/edit" title="Editar">
-                        <i class="fa fa-pen"></i>
-                    </a>
+                    @can('reserva.editar', $reserva)
+                        <a class="btn btn-success" href="/reservas/{{  $reserva->id  }}/edit" title="Editar">
+                            <i class="fa fa-pen"></i>
+                        </a>
+                    @endcan
 
                     <button class="btn btn-danger" type="submit" title="Excluir" 
                         onclick="return confirm('Tem certeza que deseja excluir a(s) reserva(s)?');" >

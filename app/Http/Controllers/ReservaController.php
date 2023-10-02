@@ -157,6 +157,7 @@ class ReservaController extends Controller
     public function edit(Reserva $reserva, GeneralSettings $settings)
     {
         $this->authorize('owner', $reserva);
+        $this->authorize('reserva.editar', $reserva);
 
         if (Gate::allows('admin')) {
             $categorias = Categoria::with('salas.recursos')->get();

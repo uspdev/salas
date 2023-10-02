@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Reserva;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Sala;
@@ -84,6 +85,21 @@ class AuthServiceProvider extends ServiceProvider
             foreach($sala->responsaveis as $responsavel){
                 if($responsavel->user->id == $user->id) return true;
             }
+
+            return false;
+        });
+
+        /**
+         * Reservas que podem ser editadas.
+         */
+        Gate::define('reserva.editar', function($user, $reserva){
+            if(Gate::allows('admin')) return true;
+
+            // Se a sala não necessita de aprovação retorna true.
+            if(!$reserva->sala->aprovacao) return true;
+
+            // Se a sala necessita de aprovação e está pendente retorna true.
+            if($reserva->sala->aprovacao && $reserva->status == 'pendente') return true;
 
             return false;
         });
