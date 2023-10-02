@@ -93,9 +93,13 @@
 
 @if ($reserva->status == 'pendente')
     @can('responsavel', $reserva->sala->id)
+        <form action="{{route('reservas.destroy', $reserva)}}" method="POST" id="form-reserva-recusar" onsubmit="return confirm('Recusar reserva?')">
+            @csrf
+            @method('DELETE')
+        </form>
         <div class="mt-4">
             <a class="btn btn-success" href="{{route('reservas.aprovar', $reserva)}}"><i class="fa fa-check"></i> Aprovar</a>
-            <a class="btn btn-danger"><i class="fa fa-ban"></i> Recusar</a>
+            <button class="btn btn-danger" form="form-reserva-recusar"><i class="fa fa-ban"></i> Recusar</button>
         </div>
     @endcan
 @endif
