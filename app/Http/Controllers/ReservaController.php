@@ -300,7 +300,7 @@ class ReservaController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function aprovar(Reserva $reserva) {
-       $this->authorize('responsavel', $reserva->sala->id);
+       $this->authorize('responsavel', $reserva->sala);
        
        $reserva->status = 'aprovada';
        $reserva->save();

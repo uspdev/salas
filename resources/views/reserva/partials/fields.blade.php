@@ -92,7 +92,7 @@
 </div>
 
 @if ($reserva->status == 'pendente')
-    @can('responsavel', $reserva->sala->id)
+    @can('responsavel', $reserva->sala)
         <form action="{{route('reservas.destroy', $reserva)}}" method="POST" id="form-reserva-recusar" onsubmit="return confirm('Recusar reserva?')">
             @csrf
             @method('DELETE')
