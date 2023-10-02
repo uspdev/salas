@@ -156,7 +156,21 @@ class ReservaController extends Controller
             $categoria_id = auth()->user()->categorias->map(function ($item, $key) {
                 return $item->id;
             });
-            $categorias = Categoria::with('salas.recursos')->find($categoria_id);
+            $categorias_list = Categoria::with('salas.recursos')->find($categoria_id);
+
+            $categorias_eca = $categorias_usp = new Collection();
+
+            if (Gate::allows('pessoa.unidade'))
+                $categorias_eca = Categoria::where('vinculos', 1)->orWhere('vinculos', 2)->get();
+
+            elseif (Gate::allows('pessoa.usp'))
+                $categorias_usp = Categoria::where('vinculos', 2)->get();
+
+            $categorias = new Collection();
+            $categorias = $categorias->merge($categorias_list);
+            $categorias = $categorias->merge($categorias_eca);
+            $categorias = $categorias->merge($categorias_usp);
+
         }
 
         return view('reserva.edit', [
