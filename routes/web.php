@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 // Reservas
 Route::get('/reservas/my', [ReservaController::class, 'my']);
+Route::get('/reservas/{reserva}/aprovar', [ReservaController::class, 'aprovar'])->name('reservas.aprovar');
 Route::resource('/reservas', ReservaController::class)->except(['index']);
 
 // Salas

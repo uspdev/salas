@@ -276,4 +276,20 @@ class ReservaController extends Controller
         }
         
     }
+
+    /**
+     * Muda o status da reserva para 'aprovada'.
+     * 
+     * @param \App\Reserva $reserva
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function aprovar(Reserva $reserva) {
+       $this->authorize('responsavel', $reserva->sala->id);
+       
+       $reserva->status = 'aprovada';
+       $reserva->save();
+
+       return redirect()->route('reservas.show', $reserva->id);
+    }
 }

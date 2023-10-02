@@ -65,7 +65,7 @@
                     </td>
                     <td>{{ $reserva->descricao ?: 'Sem descrição' }}</td>
                     <td>
-                    <div class="rectangle" style="background-color: {{  $reserva->status = 'pendente' ? config('salas.corPendente') : ($reserva->cor ?? '')}};"></div>
+                    <div class="rectangle" style="background-color: {{  $reserva->status == 'pendente' ? config('salas.corPendente') : ($reserva->cor ?? '')}};"></div>
                     </td>
                 </tr>
             </div>
@@ -78,8 +78,8 @@
                     $reservas_array = $reserva->irmaos()->toArray();
                 @endphp
                 
-                @foreach($reservas_array as $key => $reserva)
-                    <a href="/reservas/{{ $reserva['id'] }}">{{ $reserva['data'] }}</a>@if( $key !== count($reservas_array) -1 ),@endif
+                @foreach($reservas_array as $key => $reservaIterator)
+                    <a href="/reservas/{{ $reservaIterator['id'] }}">{{ $reservaIterator['data'] }}</a>@if( $key !== count($reservas_array) -1 ),@endif
                 @endforeach
             </div>
         @endif
@@ -88,3 +88,12 @@
         <br>
     </div>
 </div>
+
+@if ($reserva->status == 'pendente')
+    @can('responsavel', $reserva->sala->id)
+        <div class="mt-4">
+            <a class="btn btn-success" href="{{route('reservas.aprovar', $reserva)}}"><i class="fa fa-check"></i> Aprovar</a>
+            <a class="btn btn-danger"><i class="fa fa-ban"></i> Recusar</a>
+        </div>
+    @endcan
+@endif
