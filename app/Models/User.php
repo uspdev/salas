@@ -65,4 +65,7 @@ class User extends Authenticatable
         );
     }
 
+    public function salasResponsavel(){
+        return $this->belongsToMany(Sala::class, 'responsaveis')->withPivot('id');
+    }
 }

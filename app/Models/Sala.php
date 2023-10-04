@@ -34,6 +34,6 @@ class Sala extends Model implements Auditable
 
     public function responsaveis()
     {
-        return $this->hasMany(Responsavel::class);
+        return $this->belongsToMany(User::class, 'responsaveis')->withPivot('id');
     }
 }
