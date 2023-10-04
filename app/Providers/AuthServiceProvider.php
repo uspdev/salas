@@ -81,7 +81,7 @@ class AuthServiceProvider extends ServiceProvider
             if(Gate::allows('admin')) return true;
 
             foreach($sala->responsaveis as $responsavel){
-                if($responsavel->user->id == $user->id) return true;
+                if($responsavel->id == $user->id) return true;
             }
 
             return false;
