@@ -302,8 +302,16 @@ class ReservaController extends Controller
     public function aprovar(Reserva $reserva) {
        $this->authorize('responsavel', $reserva->sala);
        
-       $reserva->status = 'aprovada';
-       $reserva->save();
+       if($reserva->parent_id != null){
+            // Aprova todas as recorrências da reserva.
+            Reserva::where('parent_id', $reserva->parent_id)->get()->map(function($res){
+                $res->status = 'aprovada';
+                $res->save();
+            });
+       }else{
+            $reserva->status = 'aprovada';
+            $reserva->save();
+       }
 
        return redirect()->route('reservas.show', $reserva->id);
     }
