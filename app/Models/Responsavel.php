@@ -12,13 +12,13 @@ class Responsavel extends Model
     protected $table = 'responsaveis';
     protected $guarded = ['id'];
 
-    public function salas()
+    public function sala()
     {
-        return $this->belongsToMany(Sala::class);
+        return $this->hasOne(Sala::class, 'id', 'sala_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }
