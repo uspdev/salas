@@ -40,6 +40,12 @@ class ResponsavelController extends Controller
     public function destroy(Responsavel $responsavel){
         $this->authorize('admin');
 
+        // Se tiver apenas um responsável altera a sala para não precisar de aprovação ao deletar este único responsável.
+        if(count($responsavel->sala->responsaveis) == 1){
+            $responsavel->sala->aprovacao = 0;
+            $responsavel->sala->save();
+        }
+
         $responsavel->delete();
 
         return back()->with('alert-success', 'Responsável removido.');
