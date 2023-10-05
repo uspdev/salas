@@ -88,6 +88,9 @@ class FinalidadeController extends Controller
      */
     public function destroy(Finalidade $finalidade)
     {
-        //
+        $finalidade->delete();
+
+        return redirect()->route('finalidades.index')
+            ->with('alert-success', 'Finalidade excluída com sucesso.');
     }
 }

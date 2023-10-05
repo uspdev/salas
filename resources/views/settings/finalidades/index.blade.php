@@ -12,7 +12,16 @@
     <ul class="list-group list-group-flush">
         @if (count($finalidades) > 0)
             @foreach ($finalidades as $finalidade)
-                <li class="list-group-item">{{$finalidade->legenda}} - {{$finalidade->cor}}</li>
+                <li class="list-group-item d-inline-flex justify-content-between align-items-center">
+                    <div style="background-color: {{$finalidade->cor}}" class="py-2 px-4 rounded">
+                        {{$finalidade->legenda}} 
+                    </div>
+                    <form action="{{route('finalidades.destroy', $finalidade->id)}}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" id="btn-exluir-finalidade" onclick="return confirm('Excluir a finalidade {{$finalidade->legenda}}?')"><i class="fa fa-trash" ></i></button>
+                    </form>
+                </li>
             @endforeach
         @else
             <li class="list-group-item">Não há finalidades cadastradas.</li>
