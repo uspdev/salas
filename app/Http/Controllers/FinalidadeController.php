@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FinalidadeRequest;
 use App\Models\Finalidade;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,9 @@ class FinalidadeController extends Controller
      */
     public function index()
     {
-        return view('settings.finalidades.index');
+        $finalidades = Finalidade::all();
+
+        return view('settings.finalidades.index', compact('finalidades'));
     }
 
     /**
@@ -24,18 +27,23 @@ class FinalidadeController extends Controller
      */
     public function create()
     {
-        //
+        return view('settings.finalidades.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Requests\FinalidadeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FinalidadeRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $finalidade = Finalidade::create($validated);
+
+        return redirect()->route('finalidades.index')
+            ->with('alert-success', 'Finalidade criada com sucesso.');
     }
 
     /**
