@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\FinalidadeController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\RecursoController;
@@ -40,3 +41,6 @@ Route::post('/settings', [GeneralSettingsController::class, 'update']);
 // Home
 Route::get('/', [IndexController::class, 'home'])->name('home');
 Route::get('/search', [IndexController::class, 'search']);
+
+// Finalidades
+Route::resource('finalidades', FinalidadeController::class);
