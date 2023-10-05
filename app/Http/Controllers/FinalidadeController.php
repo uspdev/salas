@@ -47,17 +47,6 @@ class FinalidadeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Finalidade  $finalidade
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Finalidade $finalidade)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Finalidade  $finalidade

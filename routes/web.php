@@ -43,4 +43,4 @@ Route::get('/', [IndexController::class, 'home'])->name('home');
 Route::get('/search', [IndexController::class, 'search']);
 
 // Finalidades
-Route::resource('finalidades', FinalidadeController::class);
+Route::resource('finalidades', FinalidadeController::class)->except(['show']);
