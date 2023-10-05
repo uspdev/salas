@@ -13,14 +13,18 @@
         @if (count($finalidades) > 0)
             @foreach ($finalidades as $finalidade)
                 <li class="list-group-item d-inline-flex justify-content-between align-items-center">
-                    <div style="background-color: {{$finalidade->cor}}" class="py-2 px-4 rounded">
+                    <a href="{{route('finalidades.edit', $finalidade->id)}}" style="background-color: {{$finalidade->cor}}" class="btn px-4 rounded">
                         {{$finalidade->legenda}} 
+                    </a>
+                    <div class="row">
+                        <a href="{{route('finalidades.edit', $finalidade->id)}}" class="btn btn-warning mr-2"><i class="fa fa-pen text-white"></i></a>
+
+                        <form action="{{route('finalidades.destroy', $finalidade->id)}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger" id="btn-exluir-finalidade" onclick="return confirm('Excluir a finalidade {{$finalidade->legenda}}?')"><i class="fa fa-trash" ></i></button>
+                        </form>
                     </div>
-                    <form action="{{route('finalidades.destroy', $finalidade->id)}}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger" id="btn-exluir-finalidade" onclick="return confirm('Excluir a finalidade {{$finalidade->legenda}}?')"><i class="fa fa-trash" ></i></button>
-                    </form>
                 </li>
             @endforeach
         @else

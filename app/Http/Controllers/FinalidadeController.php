@@ -65,19 +65,24 @@ class FinalidadeController extends Controller
      */
     public function edit(Finalidade $finalidade)
     {
-        //
+        return view('settings.finalidades.edit', compact('finalidade'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\FinalidadeRequest  $request
      * @param  \App\Models\Finalidade  $finalidade
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Finalidade $finalidade)
+    public function update(FinalidadeRequest $request, Finalidade $finalidade)
     {
-        //
+        $validated = $request->validated();
+
+        $finalidade->update($validated);
+
+        return redirect()->route('finalidades.index')
+            ->with('alert-success', 'Finalidade atualizada com sucesso.');
     }
 
     /**
