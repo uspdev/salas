@@ -7,5 +7,5 @@ return [
     |--------------------------------------------------------------------------
     */
     'codUnidade' => env('REPLICADO_CODUNDCLG', 8),
-    'corPendente' => '#ffa41c'
+    'corPendente' => '#FFB540'
 ];
