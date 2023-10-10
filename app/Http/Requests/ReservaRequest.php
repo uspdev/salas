@@ -39,7 +39,7 @@ class ReservaRequest extends FormRequest
             'nome' => 'required',
             'horario_inicio' => 'required|date_format:G:i|',
             'horario_fim' => 'required|date_format:G:i|after:horario_inicio|',
-            'cor' => 'nullable',
+            'finalidade_id' => 'required|integer',
             'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray())],
             'descricao' => 'nullable',
             'repeat_until' => ['required_with:repeat_days', 'nullable', 'date_format:d/m/Y'],

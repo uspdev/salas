@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Mail\CreateReservaMail;
 use App\Mail\DeleteReservaMail;
 use App\Mail\UpdateReservaMail;
+use App\Models\Finalidade;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
 
@@ -73,11 +74,14 @@ class ReservaController extends Controller
 
         } 
 
+        $finalidades = Finalidade::all();
+        
         return view('reserva.create', [
             'irmaos' => false,
             'reserva' => new Reserva(),
             'settings' => $settings,
             'categorias' => $categorias,
+            'finalidades' => $finalidades,
         ]);
     }
 

@@ -103,4 +103,8 @@ class Reserva extends Model implements Auditable
     {
         return $this->parent_id === $this->id;
     }
+
+    public function finalidade(){
+        return $this->belongsTo(Finalidade::class);
+    }
 }

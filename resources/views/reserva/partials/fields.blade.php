@@ -56,7 +56,7 @@
                     <th>Horário</th>
                     <th>Sala</th>
                     <th>Descrição</th>
-                    <th>Cor</th>
+                    <th>Finalidade</th>
                 </tr>
                 <tr>
                     <td>{{ $reserva->user->name }} - {{ $reserva->user->codpes }}</td>
@@ -67,7 +67,11 @@
                     </td>
                     <td>{{ $reserva->descricao ?: 'Sem descrição' }}</td>
                     <td>
-                    <div class="rectangle" style="background-color: {{  $reserva->status == 'pendente' ? config('salas.corPendente') : ($reserva->cor ?? '')}};"></div>
+                        @if(isset($reserva->finalidade))
+                            <div style="background-color: {{  $reserva->status == 'pendente' ? config('salas.cores.pendente') : ($reserva->finalidade->cor ?? '')}}" class="p-2 mt-n2 rounded">{{$reserva->finalidade->legenda}}</div>
+                        @else
+                            <div style="background-color: #BDBDBD" class="p-2 mt-n2 rounded">Sem finalidade</div>
+                        @endif
                     </td>
                 </tr>
             </div>
