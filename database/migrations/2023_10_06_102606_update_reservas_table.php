@@ -14,7 +14,7 @@ class UpdateReservasTable extends Migration
     public function up()
     {
         Schema::table('reservas', function (Blueprint $table) {
-            $table->foreignId('finalidade_id')->nullable()->constrained();
+            $table->foreignId('finalidade_id')->nullable()->constrained()->nullOnDelete();
             $table->dropColumn('cor');
         });
     }
