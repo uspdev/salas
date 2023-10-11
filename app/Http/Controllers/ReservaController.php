@@ -317,6 +317,6 @@ class ReservaController extends Controller
             $reserva->save();
        }
 
-       return redirect()->route('reservas.show', $reserva->id);
+       return redirect()->route('reservas.show', $reserva->id)->with('alert-success', 'Reserva aprovada com sucesso.');
     }
 }
