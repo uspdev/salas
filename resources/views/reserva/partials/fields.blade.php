@@ -19,6 +19,12 @@
     }
 </style>
 
+@if ($reserva->status == 'pendente')
+   <div style="background-color: {{config('salas.cores.pendente')}}" class="p-2 mb-2 rounded">
+     Pendente    
+   </div>
+@endif
+
 <div class="card">
     <div class="card-header" id="reserva-header">
         <div>
