@@ -87,6 +87,8 @@
                     </div>
                 </div>
             </div>
+        @elseif($title == 'Nova')
+            <input type="hidden" name="aprovacao" value="0">
         @endif
         <button type="submit" class="btn btn-success"> Enviar </button>
         <br>
