@@ -68,7 +68,7 @@
                     <td>{{ $reserva->descricao ?: 'Sem descrição' }}</td>
                     <td>
                         @if(isset($reserva->finalidade))
-                            <div style="background-color: {{  $reserva->status == 'pendente' ? config('salas.cores.pendente') : ($reserva->finalidade->cor ?? '')}}" class="p-2 mt-n2 rounded">{{$reserva->finalidade->legenda}}</div>
+                            <div style="background-color: {{ $reserva->finalidade->cor }}" class="p-2 mt-n2 rounded">{{$reserva->finalidade->legenda}}</div>
                         @else
                             <div style="background-color: #BDBDBD" class="p-2 mt-n2 rounded">Sem finalidade</div>
                         @endif

@@ -81,7 +81,7 @@ class SalaController extends Controller
                 $reserva->fim,
                 0, //optionally, you can specify an event ID,
                 [
-                    'color' => $reserva->status == 'pendente' ? config('salas.cores.pendente') : $reserva->cor,
+                    'color' => $reserva->status == 'pendente' ? config('salas.cores.pendente') : ($reserva->finalidade->cor ?? config('salas.cores.semFinalidade')),
                     'url' => '/reservas/'.$reserva->id,
                 ],
             );

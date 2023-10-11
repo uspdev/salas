@@ -16,7 +16,7 @@
                 <td>{{ $reserva->horario_inicio }} - {{$reserva->horario_fim}}</td>
                 <td><a href="/salas/{{ $reserva->sala_id }}">{{ $reserva->sala->nome }}</a></td>
                 <td>{{ $reserva->sala->categoria->nome }}</td>
-                <td><div class="dot" style="background-color: {{$reserva->finalidade->cor ?? config('salas.cores.semFinalidade')}};"></div></td>
+                <td><div class="dot" style="background-color: {{$reserva->status == 'pendente' ? config('salas.cores.pendente'): ($reserva->finalidade->cor ?? config('salas.cores.semFinalidade'))}};"></div></td>
                 <td><a href="/reservas/{{ $reserva->id }}">{{ $reserva->nome }}</a></td>
                 <td>Capacidade: {{ $reserva->sala->capacidade  }}</td>
                 <td>{{ $reserva->descricao }}</td>
