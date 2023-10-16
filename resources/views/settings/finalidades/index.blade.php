@@ -22,7 +22,33 @@
                         <form action="{{route('finalidades.destroy', $finalidade->id)}}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-danger" id="btn-exluir-finalidade" onclick="return confirm('Excluir a finalidade {{$finalidade->legenda}}?')"><i class="fa fa-trash" ></i></button>
+
+                            <!-- Modal Button -->
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-{{$finalidade->legenda}}-Modal"><i class="fa fa-trash" ></i></button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="delete-{{$finalidade->legenda}}-Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Excluir a finalidade {{$finalidade->legenda}}?</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="text-justify">
+                                        Se excluir esta finalidade todas as reservas que estiveram com esta finalidade selecionada ficarão sinalizadas da seguinte forma:
+                                    </p>
+                                    <div class="rounded p-2 m-auto w-50" style="background-color: {{config('salas.cores.semFinalidade')}}">Sem finalidade</div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">Fechar</button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
                         </form>
                     </div>
                 </li>
