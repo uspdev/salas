@@ -128,12 +128,15 @@ class CategoriaController extends Controller
                 ->with('alert-danger', 'Número USP inválido');
         }
 
-        // Cria um objeto User para $pessoa
-        $user = User::firstOrCreate([
-            'codpes' => $pessoa['codpes'],
-            'name' => $pessoa['nompes'],
-            'email' => Pessoa::emailusp($pessoa['codpes']),
-        ]);
+        if(count(User::where('codpes', $pessoa['codpes'])->get()) == 0)
+        {
+            $user = User::findOrCreateFromReplicado($pessoa['codpes']);
+            if (!($user instanceof \App\Models\User)) {
+                return redirect()->back()->withErrors(['codpes' => $user]);
+            }
+        }else{
+            $user = User::firstWhere('codpes', $pessoa['codpes']);
+        }
 
         // não pode existir na tabela categoria_users uma instância
         // com o user_id e a categoria_id solicitados.
