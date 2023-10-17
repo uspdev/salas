@@ -3,6 +3,7 @@
 <h3><b>Título:</b> {{$reserva->nome}} </h3>
 <p><b>Horário:</b> {{$reserva->horario_inicio}} </p>
 <p><b>Sala:</b> {{$reserva->sala->nome}} </p>
+<p><b>Finalidade:</b> {{$reserva->finalidade->legenda}} </p>
 
 @if($reserva->irmaos())
     <p><b>Datas:</b>

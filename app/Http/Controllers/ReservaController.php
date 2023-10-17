@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Mail\CreateReservaMail;
 use App\Mail\DeleteReservaMail;
+use App\Mail\SolicitarReservaMail;
 use App\Mail\UpdateReservaMail;
 use App\Models\Finalidade;
 use Illuminate\Database\Eloquent\Collection;
@@ -129,7 +130,14 @@ class ReservaController extends Controller
             }
         }
         //enviar e-mail
-        Mail::queue(new CreateReservaMail($reserva));
+        if($reserva->status == 'pendente'){
+            foreach($reserva->sala->responsaveis as $responsavel)
+                Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva));
+
+            Mail::to($reserva->user->email)->queue(new SolicitarReservaMail($reserva));
+        }else{
+            Mail::queue(new CreateReservaMail($reserva));
+        }
 
         return redirect("/reservas/{$reserva->id}")
             ->with('alert-success', $mensagem . " <ul>{$created}</ul>");
@@ -186,10 +194,13 @@ class ReservaController extends Controller
 
         }
 
+        $finalidades = Finalidade::all();
+
         return view('reserva.edit', [
             'reserva' => $reserva,
             'settings' => $settings,
             'categorias' => $categorias,
+            'finalidades' => $finalidades
         ]);
     }
 
@@ -316,6 +327,9 @@ class ReservaController extends Controller
             $reserva->status = 'aprovada';
             $reserva->save();
        }
+
+       // Enviando e-mail ao ser aprovada.
+       Mail::queue(new CreateReservaMail($reserva));
 
        return redirect()->route('reservas.show', $reserva->id)->with('alert-success', 'Reserva aprovada com sucesso.');
     }
