@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
+use App\Models\Finalidade;
 use App\Models\Recurso;
 use App\Models\Reserva;
 use App\Models\Sala;
@@ -94,10 +95,13 @@ class SalaController extends Controller
                 'defaultView' => 'agendaWeek',
         ]);
 
+        $finalidades = Finalidade::all();
+
         return view('sala.show', [
             'sala' => $sala,
             'calendar' => $calendar,
             'recursos' => Recurso::all(),
+            'finalidades' => $finalidades
             ]);
     }
 
