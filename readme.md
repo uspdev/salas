@@ -12,7 +12,7 @@ Sistema em Laravel para o gerenciamento dos eventos de uma unidade de acordo com
 - Administração das finalidades para as reservas
 - Criação e edição de reservas em massa caso haja repetição do evento
 - Validação para que reservas não sejam cadastradas caso haja sobreposição de data, horário e sala
-- 
+ 
 # Gerenciando Pessoas Cadastradas na Categoria
 
 As pessoas cadastradas nas categorias são aquelas que poderão realizar reservas na categoria em questão. Para cada categoria é possível gerenciar as pessoas cadastradas de duas formas: pelo número USP ou pelo vínculo com a unidade em questão.
@@ -44,6 +44,7 @@ Mas todo gerenciamento de finalidades como adicionar, editar ou excluir, pode se
 
 Na aba de edição da sala é possível gerenciar os responsáveis pela sala através do número USP, bem como configurar se a sala necessita de aprovação ou não para a reserva. No caso de precisar de aprovação, quando uma pessoa autorizada tentar realizar uma reserva na sala, a reserva será feita com um *status* de pendente, um e-mail será enviado para os responsáveis da sala e estes devem analisar o pedido de reserva no sistema, aprovando ou recusando.
 
+
 # Como subir a aplicação
 ## Instalação
 
@@ -51,7 +52,17 @@ Na aba de edição da sala é possível gerenciar os responsáveis pela sala atr
 composer install
 cp .env.example .env
 php artisan key:generate
+```
+**Para ambiente de produção:**
+
+```bash
 php artisan migrate
+```
+
+**Para ambiente de desenvolvimento:**
+
+```bash
+php artisan migrate:fresh --seed
 ```
 
 ## Para acessar a aplicação
@@ -59,3 +70,13 @@ php artisan migrate
 ```sh
 php artisan serve
 ```
+# Histórico
+
+Este sistema foi transferido da FFLCH para o USPDev.
+
+- 15/09/2023: Permitindo selecionar qual o nível de vínculo que poderá realizar reserva na categoria.
+- 27/09/2023: Permitindo configurar necessidade de aprovação da sala e administração dos responsáveis.
+- 10/10/2023: Removendo coluna `cor` da tabela `reservas` e implementando a opção de finalidades.
+- 17/10/2023: Arrumando envio de e-mail no momento de solicitar e aprovar/recusar reservas.
+- 18/10/2023: Implementando legenda de finalidades no calendário da sala.
+- 18/10/2023: Arrumando *seeders*.
