@@ -23,6 +23,7 @@ O gerenciamento pelo vínculo é referente somente aos vínculos de Docente, Ser
 
 - **USP**: todos os docentes, servidores e estagiários que entrarem com a senha única no sistema poderão realizar reservas na categoria.
 - **Unidade**: todos os docentes, servidores e estagiários que entrarem com a senha única e pertecerem à unidade que o sistema estiver configurado poderão realizar reservas na categoria.
+  (A unidade é mostrada com base na variável de ambiente `REPLICADO_CODUNDCLG` do `.env`)
 - **Nenhum**: somente as pessoas cadastradas manualmente poderão realizar reservas na categoria.
 
 # Finalidades
