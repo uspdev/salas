@@ -19,9 +19,7 @@
             <div class="flex-item rounded" style="background-color: {{config('salas.cores.semFinalidade')}}">Sem Finalidade</div>
     </div>
 
-    <br><br>
-    {!! $calendar->calendar() !!}
-    {!! $calendar->script() !!}
+    <div id="calendar" class="mt-4"></div>
 @endsection  
 
 @section('styles')
@@ -34,4 +32,38 @@
         border: 1px solid black;
     }
 </style>
+@endsection
+
+@section('javascripts_bottom')
+   @parent
+   <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            locale: 'pt-BR',
+            expandRows: 'true',
+            eventDisplay: 'block',
+            headerToolbar:{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            buttonText: {
+                today:    'Hoje',
+                month:    'Mês',
+                week:     'Semana',
+                day:      'Dia',
+                list:     'Lista',
+            },
+            allDayText: 'dia inteiro',
+            events: {{Illuminate\Support\Js::from($eventos)}}
+        });
+
+
+        calendar.render();
+      });
+
+   </script>
 @endsection

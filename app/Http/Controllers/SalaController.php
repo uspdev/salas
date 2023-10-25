@@ -71,37 +71,27 @@ class SalaController extends Controller
      */
     public function show(Sala $sala)
     {
-        // pegando as reservas das salas
-        $events = [];
 
         foreach ($sala->reservas as $reserva) {
-            $events[] = \Calendar::event(
-                $reserva->nome,
-                false, //full day event?
-                $reserva->inicio,
-                $reserva->fim,
-                0, //optionally, you can specify an event ID,
-                [
-                    'color' => $reserva->status == 'pendente' ? config('salas.cores.pendente') : ($reserva->finalidade->cor ?? config('salas.cores.semFinalidade')),
-                    'url' => '/reservas/'.$reserva->id,
-                    'textColor' => 'black'
-                ],
-            );
-        }
 
-        $calendar = \Calendar::addEvents($events)
-            ->setOptions([
-                'firstDay' => 1,
-                'defaultView' => 'agendaWeek',
-        ]);
+            $eventos[] = [
+                'title' => $reserva->nome,
+                'start' => $reserva->inicio,
+                'end' => $reserva->fim,
+                'url' => route('reservas.show', $reserva->id),
+                'color' => $reserva->status == 'pendente' ? config('salas.cores.pendente') : ($reserva->finalidade->cor ?? config('salas.cores.semFinalidade')),
+                'textColor' => 'black'
+            ];
+
+        }
 
         $finalidades = Finalidade::all();
 
         return view('sala.show', [
             'sala' => $sala,
-            'calendar' => $calendar,
             'recursos' => Recurso::all(),
-            'finalidades' => $finalidades
+            'finalidades' => $finalidades,
+            'eventos' => $eventos
             ]);
     }
 
