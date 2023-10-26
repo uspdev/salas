@@ -50,20 +50,24 @@
                 timeGrid: {
                     selectable: true,
                     select: function(time){
-                        window.location.assign("{{route('reservas.create')}}"
-                            + "?data=" + time.start.toLocaleDateString('pt-BR') 
-                            + "&start=" + time.start.getHours() + ":" + (time.start.getMinutes() < 10 ? '0' : '') + time.start.getMinutes() 
-                            + "&end=" + time.end.getHours() + ":" + (time.end.getMinutes() < 10 ? '0' : '') + time.end.getMinutes() 
-                            + "&sala={{$sala->id}}");
+                        if (parseInt({{Gate::allows('members', $sala->id)}})) {
+                            window.location.assign("{{route('reservas.create')}}"
+                                + "?data=" + time.start.toLocaleDateString('pt-BR') 
+                                + "&start=" + time.start.getHours() + ":" + (time.start.getMinutes() < 10 ? '0' : '') + time.start.getMinutes() 
+                                + "&end=" + time.end.getHours() + ":" + (time.end.getMinutes() < 10 ? '0' : '') + time.end.getMinutes() 
+                                + "&sala={{$sala->id}}");
+                        }
                     }
                 },
 
                 dayGridMonth: {
                     selectable: true,
                     select: function(time){
-                        window.location.assign("{{route('reservas.create')}}"
-                        + "?data=" + time.start.toLocaleDateString('pt-BR')
-                        + "&sala={{$sala->id}}");
+                        if (parseInt({{Gate::allows('members', $sala->id)}})) {
+                            window.location.assign("{{route('reservas.create')}}"
+                            + "?data=" + time.start.toLocaleDateString('pt-BR')
+                            + "&sala={{$sala->id}}");
+                        }
                     }
                 }
             },
