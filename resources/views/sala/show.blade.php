@@ -45,6 +45,7 @@
             locale: 'pt-BR',
             expandRows: 'true',
             eventDisplay: 'block',
+            allDaySlot: false,
             views: {
                 timeGrid: {
                     selectable: true,
@@ -78,7 +79,6 @@
                 day:      'Dia',
                 list:     'Lista',
             },
-            allDayText: 'dia inteiro',
             events: {{Illuminate\Support\Js::from($eventos)}}
         });
 
