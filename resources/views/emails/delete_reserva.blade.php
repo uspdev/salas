@@ -1,8 +1,9 @@
-<h2>Nova exclusão de reserva(s) de sala no site <a href="https://salas.fflch.usp.br/" >salas.fflch.usp.br</a>.</h2>
+<h2>Nova exclusão de reserva(s) de sala no site <a href="{{route('home')}}" >{{route('home')}}</a>.</h2>
 
 <h3><b>Título:</b> {{$reserva->nome}} </h3>
 <p><b>Horário:</b> {{$reserva->horario_inicio}} </p>
 <p><b>Sala:</b> {{$reserva->sala->nome}} </p>
+<p><b>Finalidade:</b> {{$reserva->finalidade->legenda}} </p>
 
 @if($reserva->irmaos())
     <p><b>Datas:</b>
@@ -16,4 +17,4 @@
 
 <br>
 
-<p>Mensagem automática do sistema de reserva de salas: https://salas.fflch.usp.br</p>
+<p>Mensagem automática do sistema de reserva de salas: {{route('home')}}</p>

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Reserva;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Sala;
@@ -45,11 +46,59 @@ class AuthServiceProvider extends ServiceProvider
          */
         Gate::define('members', function ($user, $sala_id) {
             if(Gate::allows('admin')) return true;
+
             /* o $user está numa categoria que tem a sala_id? */
             $sala = Sala::find($sala_id);
             foreach($user->categorias as $categoria){
                 if( $sala->categoria->id == $categoria->id ) return true;
             }
+
+            if(Gate::allows('pessoa.unidade')) return Sala::find($sala_id)->categoria->vinculos == 1;
+                
+            if(Gate::allows('pessoa.usp')) return Sala::find($sala_id)->categoria->vinculos == 2;
+
+            return false;
+        });
+
+        /**
+         * Pessoas que possuem um dos três vínculos (Docente, Servidor ou Estagiário) ligadas à unidade.
+         */
+        Gate::define('pessoa.unidade', function(){
+            return Gate::allows('senhaunica.docente') || Gate::allows('senhaunica.servidor') || Gate::allows('senhaunica.estagiario');
+        });
+
+        /**
+         * Pessoas que possuem um dos três vínculos (Docente, Servidor ou Estagiário) ligadas à USP.
+         */
+        Gate::define('pessoa.usp', function(){
+            return Gate::allows('senhaunica.docenteusp') || Gate::allows('senhaunica.servidorusp') || Gate::allows('senhaunica.estagiariousp');
+        });
+
+        /**
+         * Pessoas que são responsáveis pela sala em questão.
+         */
+        Gate::define('responsavel', function($user, $sala){
+            if(Gate::allows('admin')) return true;
+
+            foreach($sala->responsaveis as $responsavel){
+                if($responsavel->id == $user->id) return true;
+            }
+
+            return false;
+        });
+
+        /**
+         * Reservas que podem ser editadas.
+         */
+        Gate::define('reserva.editar', function($user, $reserva){
+            if(Gate::allows('admin')) return true;
+
+            // Se a sala não necessita de aprovação retorna true.
+            if(!$reserva->sala->aprovacao) return true;
+
+            // Se a sala necessita de aprovação e está pendente retorna true.
+            if($reserva->sala->aprovacao && $reserva->status == 'pendente') return true;
+
             return false;
         });
     }

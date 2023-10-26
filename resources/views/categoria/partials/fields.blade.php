@@ -15,6 +15,8 @@
         </div>
     </div>
     <div class="card-body">
+    @include('categoria.partials.vinculos')
+    <br>
     @include('categoria.partials.addForm')
     <br>
     @include('categoria.partials.pesIndex')

@@ -7,6 +7,7 @@ use App\Models\Categoria;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Uspdev\Replicado\Pessoa;
+use App\Utils\ReplicadoUtils;
 
 class CategoriaController extends Controller
 {
@@ -48,8 +49,11 @@ class CategoriaController extends Controller
      */
     public function show(Categoria $categoria)
     {
+        $sigla_unidade = ReplicadoUtils::dumpUnidade(config('salas.codUnidade'), ['sglund']);
+
         return view('categoria.show', [
             'categoria' => $categoria,
+            'sigla_unidade' => $sigla_unidade[0]['sglund']
         ]);
     }
 
@@ -124,12 +128,15 @@ class CategoriaController extends Controller
                 ->with('alert-danger', 'Número USP inválido');
         }
 
-        // Cria um objeto User para $pessoa
-        $user = User::firstOrCreate([
-            'codpes' => $pessoa['codpes'],
-            'name' => $pessoa['nompes'],
-            'email' => Pessoa::emailusp($pessoa['codpes']),
-        ]);
+        if(count(User::where('codpes', $pessoa['codpes'])->get()) == 0)
+        {
+            $user = User::findOrCreateFromReplicado($pessoa['codpes']);
+            if (!($user instanceof \App\Models\User)) {
+                return redirect()->back()->withErrors(['codpes' => $user]);
+            }
+        }else{
+            $user = User::firstWhere('codpes', $pessoa['codpes']);
+        }
 
         // não pode existir na tabela categoria_users uma instância
         // com o user_id e a categoria_id solicitados.
@@ -141,6 +148,15 @@ class CategoriaController extends Controller
         }
 
         return redirect("/categorias/{$categoria->id}");
+    }
+
+    public function alterarVinculos(Request $request, Categoria $categoria){
+
+        $categoria->vinculos = $request->input('vinculo');
+        $categoria->save();
+
+        request()->session()->flash('alert-success', "Vínculos cadastrados em {$categoria->nome} alterados.");
+        return redirect()->route('categorias.show', ['categoria' => $categoria->id]);
     }
 
     public function removeUser(Request $request, Categoria $categoria, User $user)

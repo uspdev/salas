@@ -31,4 +31,9 @@ class Sala extends Model implements Auditable
     {
         return $this->belongsTo(Categoria::class);
     }
+
+    public function responsaveis()
+    {
+        return $this->belongsToMany(User::class, 'responsaveis')->withPivot('id');
+    }
 }

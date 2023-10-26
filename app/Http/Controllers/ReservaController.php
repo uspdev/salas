@@ -14,7 +14,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Mail\CreateReservaMail;
 use App\Mail\DeleteReservaMail;
+use App\Mail\SolicitarReservaMail;
 use App\Mail\UpdateReservaMail;
+use App\Models\Finalidade;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
 
 class ReservaController extends Controller
@@ -55,14 +58,31 @@ class ReservaController extends Controller
             $categoria_id = auth()->user()->categorias->map(function ($item, $key) {
                 return $item->id;
             });
-            $categorias = Categoria::with('salas.recursos')->find($categoria_id);
-        }
+            $categorias_list = Categoria::with('salas.recursos')->find($categoria_id);
 
+            $categorias_eca = $categorias_usp = new Collection();
+
+            if (Gate::allows('pessoa.unidade'))
+                $categorias_eca = Categoria::where('vinculos', 1)->orWhere('vinculos', 2)->get();
+
+            elseif (Gate::allows('pessoa.usp'))
+                $categorias_usp = Categoria::where('vinculos', 2)->get();
+
+            $categorias = new Collection();
+            $categorias = $categorias->merge($categorias_list);
+            $categorias = $categorias->merge($categorias_eca);
+            $categorias = $categorias->merge($categorias_usp);
+
+        } 
+
+        $finalidades = Finalidade::all();
+        
         return view('reserva.create', [
             'irmaos' => false,
             'reserva' => new Reserva(),
             'settings' => $settings,
             'categorias' => $categorias,
+            'finalidades' => $finalidades,
         ]);
     }
 
@@ -79,6 +99,14 @@ class ReservaController extends Controller
         $validated['user_id'] = auth()->user()->id;
 
         $this->authorize('members', $validated['sala_id']);
+
+        if(Sala::find($validated['sala_id'])->aprovacao)
+        {
+            $validated['status'] = 'pendente';
+            $mensagem = "Reserva(s) enviada(s) para análise com sucesso.";
+        }
+        else 
+            $mensagem = "Reserva(s) realizada(s) com sucesso.";
 
         $reserva = Reserva::create($validated);
         $created = '';
@@ -102,10 +130,17 @@ class ReservaController extends Controller
             }
         }
         //enviar e-mail
-        Mail::queue(new CreateReservaMail($reserva));
+        if($reserva->status == 'pendente'){
+            foreach($reserva->sala->responsaveis as $responsavel)
+                Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva));
+
+            Mail::to($reserva->user->email)->queue(new SolicitarReservaMail($reserva));
+        }else{
+            Mail::queue(new CreateReservaMail($reserva));
+        }
 
         return redirect("/reservas/{$reserva->id}")
-            ->with('alert-success', "Reserva(s) realizada(s) com sucesso. <ul>{$created}</ul>");
+            ->with('alert-success', $mensagem . " <ul>{$created}</ul>");
     }
 
     /**
@@ -134,6 +169,7 @@ class ReservaController extends Controller
     public function edit(Reserva $reserva, GeneralSettings $settings)
     {
         $this->authorize('owner', $reserva);
+        $this->authorize('reserva.editar', $reserva);
 
         if (Gate::allows('admin')) {
             $categorias = Categoria::with('salas.recursos')->get();
@@ -141,13 +177,30 @@ class ReservaController extends Controller
             $categoria_id = auth()->user()->categorias->map(function ($item, $key) {
                 return $item->id;
             });
-            $categorias = Categoria::with('salas.recursos')->find($categoria_id);
+            $categorias_list = Categoria::with('salas.recursos')->find($categoria_id);
+
+            $categorias_eca = $categorias_usp = new Collection();
+
+            if (Gate::allows('pessoa.unidade'))
+                $categorias_eca = Categoria::where('vinculos', 1)->orWhere('vinculos', 2)->get();
+
+            elseif (Gate::allows('pessoa.usp'))
+                $categorias_usp = Categoria::where('vinculos', 2)->get();
+
+            $categorias = new Collection();
+            $categorias = $categorias->merge($categorias_list);
+            $categorias = $categorias->merge($categorias_eca);
+            $categorias = $categorias->merge($categorias_usp);
+
         }
+
+        $finalidades = Finalidade::all();
 
         return view('reserva.edit', [
             'reserva' => $reserva,
             'settings' => $settings,
             'categorias' => $categorias,
+            'finalidades' => $finalidades
         ]);
     }
 
@@ -252,5 +305,32 @@ class ReservaController extends Controller
             return redirect('/reservas/' . $parent_id);
         }
         
+    }
+
+    /**
+     * Muda o status da reserva para 'aprovada'.
+     * 
+     * @param \App\Reserva $reserva
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function aprovar(Reserva $reserva) {
+       $this->authorize('responsavel', $reserva->sala);
+       
+       if($reserva->parent_id != null){
+            // Aprova todas as recorrências da reserva.
+            Reserva::where('parent_id', $reserva->parent_id)->get()->map(function($res){
+                $res->status = 'aprovada';
+                $res->save();
+            });
+       }else{
+            $reserva->status = 'aprovada';
+            $reserva->save();
+       }
+
+       // Enviando e-mail ao ser aprovada.
+       Mail::queue(new CreateReservaMail($reserva));
+
+       return redirect()->route('reservas.show', $reserva->id)->with('alert-success', 'Reserva aprovada com sucesso.');
     }
 }

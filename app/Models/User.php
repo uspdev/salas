@@ -14,6 +14,8 @@ class User extends Authenticatable
     use Notifiable;
     use HasRoles;
     use HasSenhaunica;
+    use \Spatie\Permission\Traits\HasRoles;
+    use \Uspdev\SenhaunicaSocialite\Traits\HasSenhaunica;
 
     /**
      * The attributes that are mass assignable.
@@ -63,4 +65,7 @@ class User extends Authenticatable
         );
     }
 
+    public function salasResponsavel(){
+        return $this->belongsToMany(Sala::class, 'responsaveis')->withPivot('id');
+    }
 }

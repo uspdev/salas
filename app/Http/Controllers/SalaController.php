@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
+use App\Models\Finalidade;
 use App\Models\Recurso;
 use App\Models\Reserva;
 use App\Models\Sala;
@@ -81,8 +82,9 @@ class SalaController extends Controller
                 $reserva->fim,
                 0, //optionally, you can specify an event ID,
                 [
-                    'color' => $reserva->cor,
+                    'color' => $reserva->status == 'pendente' ? config('salas.cores.pendente') : ($reserva->finalidade->cor ?? config('salas.cores.semFinalidade')),
                     'url' => '/reservas/'.$reserva->id,
+                    'textColor' => 'black'
                 ],
             );
         }
@@ -93,10 +95,13 @@ class SalaController extends Controller
                 'defaultView' => 'agendaWeek',
         ]);
 
+        $finalidades = Finalidade::all();
+
         return view('sala.show', [
             'sala' => $sala,
             'calendar' => $calendar,
             'recursos' => Recurso::all(),
+            'finalidades' => $finalidades
             ]);
     }
 
@@ -120,6 +125,7 @@ class SalaController extends Controller
             'sala' => $sala,
             'categorias' => Categoria::all(),
             'recursos' => $recursos,
+            'responsaveis' => $sala->responsaveis
         ]);
     }
 
@@ -135,6 +141,9 @@ class SalaController extends Controller
         $this->authorize('admin');
 
         $validated = $request->validated();
+
+        if($validated['aprovacao'] && count($sala->responsaveis) < 1)
+            return redirect()->route('salas.edit', ['sala' => $sala->id])->with('alert-danger', 'A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.');
 
         $sala->update($validated);
 
