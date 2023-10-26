@@ -55,6 +55,15 @@
                             + "&end=" + time.end.getHours() + ":" + (time.end.getMinutes() < 10 ? '0' : '') + time.end.getMinutes() 
                             + "&sala={{$sala->id}}");
                     }
+                },
+
+                dayGridMonth: {
+                    selectable: true,
+                    select: function(time){
+                        window.location.assign("{{route('reservas.create')}}"
+                        + "?data=" + time.start.toLocaleDateString('pt-BR')
+                        + "&sala={{$sala->id}}");
+                    }
                 }
             },
             headerToolbar:{
