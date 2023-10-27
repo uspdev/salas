@@ -2,18 +2,18 @@
     <div class="col-sm form-group">
         <label for="" class="required" ><b>Data</b></label>
         <br>
-        <input type="text" name="data" class="datepicker" value="{{  old('data', $reserva->data) }}">
+        <input type="text" name="data" class="datepicker" value="{{ $_GET["data"] ?? old('data', $reserva->data) }}">
     </div>
     <div class="col-sm form-group">
         <label for="" class="required"><b>Horário de início </b></label>
         <br>
-        <input class="form-control" type="text" name="horario_inicio" value="{{ old('horario_inicio', $reserva->horario_inicio) }}">
+        <input class="form-control" type="text" name="horario_inicio" value="{{ $_GET["start"] ?? old('horario_inicio', $reserva->horario_inicio) }}">
         <small class="form-text text-muted">Formato: 9:00 </small>
     </div>
     <div class="col-sm form-group">
         <label for="" class="required"><b>Horário de fim </b></label>
         <br>
-        <input class="form-control" type="text" name="horario_fim" value="{{ old('horario_fim', $reserva->horario_fim) }}">
+        <input class="form-control" type="text" name="horario_fim" value="{{ $_GET["end"] ?? old('horario_fim', $reserva->horario_fim) }}">
         <small class="form-text text-muted">Formato: 9:00 </small>
     </div>
     <div class="col-sm form-group">
@@ -25,7 +25,7 @@
               @foreach($categoria->salas as $sala)
                 @if( old('sala_id') == '' and isset($reserva->sala_id) )
                   <option value="{{ $sala->id }}" {{ ($reserva->sala_id ==
-                  $sala->id) ? 'selected' : '' }} >{{ $sala->nome }} [ Capacidade: {{
+                  $sala->id) || (isset($_GET['sala']) && $_GET['sala'] == $sala->id) ? 'selected' : '' }} >{{ $sala->nome }} [ Capacidade: {{
                     $sala->capacidade }} ]
                       @forelse($sala->recursos as $recurso)
                         @if ($loop->first)
@@ -41,7 +41,7 @@
                   </option>
                 @else
                   <option value="{{ $sala->id }}"
-                    {{ ( old('sala_id') == $sala->id ) ? 'selected' : '' }}>
+                    {{ ( old('sala_id') == $sala->id ) || (isset($_GET['sala']) && $_GET['sala'] == $sala->id) ? 'selected' : '' }}>
                     {{ $sala->nome }} [ Capacidade: {{ $sala->capacidade }} ]
                       @forelse($sala->recursos as $recurso)
                         @if ($loop->first)
