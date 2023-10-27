@@ -81,3 +81,5 @@ Este sistema foi transferido da FFLCH para o USPDev.
 - 17/10/2023: Arrumando envio de e-mail no momento de solicitar e aprovar/recusar reservas.
 - 18/10/2023: Implementando legenda de finalidades no calendário da sala.
 - 18/10/2023: Arrumando *seeders*.
+- 26/10/2023: Atualizando biblioteca do calendário.
+- 26/10/2023: Permitindo realizar reservas ao clicar no calendário.
