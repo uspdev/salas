@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26e83599f84c45062046c76f951648b9",
+    "content-hash": "ca598779c159652db9910da77b00ee62",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6514,16 +6514,16 @@
         },
         {
             "name": "uspdev/laravel-usp-theme",
-            "version": "2.4.3",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/laravel-usp-theme.git",
-                "reference": "e50a0e85652bc5c31da39bbc30ea646897022f61"
+                "reference": "bcf1c38c5c4282f09a203978a51c7e82929a5d3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/laravel-usp-theme/zipball/e50a0e85652bc5c31da39bbc30ea646897022f61",
-                "reference": "e50a0e85652bc5c31da39bbc30ea646897022f61",
+                "url": "https://api.github.com/repos/uspdev/laravel-usp-theme/zipball/bcf1c38c5c4282f09a203978a51c7e82929a5d3a",
+                "reference": "bcf1c38c5c4282f09a203978a51c7e82929a5d3a",
                 "shasum": ""
             },
             "type": "library",
@@ -6538,12 +6538,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Uspdev\\UspTheme\\": "src"
-                },
                 "files": [
                     "src/helpers.php"
-                ]
+                ],
+                "psr-4": {
+                    "Uspdev\\UspTheme\\": "src"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -6558,9 +6558,9 @@
             "description": "usp theme for laravel",
             "support": {
                 "issues": "https://github.com/uspdev/laravel-usp-theme/issues",
-                "source": "https://github.com/uspdev/laravel-usp-theme/tree/2.4.3"
+                "source": "https://github.com/uspdev/laravel-usp-theme/tree/2.8.1"
             },
-            "time": "2022-01-18T16:19:52+00:00"
+            "time": "2023-09-21T16:53:04+00:00"
         },
         {
             "name": "uspdev/replicado",

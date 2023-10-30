@@ -70,12 +70,7 @@ $right_menu = [
         'key' => 'senhaunica-socialite'
     ],
     [
-        'text' => '<i class="fas fa-hard-hat"></i>',
-        'title' => 'Logs',
-        'target' => '_blank',
-        'url' => config('app.url').'/logs',
-        'align' => 'right',
-        'can' => 'admin',
+        'key' => 'laravel-tools'
     ],
 ];
 
@@ -83,7 +78,7 @@ $right_menu = [
 // USPTHEME_SKIN deve ser colocado no .env da aplicação
 
 return [
-    'title' => '',
+    'title' => config('app.name'),
     'skin' => env('USP_THEME_SKIN', 'uspdev'),
     'app_url' => config('app.url'),
     'logout_method' => 'POST',
