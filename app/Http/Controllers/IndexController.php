@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Models\Finalidade;
 use App\Models\Reserva;
 use App\Models\Sala;
 use Carbon\Carbon;
@@ -23,6 +24,9 @@ class IndexController extends Controller
             ->when($request->filter, function ($query) use ($request) {
                 $salas = Sala::select('id')->whereIn('categoria_id', $request->filter)->pluck('id');
                 $query->whereIn('sala_id', $salas->toArray());
+            })
+            ->when($request->finalidades_filter, function ($query) use ($request){
+                $query->whereIn('finalidade_id', $request->finalidades_filter);
             });
 
         $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
@@ -31,6 +35,8 @@ class IndexController extends Controller
             'categorias' => Categoria::all(),
             'filter' => ($request->filter) ?: [],
             'reservas' => $reservas,
+            'finalidades' => Finalidade::all(),
+            'finalidades_filter' => $request->finalidades_filter ?? []
         ]);
     }
 
@@ -43,6 +49,8 @@ class IndexController extends Controller
             'categorias' => Categoria::all(),
             'filter' => ($request->filter) ?: [],
             'reservas' => $reservas,
+            'finalidades' => Finalidade::all(),
+            'finalidades_filter' => $request->finalidades_filter ?? []
         ]);
     }
 }

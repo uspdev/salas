@@ -1,12 +1,24 @@
 <div class="card">
     <div class="card-body">
         <form method="GET" action="/search">
-            <div class="row">
+            <b>Categorias:</b>
+            <div class="row mt-2">
                 @foreach($categorias as $categoria)
                     <div class="form-group col-md-3">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" value="{{ $categoria->id }}" id="inlineCheckbox{{ $categoria->id }}" name="filter[]" @if(in_array($categoria->id, $filter))  checked  @endif/>
                             <label class="form-check-label" for="inlineCheckbox{{ $categoria->id }}">{{ $categoria->nome }}</label>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <b>Finalidades:</b>
+            <div class="row mt-2">
+                @foreach ($finalidades as $finalidade)
+                    <div class="form-group col-md-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="{{ $finalidade->id }}" id="inlineFinalidadeCheckbox{{ $finalidade->id }}" name="finalidades_filter[]" @if(in_array($finalidade->id, $finalidades_filter))  checked  @endif/>
+                            <label class="form-check-label" for="inlineFinalidadeCheckbox{{ $finalidade->id }}">{{ $finalidade->legenda }}</label>
                         </div>
                     </div>
                 @endforeach
