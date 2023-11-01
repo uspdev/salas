@@ -1,16 +1,30 @@
 <div class="card">
     <div class="card-body">
         <form method="GET" action="/search">
-            <div class="row">
+            <b>Categorias:</b>
+            <select name="filter[]" class="select2 form-control" multiple="multiple">
                 @foreach($categorias as $categoria)
-                    <div class="form-group col-md-3">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="{{ $categoria->id }}" id="inlineCheckbox{{ $categoria->id }}" name="filter[]" @if(in_array($categoria->id, $filter))  checked  @endif/>
-                            <label class="form-check-label" for="inlineCheckbox{{ $categoria->id }}">{{ $categoria->nome }}</label>
-                        </div>
-                    </div>
+                    <option value="{{$categoria->id}}" {{ in_array($categoria->id, $filter) ? 'selected' : ''}}>{{$categoria->nome}}</option>
                 @endforeach
-            </div>
+            </select>
+
+            <br>
+            <b>Finalidades:</b>
+            <select name="finalidades_filter[]" id="" class="select2 form-control" multiple="multiple">
+                @foreach ($finalidades as $finalidade)
+                    <option value="{{$finalidade->id}}" {{in_array($finalidade->id, $finalidades_filter) ? 'selected' : ''}}>{{$finalidade->legenda}}</option>
+                @endforeach
+            </select>
+
+            <br>
+            <b>Salas:</b>
+            <select name="salas_filter[]" id="" class="select2 form-control" multiple="multiple">
+                @foreach ($salas as $sala)
+                    <option value="{{$sala->id}}" {{in_array($sala->id, $salas_filter) ? 'selected' : ''}}>{{$sala->nome}}</option>
+                @endforeach
+            </select>
+
+            <br>
             <div class="row">
                 <div class="col-sm input-group">
                     <input type="text" class="datepicker" id="input_busca_data" name="busca_data" type="text" placeholder="Data" value="{{ request()->busca_data ?? '' }}">      
