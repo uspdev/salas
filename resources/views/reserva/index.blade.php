@@ -2,27 +2,21 @@
     <div class="card-body">
         <form method="GET" action="/search">
             <b>Categorias:</b>
-            <div class="row mt-2">
+            <select name="filter[]" class="select2 form-control" multiple="multiple">
                 @foreach($categorias as $categoria)
-                    <div class="form-group col-md-3">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="{{ $categoria->id }}" id="inlineCheckbox{{ $categoria->id }}" name="filter[]" @if(in_array($categoria->id, $filter))  checked  @endif/>
-                            <label class="form-check-label" for="inlineCheckbox{{ $categoria->id }}">{{ $categoria->nome }}</label>
-                        </div>
-                    </div>
+                    <option value="{{$categoria->id}}" {{ in_array($categoria->id, $filter) ? 'selected' : ''}}>{{$categoria->nome}}</option>
                 @endforeach
-            </div>
+            </select>
+
+            <br>
             <b>Finalidades:</b>
-            <div class="row mt-2">
+            <select name="finalidades_filter[]" id="" class="select2 form-control" multiple="multiple">
                 @foreach ($finalidades as $finalidade)
-                    <div class="form-group col-md-3">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="{{ $finalidade->id }}" id="inlineFinalidadeCheckbox{{ $finalidade->id }}" name="finalidades_filter[]" @if(in_array($finalidade->id, $finalidades_filter))  checked  @endif/>
-                            <label class="form-check-label" for="inlineFinalidadeCheckbox{{ $finalidade->id }}">{{ $finalidade->legenda }}</label>
-                        </div>
-                    </div>
+                    <option value="{{$finalidade->id}}" {{in_array($finalidade->id, $finalidades_filter) ? 'selected' : ''}}>{{$finalidade->legenda}}</option>
                 @endforeach
-            </div>
+            </select>
+
+            <br>
             <div class="row">
                 <div class="col-sm input-group">
                     <input type="text" class="datepicker" id="input_busca_data" name="busca_data" type="text" placeholder="Data" value="{{ request()->busca_data ?? '' }}">      
