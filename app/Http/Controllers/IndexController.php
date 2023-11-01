@@ -27,6 +27,9 @@ class IndexController extends Controller
             })
             ->when($request->finalidades_filter, function ($query) use ($request){
                 $query->whereIn('finalidade_id', $request->finalidades_filter);
+            })
+            ->when($request->salas_filter, function ($query) use ($request){
+                $query->whereIn('sala_id', $request->salas_filter);
             });
 
         $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
@@ -36,7 +39,9 @@ class IndexController extends Controller
             'filter' => ($request->filter) ?: [],
             'reservas' => $reservas,
             'finalidades' => Finalidade::all(),
-            'finalidades_filter' => $request->finalidades_filter ?? []
+            'finalidades_filter' => $request->finalidades_filter ?? [],
+            'salas' => Sala::all(),
+            'salas_filter' => $request->salas_filter ?? []
         ]);
     }
 
@@ -50,7 +55,9 @@ class IndexController extends Controller
             'filter' => ($request->filter) ?: [],
             'reservas' => $reservas,
             'finalidades' => Finalidade::all(),
-            'finalidades_filter' => $request->finalidades_filter ?? []
+            'finalidades_filter' => $request->finalidades_filter ?? [],
+            'salas' => Sala::all(),
+            'salas_filter' => $request->salas_filter ?? []
         ]);
     }
 }

@@ -17,6 +17,14 @@
             </select>
 
             <br>
+            <b>Salas:</b>
+            <select name="salas_filter[]" id="" class="select2 form-control" multiple="multiple">
+                @foreach ($salas as $sala)
+                    <option value="{{$sala->id}}" {{in_array($sala->id, $salas_filter) ? 'selected' : ''}}>{{$sala->nome}}</option>
+                @endforeach
+            </select>
+
+            <br>
             <div class="row">
                 <div class="col-sm input-group">
                     <input type="text" class="datepicker" id="input_busca_data" name="busca_data" type="text" placeholder="Data" value="{{ request()->busca_data ?? '' }}">      
