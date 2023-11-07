@@ -72,6 +72,8 @@ class SalaController extends Controller
     public function show(Sala $sala)
     {
 
+        $eventos = [];
+
         foreach ($sala->reservas as $reserva) {
 
             $eventos[] = [
