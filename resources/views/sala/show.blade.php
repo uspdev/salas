@@ -46,6 +46,11 @@
             expandRows: 'true',
             eventDisplay: 'block',
             allDaySlot: false,
+            selectAllow: function(info){
+                if (info.start < Date.now())
+                    return false;
+                return true;
+            },
             views: {
                 timeGrid: {
                     selectable: true,
