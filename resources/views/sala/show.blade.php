@@ -31,6 +31,12 @@
         margin: 5px;
         border: 1px solid black;
     }
+    td{
+        background-clip: padding-box; /* Esta opção só é necessária para contornar um bug do firefox que pinta o background em cima das bordas das tag 'td'. Referência: https://bugzilla.mozilla.org/show_bug.cgi?id=688556 */
+    }
+    td.fc-day.fc-day-past{
+        background-color: #eeeeee; /* Deixando os dias passados cinzas. */
+    }
 </style>
 @endsection
 
