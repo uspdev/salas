@@ -53,6 +53,8 @@
             eventDisplay: 'block',
             allDaySlot: false,
             selectAllow: function(info){
+                if(parseInt({{Gate::allows('responsavel', App\Models\Sala::find($sala->id))}}))
+                    return true;
                 if (info.start < Date.now())
                     return false;
                 return true;
