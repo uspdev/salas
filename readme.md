@@ -83,3 +83,4 @@ Este sistema foi transferido da FFLCH para o USPDev.
 - 18/10/2023: Arrumando *seeders*.
 - 26/10/2023: Atualizando biblioteca do calendário.
 - 26/10/2023: Permitindo realizar reservas ao clicar no calendário.
+- 14/11/2023: Não permitindo realizar reservas no passado.
