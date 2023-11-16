@@ -26,6 +26,7 @@ class ReservaRequest extends FormRequest
      */
     public function rules()
     {
+        
         /*
          * A validação da disponibilidade será customizada
          */

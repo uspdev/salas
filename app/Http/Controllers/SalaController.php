@@ -8,6 +8,8 @@ use App\Models\Finalidade;
 use App\Models\Recurso;
 use App\Models\Reserva;
 use App\Models\Sala;
+use App\Models\Restricao;
+use App\Models\PeriodoLetivo;
 
 class SalaController extends Controller
 {
@@ -113,12 +115,19 @@ class SalaController extends Controller
             return $recurso;
         });
 
+        $sala->load('restricao');        
+        
+
+
+        
+
         return view('sala.edit', [
             'sala' => $sala,
             'categorias' => Categoria::all(),
             'recursos' => $recursos,
-            'responsaveis' => $sala->responsaveis
-        ]);
+            'responsaveis' => $sala->responsaveis,
+            'periodos' => PeriodoLetivo::all(),
+            ]);
     }
 
     /**
@@ -131,9 +140,14 @@ class SalaController extends Controller
     public function update(SalaRequest $request, Sala $sala)
     {
         $this->authorize('admin');
+        
+        //dd($request->only(['tipo_restricao', 'dias_limite', 'data_limite', 'periodo_letivo']));
+        
 
         $validated = $request->validated();
 
+        //dd($validated);
+        
         if($validated['aprovacao'] && count($sala->responsaveis) < 1)
             return redirect()->route('salas.edit', ['sala' => $sala->id])->with('alert-danger', 'A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.');
 
@@ -149,6 +163,21 @@ class SalaController extends Controller
             }
             $sala->recursos()->detach($recurso_ids);
         }
+
+        
+        
+
+        $sala->restricao()->update(
+            [
+                'bloqueada'            => $validated['bloqueada'],
+                'dias_antecedencia'    => $validated['dias_antecedencia'],
+                'tipo_restricao'       => $validated['tipo_restricao'],
+                'data_limite'          => $validated['data_limite'],
+                'dias_limite'          => $validated['dias_limite'],
+                'periodo_letivo_id'    => $validated['periodo_letivo']
+            ]
+            );
+        
 
         return redirect("/salas/{$sala->id}")
             ->with('alert-success', 'Sala atualizada com sucesso');
