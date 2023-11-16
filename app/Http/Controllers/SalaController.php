@@ -115,11 +115,12 @@ class SalaController extends Controller
             return $recurso;
         });
 
-        $sala->load('restricao');        
         
+        $sala->restricao = Restricao::firstOrCreate([
+            'sala_id' => $sala->id
+        ]);
 
-
-        
+       
 
         return view('sala.edit', [
             'sala' => $sala,
