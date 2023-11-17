@@ -9,8 +9,10 @@ class Setor extends Model
 {
     use HasFactory;
 
+    protected $table = 'setores';
+
     public function categorias()
     {
-        return $this->belongsToMany(Categorias::class);
+        return $this->belongsToMany(Categoria::class, 'categoria_setor');
     }
 }

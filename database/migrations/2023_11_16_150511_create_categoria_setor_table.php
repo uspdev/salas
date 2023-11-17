@@ -14,8 +14,10 @@ class CreateCategoriaSetorTable extends Migration
     public function up()
     {
         Schema::create('categoria_setor', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('categoria_id')->constrained();
             $table->foreignId('setor_id')->constrained('setores');
+            $table->timestamps();
         });
     }
 

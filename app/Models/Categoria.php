@@ -25,6 +25,6 @@ class Categoria extends Model implements Auditable
 
     public function setores()
     {
-        return $this->belongsToMany(Setor::class);
+        return $this->belongsToMany(Setor::class, 'categoria_setor');
     }
 }
