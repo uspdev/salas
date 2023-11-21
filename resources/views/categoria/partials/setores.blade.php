@@ -3,11 +3,11 @@
       <b>Setores cadastrados em {{ $categoria->nome }}</b>
     </div>
     <div class="card-body">
-        <form method="POST">
+        <form method="POST" action="{{route('categoria.add-setor', $categoria)}}">
             @csrf
-            <select name="" id="" class="select2 form-control" multiple="multiple">
+            <select name="setores[]" class="select2 form-control" multiple="multiple">
                 @foreach ($setores as $setor)
-                    <option value="{{$setor['codset']}}">{{$setor['nomabvset']}} - {{$setor['nomset']}}</option>
+                    <option value="{{$setor['codset']}}" {{$categoria->setores }}>{{$setor['nomabvset']}} - {{$setor['nomset']}}</option>
                 @endforeach
             </select>
             <button class="btn btn-success mt-3" type="submit">Salvar</button>

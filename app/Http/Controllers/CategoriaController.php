@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoriaRequest;
 use App\Models\Categoria;
+use App\Models\Setor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Uspdev\Replicado\Pessoa;
@@ -171,5 +172,39 @@ class CategoriaController extends Controller
 
         return redirect("/categorias/{$categoria->id}")
             ->with('alert-sucess', "{$user->name} foi excluído(a) de {$categoria->nome}");
+    }
+
+    public function addSetor(Request $request, Categoria $categoria)
+    {
+        $this->authorize('admin');
+
+        $request->validate([
+            'setores' => 'required'
+        ],
+        [
+            'setores.required' => 'Selecione um setor',
+        ]);
+
+        foreach($request->setores as $codset){
+
+            $setor = Setor::firstWhere('codset', $codset);
+
+            if(!$setor){
+                $dumpSetor = Estrutura::dump($codset);
+
+                $setor = new Setor();
+                $setor->codset = $dumpSetor['codset'];
+                $setor->nomset = $dumpSetor['nomset'];
+                $setor->nomabvset = $dumpSetor['nomabvset'];
+                $setor->save(); 
+            }
+
+            if(!$categoria->setores()->where('codset', $codset)->exists()){
+                $categoria->setores()->attach($setor->id);
+            }
+
+        }
+
+        return redirect()->route('categorias.show', $categoria->id)->with('alert-success', "Setores cadastrados em {$categoria->nome} atualizados com sucesso");
     }
 }
