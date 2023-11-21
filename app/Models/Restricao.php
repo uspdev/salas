@@ -18,7 +18,8 @@ class Restricao extends Model
         'dias_limite',
         'dias_antecedencia',
         'bloqueada',
-        'sala_id'
+        'sala_id',
+        'periodo_letivo_id'
     ];
 
 
@@ -29,3 +30,4 @@ class Restricao extends Model
 
 
 }
+

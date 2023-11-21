@@ -142,13 +142,9 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
         
-        //dd($request->only(['tipo_restricao', 'dias_limite', 'data_limite', 'periodo_letivo']));
-        
-
         $validated = $request->validated();
 
-        //dd($validated);
-        
+                
         if($validated['aprovacao'] && count($sala->responsaveis) < 1)
             return redirect()->route('salas.edit', ['sala' => $sala->id])->with('alert-danger', 'A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.');
 
