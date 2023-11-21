@@ -7,7 +7,7 @@
             @csrf
             <select name="setores[]" class="select2 form-control" multiple="multiple">
                 @foreach ($setores as $setor)
-                    <option value="{{$setor['codset']}}" {{$categoria->setores }}>{{$setor['nomabvset']}} - {{$setor['nomset']}}</option>
+                    <option value="{{$setor['codset']}}" {{$categoria->setores->contains('codset', $setor['codset']) ? 'selected': ''}}>{{$setor['nomabvset']}} - {{$setor['nomset']}}</option>
                 @endforeach
             </select>
             <button class="btn btn-success mt-3" type="submit">Salvar</button>
