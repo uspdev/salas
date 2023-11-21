@@ -30,7 +30,7 @@ Route::resource('/categorias', CategoriaController::class)->except(['index']);
 Route::post('/categorias/adduser/{categoria}', [CategoriaController::class, 'addUser']);
 Route::post('/categorias/alterar-vinculos/{categoria}', [CategoriaController::class, 'alterarVinculos'])->name('alterar-vinculos');
 Route::delete('/categorias/removeuser/{categoria}/{user}', [CategoriaController::class, 'removeUser']);
-Route::post('/categorias/addsetor/{categoria}', [CategoriaController::class, 'addSetor'])->name('categoria.add-setor');
+Route::post('/categorias/updatesetores/{categoria}', [CategoriaController::class, 'updateSetores'])->name('categoria.update-setores');
 
 // Logs
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->middleware('can:admin');

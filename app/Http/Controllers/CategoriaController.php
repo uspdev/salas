@@ -174,7 +174,7 @@ class CategoriaController extends Controller
             ->with('alert-sucess', "{$user->name} foi excluído(a) de {$categoria->nome}");
     }
 
-    public function addSetor(Request $request, Categoria $categoria)
+    public function updateSetores(Request $request, Categoria $categoria)
     {
         $this->authorize('admin');
 
@@ -184,6 +184,8 @@ class CategoriaController extends Controller
         [
             'setores.required' => 'Selecione um setor',
         ]);
+
+        $categoria->setores()->detach();
 
         foreach($request->setores as $codset){
 
@@ -199,9 +201,7 @@ class CategoriaController extends Controller
                 $setor->save(); 
             }
 
-            if(!$categoria->setores()->where('codset', $codset)->exists()){
-                $categoria->setores()->attach($setor->id);
-            }
+            $categoria->setores()->attach($setor->id);
 
         }
 

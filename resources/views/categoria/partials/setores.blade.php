@@ -3,7 +3,7 @@
       <b>Setores cadastrados em {{ $categoria->nome }}</b>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{route('categoria.add-setor', $categoria)}}">
+        <form method="POST" action="{{route('categoria.update-setores', $categoria)}}">
             @csrf
             <select name="setores[]" class="select2 form-control" multiple="multiple">
                 @foreach ($setores as $setor)
