@@ -171,6 +171,8 @@ class SalaController extends Controller
                 'tipo_restricao'       => $validated['tipo_restricao'],
                 'data_limite'          => $validated['data_limite'],
                 'dias_limite'          => $validated['dias_limite'],
+                'duracao_minima'       => $validated['duracao_minima'],
+                'duracao_maxima'       => $validated['duracao_maxima'],
                 'periodo_letivo_id'    => $validated['periodo_letivo']
             ]
             );

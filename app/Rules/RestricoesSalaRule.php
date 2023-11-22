@@ -93,6 +93,31 @@ class RestricoesSalaRule implements Rule
         }
 
 
+        /* verificar se a reserva atende as restrições de duração mínima */
+        if ($sala->restricao->duracao_minima > 0) {
+            $hi = Carbon::createFromFormat('H:i', $this->reserva->horario_inicio);
+            $hf = Carbon::createFromFormat('H:i', $this->reserva->horario_fim);
+            $duracao = $hi->diffInMinutes($hf) ;
+
+            if ($duracao < $sala->restricao->duracao_minima) {
+                $this->message .= "A duração da reserva não tem a duração mínima definida para a sala $sala->nome que é de ". $sala->restricao->duracao_minima . " minutos";
+                $this->validationErrors++;
+            }
+        }
+
+        /* verificar se a reserva atende as restrições de duração máxima  */
+        if ($sala->restricao->duracao_maxima > 0) {
+            $hi = Carbon::createFromFormat('H:i', $this->reserva->horario_inicio);
+            $hf = Carbon::createFromFormat('H:i', $this->reserva->horario_fim);
+            $duracao = $hi->diffInMinutes($hf) ;
+
+            if ($duracao > $sala->restricao->duracao_maxima) {
+                $this->message .= "A duração da reserva supera a duração máxima definida para a sala $sala->nome que é de ". $sala->restricao->duracao_maxima . " minutos";
+                $this->validationErrors++;
+            }
+        }
+
+
         if ($this->validationErrors > 0) {
             return false;
         } else {

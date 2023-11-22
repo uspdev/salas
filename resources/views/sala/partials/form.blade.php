@@ -126,6 +126,23 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-sm form-group">
+                    <b>Duração das reservas</b>
+                    <br>As reservas para a sala podem ser limitadas a uma duração mínima e a uma duração máxima. Ao definir os valores, o sistema não permite a reserva da sala além da duração definida e nem com o tempo 
+                    inferior ao tempo mínimo estipulado, mesmo que a sala esteja livre. 
+
+                    <div class="form-group">
+                        <label for="dias_antecedencia">Duração mínima:</label>
+                        <input type="number" name="duracao_minima" value="{{ old('duracao_minima', $sala->restricao->duracao_minima) }}" min="0" size="5"> minutos
+                    </div>
+                    <div class="form-group">
+                        <label for="dias_antecedencia">Duração máxima:</label>
+                        <input type="number" name="duracao_maxima" value="{{ old('duracao_maxima', $sala->restricao->duracao_maxima) }}" min="1" size="5"> minutos
+                    </div>
+                </div>
+            </div>
+
 
 
             <div class="row">

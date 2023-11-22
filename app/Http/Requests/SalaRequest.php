@@ -37,6 +37,8 @@ class SalaRequest extends FormRequest
             'data_limite'   => 'nullable',
             'dias_limite'   => 'nullable',
             'periodo_letivo' => 'nullable',
+            'duracao_minima' => 'nullable|numeric',
+            'duracao_maxima' => 'nullable|numeric',
             'tipo_restricao' => ['required', new TipoRestricaoRule($this->data_limite, $this->dias_limite, $this->periodo_letivo)],
         ];
     }
