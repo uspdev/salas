@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\TipoRestricaoRule;
+
 
 class SalaRequest extends FormRequest
 {
@@ -23,12 +25,19 @@ class SalaRequest extends FormRequest
      */
     public function rules()
     {
+        
         return [
             'nome'         => 'required',
             'categoria_id' => 'required',
             'capacidade'   => 'required|integer',
             'recursos'     => 'nullable',
-            'aprovacao'    => 'required|integer'
+            'aprovacao'    => 'required|integer',
+            'bloqueada'    => 'nullable',
+            'dias_antecedencia'   => 'nullable',
+            'data_limite'   => 'nullable',
+            'dias_limite'   => 'nullable',
+            'periodo_letivo' => 'nullable',
+            'tipo_restricao' => ['required', new TipoRestricaoRule($this->data_limite, $this->dias_limite, $this->periodo_letivo)],
         ];
     }
 

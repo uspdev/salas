@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Recurso;
 use App\Models\Reserva;
 use App\Models\Categoria;
+use App\Models\Restricao;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Sala extends Model implements Auditable
@@ -36,4 +37,10 @@ class Sala extends Model implements Auditable
     {
         return $this->belongsToMany(User::class, 'responsaveis')->withPivot('id');
     }
+
+    public function restricao()
+    {
+        return $this->hasOne(Restricao::class);
+    }
+
 }

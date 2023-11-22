@@ -16,6 +16,11 @@ $admin = [
         'url' => config('app.url').'/recursos',
         'can' => 'admin',
     ],
+    [
+        'text' => 'Períodos Letivos',
+        'url' => config('app.url').'/periodos_letivos',
+        'can' => 'admin',
+    ],
 ];
 
 $reservas = [

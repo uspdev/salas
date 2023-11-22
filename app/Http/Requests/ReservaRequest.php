@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Sala;
 use App\Rules\verifyRoomAvailability;
 use Illuminate\Support\Facades\Gate;
+use App\Rules\RestricoesSalaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,6 +28,7 @@ class ReservaRequest extends FormRequest
      */
     public function rules()
     {
+        
         /*
          * A validação da disponibilidade será customizada
          */
@@ -36,12 +38,13 @@ class ReservaRequest extends FormRequest
             $id = 0;
         }
 
+        
         $rules = [
             'nome' => 'required',
             'horario_inicio' => 'required|date_format:G:i|',
             'horario_fim' => 'required|date_format:G:i|after:horario_inicio|',
             'finalidade_id' => 'required|integer',
-            'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray())],
+            'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray()), new RestricoesSalaRule($this) ],
             'descricao' => 'nullable',
             'repeat_until' => ['required_with:repeat_days', 'nullable', 'date_format:d/m/Y'],
             'repeat_days.*' => 'integer|between:0,7',
