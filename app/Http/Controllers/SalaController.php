@@ -167,6 +167,7 @@ class SalaController extends Controller
         $sala->restricao()->update(
             [
                 'bloqueada'            => $validated['bloqueada'],
+                'motivo_bloqueio'      => $validated['motivo_bloqueio'],
                 'dias_antecedencia'    => $validated['dias_antecedencia'],
                 'tipo_restricao'       => $validated['tipo_restricao'],
                 'data_limite'          => $validated['data_limite'],

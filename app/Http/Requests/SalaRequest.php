@@ -27,19 +27,20 @@ class SalaRequest extends FormRequest
     {
         
         return [
-            'nome'         => 'required',
-            'categoria_id' => 'required',
-            'capacidade'   => 'required|integer',
-            'recursos'     => 'nullable',
-            'aprovacao'    => 'required|integer',
-            'bloqueada'    => 'nullable',
-            'dias_antecedencia'   => 'nullable',
-            'data_limite'   => 'nullable',
-            'dias_limite'   => 'nullable',
-            'periodo_letivo' => 'nullable',
-            'duracao_minima' => 'nullable|numeric',
-            'duracao_maxima' => 'nullable|numeric',
-            'tipo_restricao' => ['required', new TipoRestricaoRule($this->data_limite, $this->dias_limite, $this->periodo_letivo)],
+            'nome'                  => 'required',
+            'categoria_id'          => 'required',
+            'capacidade'            => 'required|integer',
+            'recursos'              => 'nullable',
+            'aprovacao'             => 'required|integer',
+            'bloqueada'             => 'nullable',
+            'motivo_bloqueio'       => 'nullable',
+            'dias_antecedencia'     => 'nullable',
+            'data_limite'           => 'nullable',
+            'dias_limite'           => 'nullable',
+            'periodo_letivo'        => 'nullable',
+            'duracao_minima'        => 'nullable|numeric',
+            'duracao_maxima'        => 'nullable|numeric',
+            'tipo_restricao'        => ['required', new TipoRestricaoRule($this->data_limite, $this->dias_limite, $this->periodo_letivo)],
         ];
     }
 
