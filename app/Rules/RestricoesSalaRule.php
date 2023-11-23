@@ -44,14 +44,14 @@ class RestricoesSalaRule implements Rule
 
         /* sala bloqueada */
         if ($sala->restricao->bloqueada) {
-            $this->message .= "A sala $sala->nome está bloqueada para reservas";
+            $this->message .= "A sala $sala->nome está bloqueada para reservas. " . $sala->restricao->motivo_bloqueio;
             $this->validationErrors++;
         }
 
 
         /* respeita a antecedência mínima */
         if ($sala->restricao->dias_antecedencia > (Carbon::now()->diffInDays(Carbon::createFromFormat('d/m/Y', $this->reserva->data)->format('Y-m-d'), false))) {
-            $this->message .= $this->message . "As reservas na sala $sala->nome precisam ser solicitadas com até " . $sala->restricao->dias_antecedencia . " dias de antecedência";
+            $this->message .= $this->message . "<li>As reservas na sala $sala->nome precisam ser solicitadas com até " . $sala->restricao->dias_antecedencia . " dias de antecedência";
             $this->validationErrors++;
         }
 
@@ -63,7 +63,7 @@ class RestricoesSalaRule implements Rule
             $dataLimite = Carbon::now()->addDays($sala->restricao->dias_limite);
 
             if ($dataReserva->isAfter($dataLimite)) {
-                $this->message .= "A sala $sala->nome aceita reservas somente até o dia " . Carbon::parse($dataLimite)->format('d/m/Y');
+                $this->message .= "<br>A sala $sala->nome aceita reservas somente até o dia " . Carbon::parse($dataLimite)->format('d/m/Y');
                 $this->validationErrors++;
             }
         }
@@ -74,7 +74,7 @@ class RestricoesSalaRule implements Rule
             $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data);
 
             if ($dataReserva->isAfter($sala->restricao->data_limite)) {
-                $this->message .= "A sala $sala->nome aceita reservas somente até o dia " . Carbon::parse($sala->restricao->data_limite)->format('d/m/Y');
+                $this->message .= "<br>A sala $sala->nome aceita reservas somente até o dia " . Carbon::parse($sala->restricao->data_limite)->format('d/m/Y');
                 $this->validationErrors++;
             }
         }
@@ -87,7 +87,7 @@ class RestricoesSalaRule implements Rule
             $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data);
 
             if (!$dataReserva->between($periodo->data_inicio_reservas, $periodo->data_fim_reservas)) {
-                $this->message .= "A sala $sala->nome aceita reservas somente entre os dias " . Carbon::parse($periodo->data_inicio_reservas)->format('d/m/Y') . " e " . Carbon::parse($periodo->data_fim_reservas)->format('d/m/Y');
+                $this->message .= "<br>A sala $sala->nome aceita reservas somente entre os dias " . Carbon::parse($periodo->data_inicio_reservas)->format('d/m/Y') . " e " . Carbon::parse($periodo->data_fim_reservas)->format('d/m/Y');
                 $this->validationErrors++;
             }
         }
@@ -100,7 +100,7 @@ class RestricoesSalaRule implements Rule
             $duracao = $hi->diffInMinutes($hf) ;
 
             if ($duracao < $sala->restricao->duracao_minima) {
-                $this->message .= "A duração da reserva não tem a duração mínima definida para a sala $sala->nome que é de ". $sala->restricao->duracao_minima . " minutos";
+                $this->message .= "<br>A reserva não tem a duração mínima definida para a sala $sala->nome que é de ". $sala->restricao->duracao_minima . " minutos";
                 $this->validationErrors++;
             }
         }
@@ -112,7 +112,7 @@ class RestricoesSalaRule implements Rule
             $duracao = $hi->diffInMinutes($hf) ;
 
             if ($duracao > $sala->restricao->duracao_maxima) {
-                $this->message .= "A duração da reserva supera a duração máxima definida para a sala $sala->nome que é de ". $sala->restricao->duracao_maxima . " minutos";
+                $this->message .= "<br>A reserva supera a duração máxima definida para a sala $sala->nome que é de ". $sala->restricao->duracao_maxima . " minutos";
                 $this->validationErrors++;
             }
         }

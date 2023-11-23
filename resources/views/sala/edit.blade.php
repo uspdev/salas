@@ -93,5 +93,16 @@
 
         });
 
+
+        $('.radio-bloqueada').on('click', function(e){
+            if(parseInt($(this).val()))
+                $('#box_motivo_bloqueio').css('display', 'block');
+            else
+                $('#box_motivo_bloqueio').css('display', 'none');
+                $('#txt_motivo_bloqueio').val(null);
+       });
+
+
+
     </script>
 @stop

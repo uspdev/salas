@@ -112,6 +112,12 @@
                         <label for="bloqueada-nao">Não</label>
                     </div>
 
+                    <div class="col-sm form-group" id="box_motivo_bloqueio" @if (old('bloqueada', !$sala->restricao->bloqueada)) style="display: none" @endif>
+                        <b>Motivo do bloqueio</b>
+                        <br>Descreva resumidamente o motivo, período e outras informações relevantes sobre o bloqueio
+                        <input class="form-control" type="text" name="motivo_bloqueio" id="txt_motivo_bloqueio" value="{{  old('motivo_bloqueio', $sala->restricao->motivo_bloqueio) }}" >
+                    </div>
+
                 </div>
             </div>
             
