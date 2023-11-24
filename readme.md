@@ -34,6 +34,15 @@ O gerenciamento pelo vínculo é referente somente aos vínculos de Docente, Ser
   (A unidade é mostrada com base na variável de ambiente `REPLICADO_CODUNDCLG` do `.env`)
 - **Nenhum**: somente as pessoas cadastradas manualmente poderão realizar reservas na categoria.
 
+# Gerenciando Restrições na Sala
+
+As salas podem conter algumas restrições de datas para as reservas. A ativação de qualquer uma dessas opções altera o funcionamento do sistema, especialmente nas novas solicitações:
+
+- **Bloqueio**: Impede novas reservas na sala. Essa condição pode ser útil em caso de manutenção ou qualquer outra situação em que a sala não pode ser reservada.
+- **Antecedência mínima**: Quantidade de dias de antecedência mínima para reservar a sala.
+- **Duração das reservas**: As reservas para a sala podem ser limitadas a uma duração mínima e a uma duração máxima em minutos.
+- **Limites de datas para as reservas**: Podem ser por Data limite fixa, Data limite dinâmica ou Data limite por Período Letivo (janela de reserva).
+
 # Finalidades
 
 Por padrão o sistema é instalado com as seguintes finalidades para as reservas:
@@ -55,6 +64,7 @@ Na aba de edição da sala é possível gerenciar os responsáveis pela sala atr
 
 
 # Como subir a aplicação
+
 ## Instalação
 
 ```sh
@@ -62,6 +72,7 @@ composer install
 cp .env.example .env
 php artisan key:generate
 ```
+
 **Para ambiente de produção:**
 
 ```bash
@@ -79,6 +90,7 @@ php artisan migrate:fresh --seed
 ```sh
 php artisan serve
 ```
+
 # Histórico
 
 Este sistema foi transferido da FFLCH para o USPDev.
