@@ -4,8 +4,9 @@
     <div class="card-header">
         <b>Períodos Letivos</b>
     </div>
+    
     <div class="card-body">
-    @include('periodos_letivos.partials.table')
+        @include('periodos_letivos.partials.table')
     </div>
 </div>
 <br>

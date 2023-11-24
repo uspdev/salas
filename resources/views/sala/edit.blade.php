@@ -85,7 +85,7 @@
 
             if (selectedValue === 'NENHUMA') {
                 $('#txt_dias_limite').val(null);
-                $('#txt_dias_limite').val(null);
+                $('#txt_data_limite').val(null);
                 $('#select_periodo_letivo').val(null);
             } else {
                 // nada a fazer
