@@ -50,9 +50,13 @@ class RestricoesSalaRule implements Rule
 
         $sala = Sala::with('restricao')->find($value);
 
-        
+        /* sala não possui nenhuma restrição */
+        if (!isset($sala->restricao)) {
+            return true;
+        }
+
         /* sala bloqueada */
-        if ($sala->restricao->bloqueada == TRUE) {
+        if ($sala->restricao->bloqueada) {
             $this->message .= "A sala $sala->nome está bloqueada para reservas. " . $sala->restricao->motivo_bloqueio . "<br>";
             $this->validationErrors++;
         }
