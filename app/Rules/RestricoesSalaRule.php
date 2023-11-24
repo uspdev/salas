@@ -51,15 +51,20 @@ class RestricoesSalaRule implements Rule
         $sala = Sala::with('restricao')->find($value);
 
         
+        /* sala não possui nenhuma restrição */
+        if (!isset($sala->restricao)) {
+            return true;
+        }
+
         /* sala bloqueada */
-        if ($sala->restricao->bloqueada == TRUE) {
+        if ($sala->restricao->bloqueada) {
             $this->message .= "A sala $sala->nome está bloqueada para reservas. " . $sala->restricao->motivo_bloqueio . "<br>";
             $this->validationErrors++;
         }
 
         
         /* respeita a antecedência mínima */
-        if ($sala->restricao->dias_antecedencia > (Carbon::now()->diffInDays(Carbon::createFromFormat('d/m/Y', $this->reserva->data)->format('Y-m-d'), false))) {
+        if ($sala->restricao->dias_antecedencia > 0 && $sala->restricao->dias_antecedencia > (Carbon::now()->diffInDays(Carbon::createFromFormat('d/m/Y', $this->reserva->data)->format('Y-m-d'), false))) {
             $this->message .= "As reservas na sala $sala->nome precisam ser solicitadas com até " . $sala->restricao->dias_antecedencia . " dias de antecedência<br>";
             $this->validationErrors++;
         }
@@ -68,7 +73,7 @@ class RestricoesSalaRule implements Rule
         /* verificar se a data da reserva e se a data repeat_until é antes dos dia limite dinamicamente calculado */
         if ($sala->restricao->tipo_restricao === 'AUTO') {
 
-            $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data);
+            $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data)->startOfDay();
             $dataLimite = Carbon::now()->addDays($sala->restricao->dias_limite);
 
             
@@ -81,7 +86,7 @@ class RestricoesSalaRule implements Rule
         /* verificar se a data da reserva e se a data repeat_until  é antes da data limite estabelecida */
         if ($sala->restricao->tipo_restricao === 'FIXA') {
 
-            $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data);
+            $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data)->startOfDay();
 
             if ($dataReserva->isAfter($sala->restricao->data_limite) || $this->repeatUntil->isAfter($sala->restricao->data_limite) ) {
                 $this->message .= "A sala $sala->nome aceita reservas somente até o dia " . Carbon::parse($sala->restricao->data_limite)->format('d/m/Y') . "<br>";
@@ -94,7 +99,7 @@ class RestricoesSalaRule implements Rule
 
             $periodo = PeriodoLetivo::find($sala->restricao->periodo_letivo_id);
 
-            $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data);
+            $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data)->startOfDay();
 
             if (!$dataReserva->between($periodo->data_inicio_reservas, $periodo->data_fim_reservas) || $this->repeatUntil->isAfter($periodo->data_fim_reservas)) {
                 $this->message .= "A sala $sala->nome aceita reservas somente entre os dias " . Carbon::parse($periodo->data_inicio_reservas)->format('d/m/Y') . " e " . Carbon::parse($periodo->data_fim_reservas)->format('d/m/Y') . "<br>";
