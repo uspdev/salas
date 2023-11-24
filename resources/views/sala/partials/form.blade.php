@@ -127,7 +127,7 @@
                     <br>Quantidade de dias de antecedência mínima para reservar a sala. Ao habilitar essa opção, o sistema não permite a reserva que não respeite o período mínimo de antecedência, mesmo que a sala esteja livre.
                     <div class="form-group">
                         <label for="dias_antecedencia">Dias de antecedência:</label>
-                        <input type="number" name="dias_antecedencia" value="{{ old('dias_antecedencia', $sala->restricao->dias_antecedencia) }}" min="1" max="99999">
+                        <input type="number" name="dias_antecedencia" value="{{ old('dias_antecedencia', $sala->restricao->dias_antecedencia) }}" min="0" max="99999">
                     </div>
                 </div>
             </div>
