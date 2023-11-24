@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Rules\RestricoesSalaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class ReservaRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class ReservaRequest extends FormRequest
      */
     public function rules()
     {
-        
+
         /*
          * A validação da disponibilidade será customizada
          */
@@ -38,7 +39,7 @@ class ReservaRequest extends FormRequest
             $id = 0;
         }
 
-        
+
         $rules = [
             'nome' => 'required',
             'horario_inicio' => 'required|date_format:G:i|',
@@ -53,7 +54,11 @@ class ReservaRequest extends FormRequest
 
         if(!Gate::allows('responsavel', Sala::find($this->sala_id))){
             array_push($rules['data'], 'after_or_equal:today');
-            $rules['horario_inicio'] .= 'after:'. date('G:i');
+            $date_today = Carbon::createFromFormat('d/m/Y', date('d/m/Y'));
+            $date_input = Carbon::createFromFormat('d/m/Y', $this->data);
+            if($date_input->eq($date_today)) {
+                $rules['horario_inicio'] .= 'after:'. date('G:i');
+            }
         }
 
         return $rules;
