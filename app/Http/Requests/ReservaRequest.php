@@ -4,8 +4,11 @@ namespace App\Http\Requests;
 
 use App\Models\Sala;
 use App\Rules\verifyRoomAvailability;
+use Illuminate\Support\Facades\Gate;
+use App\Rules\RestricoesSalaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class ReservaRequest extends FormRequest
 {
@@ -26,6 +29,7 @@ class ReservaRequest extends FormRequest
      */
     public function rules()
     {
+
         /*
          * A validação da disponibilidade será customizada
          */
@@ -35,17 +39,27 @@ class ReservaRequest extends FormRequest
             $id = 0;
         }
 
+
         $rules = [
             'nome' => 'required',
             'horario_inicio' => 'required|date_format:G:i|',
             'horario_fim' => 'required|date_format:G:i|after:horario_inicio|',
             'finalidade_id' => 'required|integer',
-            'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray())],
+            'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray()), new RestricoesSalaRule($this) ],
             'descricao' => 'nullable',
             'repeat_until' => ['required_with:repeat_days', 'nullable', 'date_format:d/m/Y'],
             'repeat_days.*' => 'integer|between:0,7',
             'data' => ['required', 'date_format:d/m/Y', new verifyRoomAvailability($this, $id)],
         ];
+
+        if(!Gate::allows('responsavel', Sala::find($this->sala_id))){
+            array_push($rules['data'], 'after_or_equal:today');
+            $date_today = Carbon::createFromFormat('d/m/Y', date('d/m/Y'));
+            $date_input = Carbon::createFromFormat('d/m/Y', $this->data);
+            if($date_input->eq($date_today)) {
+                $rules['horario_inicio'] .= 'after:'. date('G:i');
+            }
+        }
 
         return $rules;
     }
@@ -61,6 +75,8 @@ class ReservaRequest extends FormRequest
             'horario_fim.date_format' => 'Digite o horário no formato 0:00. Exemplo: 9:00',
             'sala_id.required' => 'Selecione uma sala.',
             'repeat_until.required_with' => 'Selecione uma data para o fim da repetição.',
+            'data.after_or_equal' => 'Não é possível fazer reservas em dias passados.',
+            'horario_inicio.after' => 'Não é possível fazer reservas em um horário passado.',
         ];
     }
 }

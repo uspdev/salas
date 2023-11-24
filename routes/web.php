@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\FinalidadeController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\PeriodoLetivoController;
 use App\Http\Controllers\RecursoController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\ResponsavelController;
@@ -45,3 +46,8 @@ Route::get('/search', [IndexController::class, 'search']);
 
 // Finalidades
 Route::resource('finalidades', FinalidadeController::class)->except(['show']);
+
+// Períodos Letivos
+Route::resource('/periodos_letivos', PeriodoLetivoController::class)->parameters([
+    'periodos_letivos' => 'periodo',
+]);;

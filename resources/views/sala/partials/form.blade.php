@@ -52,7 +52,7 @@
         @if ($title == 'Editar')
             <div class="row">
                 <div class="col-sm form-group">
-                    <b>Necessita de Aprovação?</b>
+                    <b>Necessita de aprovação?</b>
                     <div class="form-check">
                         <input name="aprovacao" type="radio" class="form-check-input radio-aprovacao" id="aprovacao-sim" value="1" {{$sala->aprovacao ? 'checked' : ''}}>
                         <label for="aprovacao-sim">Sim</label>
@@ -87,6 +87,146 @@
                     </div>
                 </div>
             </div>
+
+
+            <!-- início das restrições -->
+            <p><b>Restrições</b>
+                <br>
+                As salas podem conter algumas restrições de datas para as reservas. A ativação de qualquer uma dessas opções altera o funcionamento do sistema, especialmente nas novas solicitações. 
+            </p>
+            
+            <div class="row">
+                
+                <div class="col-sm form-group">
+                    <b>Sala bloqueada</b>
+                    <br>Impede novas reservas na sala. Essa condição pode ser útil em caso de manutenção ou qualquer outra situação em que a sala não pode ser reservada. 
+                    
+
+                    <div class="form-check">
+                        <input name="bloqueada" type="radio" class="form-check-input radio-bloqueada" id="bloqueada-sim" value="1" {{$sala->restricao->bloqueada ? 'checked' : ''}}>
+                        <label for="bloqueada-sim">Sim</label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input name="bloqueada" type="radio" class="form-check-input radio-bloqueada" id="bloqueada-nao" value="0" {{!$sala->restricao->bloqueada ? 'checked' : ''}}>
+                        <label for="bloqueada-nao">Não</label>
+                    </div>
+
+                    <div class="col-sm form-group" id="box_motivo_bloqueio" @if (old('bloqueada', !$sala->restricao->bloqueada)) style="display: none" @endif>
+                        <b>Motivo do bloqueio</b>
+                        <br>Descreva resumidamente o motivo, período e outras informações relevantes sobre o bloqueio
+                        <input class="form-control" type="text" name="motivo_bloqueio" id="txt_motivo_bloqueio" value="{{  old('motivo_bloqueio', $sala->restricao->motivo_bloqueio) }}" >
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-sm form-group">
+                    <b>Antecedência mínima</b>
+                    <br>Quantidade de dias de antecedência mínima para reservar a sala. Ao habilitar essa opção, o sistema não permite a reserva que não respeite o período mínimo de antecedência, mesmo que a sala esteja livre.
+                    <div class="form-group">
+                        <label for="dias_antecedencia">Dias de antecedência:</label>
+                        <input type="number" name="dias_antecedencia" value="{{ old('dias_antecedencia', $sala->restricao->dias_antecedencia) }}" min="0" max="99999">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm form-group">
+                    <b>Duração das reservas</b>
+                    <br>As reservas para a sala podem ser limitadas a uma duração mínima e a uma duração máxima. Ao definir os valores, o sistema não permite a reserva da sala além da duração definida e nem com o tempo 
+                    inferior ao tempo mínimo estipulado, mesmo que a sala esteja livre. 
+
+                    <div class="form-group">
+                        <label for="dias_antecedencia">Duração mínima:</label>
+                        <input type="number" name="duracao_minima" value="{{ old('duracao_minima', $sala->restricao->duracao_minima) }}" min="0" size="5"> minutos
+                    </div>
+                    <div class="form-group">
+                        <label for="dias_antecedencia">Duração máxima:</label>
+                        <input type="number" name="duracao_maxima" value="{{ old('duracao_maxima', $sala->restricao->duracao_maxima) }}" min="1" size="5"> minutos
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm form-group">
+                    <b>Limites de datas para as reservas</b>
+                        <div class="form-group">
+                            <label for="select_tipo_restricao">Escolha uma opção:</label>
+                            
+                            <select name="tipo_restricao" id="select_tipo_restricao">
+                                <option value="NENHUMA" @if(old('tipo_restricao', $sala->restricao->tipo_restricao) === 'NENHUMA') selected @endif>Nenhuma</option>
+                                <option value="AUTO" @if(old('tipo_restricao', $sala->restricao->tipo_restricao) === 'AUTO') selected @endif>Data limite dinâmica</option>
+                                <option value="FIXA" @if(old('tipo_restricao', $sala->restricao->tipo_restricao) === 'FIXA') selected @endif>Data limite fixa</option>
+                                <option value="PERIODO_LETIVO" @if(old('tipo_restricao', $sala->restricao->tipo_restricao) === 'PERIODO_LETIVO') selected @endif>Datas limites definidas pelo Período Letivo</option>
+                            </select>
+                            
+                    </div>
+                </div>
+            </div>
+
+       
+            <div class="row" id="box_restricao_tipo_fixa"  @if (old('tipo_restricao', $sala->restricao->tipo_restricao) !== 'FIXA') style="display: none" @endif>
+                <div class="col-sm form-group">
+                    <b>Data limite fixa</b>
+                    <br>Data limite que a sala aceita reservas. Ao habilitar essa opção, o sistema não permite a reserva da sala que além da data escolhida, mesmo que a sala esteja livre. 
+
+                        <div class="form-group">
+                            <label for="data">Escolha uma data:</label>
+                            <input type="date" name="data_limite" id="txt_data_limite" min="{{ \Carbon\Carbon::now()->addDay()->format('Y-m-d') }}"
+                                value="{{ old('data', isset($sala->restricao->data_limite) ? $sala->restricao->data_limite : null) }}"
+                                min="{{ \Carbon\Carbon::now()->addDay()->format('Y-m-d') }}">
+                        </div>
+                </div>
+            </div>
+
+
+            <div class="row" id="box_restricao_tipo_auto" @if (old('tipo_restricao', $sala->restricao->tipo_restricao) !== 'AUTO') style="display: none" @endif>
+                <div class="col-sm form-group">
+                    <b>Data limite dinâmica</b>
+                    <br>Número de dias a contar do momento da solicitação para que o sistema determine dinamicamente a data limite. Ao habilitar essa opção, 
+                    o sistema não permite a reserva da sala além do número de dias indicado, mesmo que a sala esteja livre. 
+
+                        <div class="form-group">
+                            <label for="dias_limite">Número de dias de limite:</label>
+                            <input type="number" name="dias_limite" id="txt_dias_limite" value="{{ $sala->restricao->dias_limite }}" min="1" >
+                        </div>
+                </div>
+            </div>
+
+
+            <div class="row" id="box_restricao_tipo_periodo_letivo"  @if (old('tipo_restricao', $sala->restricao->tipo_restricao) !== 'PERIODO_LETIVO') style="display: none" @endif>
+                <div class="col-sm form-group">
+                    <b>Período letivo</b>
+                    <br>Número de dias a contar do momento da solicitação para que o sistema determine dinamicamente a data limite. Ao habilitar essa opção, 
+                    o sistema não permite a reserva da sala além do número de dias indicado, mesmo que a sala esteja livre. 
+
+                        <div class="form-group">
+                            <label for="select_periodo_letivo">Período letivo:</label>
+
+                            <select name="periodo_letivo" id="select_periodo_letivo">
+                                <option value="">Escolha um período</option>
+                                @foreach ($periodos as $periodo)
+                                    
+                                        <option value="{{ $periodo->id }}" {{ old('periodo_letivo', $sala->restricao->periodo_letivo_id) == $periodo->id ? 'selected' : '' }}>
+                                        {{ $periodo->codigo }} 
+                                        (Janela de  
+                                        {{ \Carbon\Carbon::parse($periodo->data_inicio_reservas)->format('d/m/Y')  }} 
+                                        a 
+                                        {{ \Carbon\Carbon::parse($periodo->data_fim_reservas)->format('d/m/Y')  }} 
+                                        )
+
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                </div>
+            </div>
+
+            <!-- fim das restrições -->
+
         @elseif($title == 'Nova')
             <input type="hidden" name="aprovacao" value="0">
         @endif

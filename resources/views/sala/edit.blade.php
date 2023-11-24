@@ -50,5 +50,59 @@
                 }
             }
        })
+
+
+       $('#select_tipo_restricao').on('change', function () {
+
+            var selectedValue = $(this).val();
+            var boxRestricaoTipoFixa = $('#box_restricao_tipo_fixa');
+            var boxRestricaoTipoAuto = $('#box_restricao_tipo_auto');
+            var boxRestricaoTipoPeriodoLetivo = $('#box_restricao_tipo_periodo_letivo');
+
+            if (selectedValue === 'FIXA') {
+                boxRestricaoTipoFixa.show();
+                $('#txt_dias_limite').val(null);
+                $('#select_periodo_letivo').val(null);
+            } else {
+                boxRestricaoTipoFixa.hide();
+            }
+
+            if (selectedValue === 'AUTO') {
+                boxRestricaoTipoAuto.show();
+                $('#txt_data_limite').val(null);
+                $('#select_periodo_letivo').val(null);
+            } else {
+                boxRestricaoTipoAuto.hide();
+            }
+
+            if (selectedValue === 'PERIODO_LETIVO') {
+                boxRestricaoTipoPeriodoLetivo.show();
+                $('#txt_dias_limite').val(null);
+                $('#txt_data_limite').val(null);
+            } else {
+                boxRestricaoTipoPeriodoLetivo.hide();
+            }
+
+            if (selectedValue === 'NENHUMA') {
+                $('#txt_dias_limite').val(null);
+                $('#txt_data_limite').val(null);
+                $('#select_periodo_letivo').val(null);
+            } else {
+                // nada a fazer
+            }
+
+        });
+
+
+        $('.radio-bloqueada').on('click', function(e){
+            if(parseInt($(this).val()))
+                $('#box_motivo_bloqueio').css('display', 'block');
+            else
+                $('#box_motivo_bloqueio').css('display', 'none');
+                $('#txt_motivo_bloqueio').val(null);
+       });
+
+
+
     </script>
 @stop

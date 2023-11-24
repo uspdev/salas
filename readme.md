@@ -5,13 +5,21 @@ Sistema em Laravel para o gerenciamento dos eventos de uma unidade de acordo com
 # Recursos
 
 - Visualização do calendário de reservas de cada sala (semanal, diário e mensal)
-- Busca pelas reservas filtrando por categoria, data e título
-- Administração dos usuários permitidos para reservar em um grupo de salas através das Categorias
-- Configurar se a sala precisa ou não de aprovação para o pedido de reserva
+- Busca pelas reservas filtrando por categoria, finalidade, data e título
+- Administração dos usuários permitidos para reservar dentro de uma Categoria
+- Configurar se a sala precisa ou não de aprovação
 - Administração dos usuários responsáveis por cada sala, que gerenciarão os pedidos de reservas para as salas que precisam de aprovação
 - Administração das finalidades para as reservas
+- Administração dos Perídos letivos e suas respectivas janelas de reservas
 - Criação e edição de reservas em massa caso haja repetição do evento
 - Validação para que reservas não sejam cadastradas caso haja sobreposição de data, horário e sala
+- Configuração por sala de bloqueio informando o motivo
+- Configuração por sala de antecedência mínima em dias para uma reserva
+- Configuração por sala da duração mínima e máxima em minutos de uma reserva
+- Configuração por sala dos limites de datas para as reservas:
+    - Data limite fixa (data máxima para uma reserva)
+    - Data limite dinâmica (máximo de dias a partir da solicitação para uma reserva)
+    - Datas limites definidas pelo Período Letivo (janelas de reserva por período letivo)
  
 # Gerenciando Pessoas Cadastradas na Categoria
 
@@ -25,6 +33,15 @@ O gerenciamento pelo vínculo é referente somente aos vínculos de Docente, Ser
 - **Unidade**: todos os docentes, servidores e estagiários que entrarem com a senha única e pertecerem à unidade que o sistema estiver configurado poderão realizar reservas na categoria.
   (A unidade é mostrada com base na variável de ambiente `REPLICADO_CODUNDCLG` do `.env`)
 - **Nenhum**: somente as pessoas cadastradas manualmente poderão realizar reservas na categoria.
+
+# Gerenciando Restrições na Sala
+
+As salas podem conter algumas restrições de datas para as reservas. A ativação de qualquer uma dessas opções altera o funcionamento do sistema, especialmente nas novas solicitações:
+
+- **Bloqueio**: Impede novas reservas na sala. Essa condição pode ser útil em caso de manutenção ou qualquer outra situação em que a sala não pode ser reservada.
+- **Antecedência mínima**: Quantidade de dias de antecedência mínima para reservar a sala.
+- **Duração das reservas**: As reservas para a sala podem ser limitadas a uma duração mínima e a uma duração máxima em minutos.
+- **Limites de datas para as reservas**: Podem ser por Data limite fixa, Data limite dinâmica ou Data limite por Período Letivo (janela de reserva).
 
 # Finalidades
 
@@ -47,6 +64,7 @@ Na aba de edição da sala é possível gerenciar os responsáveis pela sala atr
 
 
 # Como subir a aplicação
+
 ## Instalação
 
 ```sh
@@ -54,6 +72,7 @@ composer install
 cp .env.example .env
 php artisan key:generate
 ```
+
 **Para ambiente de produção:**
 
 ```bash
@@ -66,11 +85,12 @@ php artisan migrate
 php artisan migrate:fresh --seed
 ```
 
-## Para acessar a aplicação
+**Para acessar a aplicação:**
 
 ```sh
 php artisan serve
 ```
+
 # Histórico
 
 Este sistema foi transferido da FFLCH para o USPDev.
@@ -83,3 +103,7 @@ Este sistema foi transferido da FFLCH para o USPDev.
 - 18/10/2023: Arrumando *seeders*.
 - 26/10/2023: Atualizando biblioteca do calendário.
 - 26/10/2023: Permitindo realizar reservas ao clicar no calendário.
+- 01/11/2023: Adicionado filtro por finalidade.
+- 14/11/2023: Não permitindo realizar reservas no passado.
+- 16/11/2023: Adicionada interface de restrições por sala
+- 24/11/2023: Cadastro de períodos letivos
