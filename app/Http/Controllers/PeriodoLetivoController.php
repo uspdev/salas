@@ -61,10 +61,24 @@ class PeriodoLetivoController extends Controller
     public function destroy(PeriodoLetivo $periodo)
     {
         $this->authorize('admin');
-        $periodo->delete();
+        
+        if ($periodo->restricao->isNotEmpty()) {
+            $nomesSalas = "";            
+          
+            foreach ($periodo->restricao as $restricao) {
+                $nomesSalas .= $restricao->sala->nome . "<br>";
+              }
+            
+            return redirect('/periodos_letivos')
+                ->with('alert-danger', "Período Letivo não pôde ser excluído pois está associado a restrições da(s) sala(s): <br> $nomesSalas ");
+                
+        } else {
+            $periodo->delete();
 
-        return redirect('/periodos_letivos')
-            ->with('alert-sucess', 'Período Letivo excluído com sucesso.');
+            return redirect('/periodos_letivos')
+                ->with('alert-sucess', 'Período Letivo excluído com sucesso.');
+        }
+
     }
 
 
