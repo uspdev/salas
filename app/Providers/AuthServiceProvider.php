@@ -97,13 +97,15 @@ class AuthServiceProvider extends ServiceProvider
             foreach ($categoria->setores as $setor) {
                 $setorSigla = strtolower(explode('-', $setor['nomabvset'])[0]);
 
-                $permissionExists = Permission::where('name', $setor['nomabvset'])->exists();
-                $userHasPermission = $user->hasPermissionTo('Estagiario.'.$setorSigla) || $user->hasPermissionTo('Servidor.'.$setorSigla) || $user->hasPermissionTo('Docente.'.$setorSigla);
+                $userHasEstagiarioPermission = Permission::where('name', 'Estagiario.'. $setorSigla)->exists() && $user->hasPermissionTo('Estagiario.'.$setorSigla, 'senhaunica');
+                $userHasServidorPermission = Permission::where('name', 'Servidor.'. $setorSigla)->exists() && $user->hasPermissionTo('Servidor.'.$setorSigla, 'senhaunica');
+                $userHasDocentePermission = Permission::where('name', 'Docente.'. $setorSigla)->exists() && $user->hasPermissionTo('Docente.'.$setorSigla, 'senhaunica');
 
-                if($permissionExists && $userHasPermission) return true;
+                if($userHasEstagiarioPermission || $userHasServidorPermission || $userHasDocentePermission) return true;
 
-                return false;
             }
+
+            return false;
         });
 
         /**

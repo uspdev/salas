@@ -74,6 +74,12 @@ class ReservaController extends Controller
             $categorias = $categorias->merge($categorias_eca);
             $categorias = $categorias->merge($categorias_usp);
 
+            $categorias_setores = Categoria::whereHas('setores')->get();
+
+            foreach($categorias_setores as $categoria)
+                if(Gate::allows('pessoa.setor', $categoria))
+                    $categorias = $categorias->merge([$categoria]);
+
         } 
 
         $finalidades = Finalidade::all();
