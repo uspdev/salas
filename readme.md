@@ -32,6 +32,7 @@ O gerenciamento pelo vínculo é referente somente aos vínculos de Docente, Ser
 - **USP**: todos os docentes, servidores e estagiários que entrarem com a senha única no sistema poderão realizar reservas na categoria.
 - **Unidade**: todos os docentes, servidores e estagiários que entrarem com a senha única e pertecerem à unidade que o sistema estiver configurado poderão realizar reservas na categoria.
   (A unidade é mostrada com base na variável de ambiente `REPLICADO_CODUNDCLG` do `.env`)
+- **Setor**: somente os docentes, servidores e estagiários que pertencem ao(s) setor(es) poderão realizar reservas na categoria.  
 - **Nenhum**: somente as pessoas cadastradas manualmente poderão realizar reservas na categoria.
 
 # Gerenciando Restrições na Sala
@@ -105,5 +106,5 @@ Este sistema foi transferido da FFLCH para o USPDev.
 - 26/10/2023: Permitindo realizar reservas ao clicar no calendário.
 - 01/11/2023: Adicionado filtro por finalidade.
 - 14/11/2023: Não permitindo realizar reservas no passado.
-- 16/11/2023: Adicionada interface de restrições por sala
-- 24/11/2023: Cadastro de períodos letivos
+- 16/11/2023: Adicionada interface de restrições por sala.
+- 24/11/2023: Cadastro de períodos letivos e cadastro de solicitantes por setor na categora.
