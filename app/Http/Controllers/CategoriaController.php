@@ -178,14 +178,10 @@ class CategoriaController extends Controller
     {
         $this->authorize('admin');
 
-        $request->validate([
-            'setores' => 'required'
-        ],
-        [
-            'setores.required' => 'Selecione um setor',
-        ]);
-
         $categoria->setores()->detach();
+
+        if(is_null($request->setores))
+            return redirect()->route('categorias.show', $categoria->id)->with('alert-success', "Setores cadastrados em {$categoria->nome} atualizados com sucesso");
 
         foreach($request->setores as $codset){
 
