@@ -6,6 +6,7 @@ use App\Models\Reserva;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Sala;
+use Spatie\Permission\Models\Permission;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -53,11 +54,13 @@ class AuthServiceProvider extends ServiceProvider
                 if( $sala->categoria->id == $categoria->id ) return true;
             }
 
+            if(Gate::allows('responsavel')) return true;
+
             if(Gate::allows('pessoa.unidade')) return Sala::find($sala_id)->categoria->vinculos == 1;
                 
             if(Gate::allows('pessoa.usp')) return Sala::find($sala_id)->categoria->vinculos == 2;
 
-            return false;
+            return Gate::allows('pessoa.setor', $sala->categoria);
         });
 
         /**
@@ -85,6 +88,22 @@ class AuthServiceProvider extends ServiceProvider
             }
 
             return false;
+        });
+
+        /**
+         * Pessoas que pertencem à algum setor cadastrado na categoria.
+         */
+        Gate::define('pessoa.setor', function($user, $categoria){
+            foreach ($categoria->setores as $setor) {
+                $setorSigla = strtolower(explode('-', $setor['nomabvset'])[0]);
+
+                $permissionExists = Permission::where('name', $setor['nomabvset'])->exists();
+                $userHasPermission = $user->hasPermissionTo('Estagiario.'.$setorSigla) || $user->hasPermissionTo('Servidor.'.$setorSigla) || $user->hasPermissionTo('Docente.'.$setorSigla);
+
+                if($permissionExists && $userHasPermission) return true;
+
+                return false;
+            }
         });
 
         /**

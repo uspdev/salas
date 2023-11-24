@@ -19,6 +19,7 @@ use App\Mail\UpdateReservaMail;
 use App\Models\Finalidade;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Permission;
 
 class ReservaController extends Controller
 {
