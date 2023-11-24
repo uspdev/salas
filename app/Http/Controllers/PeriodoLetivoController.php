@@ -21,6 +21,35 @@ class PeriodoLetivoController extends Controller
     }
 
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $this->authorize('admin');
+
+        return view('periodos_letivos.create', [
+            'periodo' => new PeriodoLetivo()
+        ]);
+    }
+
+
+
+/**
+     * Show the form for editing the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(PeriodoLetivo $periodo)  // atenção: o nome do atributo 'periodo' está mapeado no arquivo de rotas
+    {
+        $this->authorize('admin');
+        return view('periodos_letivos.edit', compact('periodo'));
+    }
+
+
+
     public function store(PeriodoLetivoRequest $request) {
         $this->authorize('admin');
         $periodo = PeriodoLetivo::create($request->validated());
@@ -36,6 +65,28 @@ class PeriodoLetivoController extends Controller
 
         return redirect('/periodos_letivos')
             ->with('alert-sucess', 'Período Letivo excluído com sucesso.');
+    }
+
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(PeriodoLetivoRequest $request, PeriodoLetivo $periodo)
+    {
+        $this->authorize('admin');
+        
+        $validated = $request->validated();
+
+        $periodo->update($validated);
+        
+
+        return redirect("/periodos_letivos")
+            ->with('alert-success', 'Periodo letivo atualizada com sucesso');
     }
 
 }

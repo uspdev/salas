@@ -47,4 +47,6 @@ Route::get('/search', [IndexController::class, 'search']);
 Route::resource('finalidades', FinalidadeController::class)->except(['show']);
 
 // Períodos Letivos
-Route::resource('/periodos_letivos', PeriodoLetivoController::class)->only(['index', 'store', 'destroy']);
+Route::resource('/periodos_letivos', PeriodoLetivoController::class)->parameters([
+    'periodos_letivos' => 'periodo',
+]);;

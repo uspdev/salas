@@ -150,7 +150,6 @@
             </div>
 
 
-
             <div class="row">
                 <div class="col-sm form-group">
                     <b>Limites de datas para as reservas</b>
@@ -161,7 +160,7 @@
                                 <option value="NENHUMA" @if(old('tipo_restricao', $sala->restricao->tipo_restricao) === 'NENHUMA') selected @endif>Nenhuma</option>
                                 <option value="AUTO" @if(old('tipo_restricao', $sala->restricao->tipo_restricao) === 'AUTO') selected @endif>Data limite dinâmica</option>
                                 <option value="FIXA" @if(old('tipo_restricao', $sala->restricao->tipo_restricao) === 'FIXA') selected @endif>Data limite fixa</option>
-                                <option value="PERIODO_LETIVO" @if(old('tipo_restricao', $sala->restricao->tipo) === 'PERIODO_LETIVO') selected @endif>Datas limites definidas pelo Período Letivo</option>
+                                <option value="PERIODO_LETIVO" @if(old('tipo_restricao', $sala->restricao->tipo_restricao) === 'PERIODO_LETIVO') selected @endif>Datas limites definidas pelo Período Letivo</option>
                             </select>
                             
                     </div>
@@ -210,7 +209,16 @@
                             <select name="periodo_letivo" id="select_periodo_letivo">
                                 <option value="">Escolha um período</option>
                                 @foreach ($periodos as $periodo)
-                                    <option value="{{ $periodo->id }}">{{ $periodo->codigo }}</option>
+                                    
+                                        <option value="{{ $periodo->id }}" {{ old('periodo_letivo', $sala->restricao->periodo_letivo_id) == $periodo->id ? 'selected' : '' }}>
+                                        {{ $periodo->codigo }} 
+                                        (Janela de  
+                                        {{ \Carbon\Carbon::parse($periodo->data_inicio_reservas)->format('d/m/Y')  }} 
+                                        a 
+                                        {{ \Carbon\Carbon::parse($periodo->data_fim_reservas)->format('d/m/Y')  }} 
+                                        )
+
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
