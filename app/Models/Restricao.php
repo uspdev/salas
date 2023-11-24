@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PeriodoLetivo;
+use App\Models\Sala;
+
 
 class Restricao extends Model
 {
@@ -27,9 +30,15 @@ class Restricao extends Model
     ];
 
 
+    public function periodoLetivo()
+    {
+        return $this->belongsTo(PeriodoLetivo::class);
+    }
+
+
     public function sala()
     {
-        return $this->hasOne(Sala::class, 'id', 'sala_id');
+        return $this->belongsTo(Sala::class);
     }
 
 
