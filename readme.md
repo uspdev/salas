@@ -85,7 +85,7 @@ php artisan migrate
 php artisan migrate:fresh --seed
 ```
 
-## Para acessar a aplicação
+**Para acessar a aplicação:**
 
 ```sh
 php artisan serve
