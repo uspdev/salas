@@ -19,6 +19,7 @@ use App\Mail\UpdateReservaMail;
 use App\Models\Finalidade;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Permission;
 
 class ReservaController extends Controller
 {
@@ -72,6 +73,12 @@ class ReservaController extends Controller
             $categorias = $categorias->merge($categorias_list);
             $categorias = $categorias->merge($categorias_eca);
             $categorias = $categorias->merge($categorias_usp);
+
+            $categorias_setores = Categoria::whereHas('setores')->get();
+
+            foreach($categorias_setores as $categoria)
+                if(Gate::allows('pessoa.setor', $categoria))
+                    $categorias = $categorias->merge([$categoria]);
 
         } 
 

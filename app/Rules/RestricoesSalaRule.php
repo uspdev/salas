@@ -50,7 +50,6 @@ class RestricoesSalaRule implements Rule
 
         $sala = Sala::with('restricao')->find($value);
 
-        
         /* sala não possui nenhuma restrição */
         if (!isset($sala->restricao)) {
             return true;
