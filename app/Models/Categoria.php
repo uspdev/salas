@@ -23,4 +23,8 @@ class Categoria extends Model implements Auditable
         return $this->belongsToMany('App\Models\User', 'categoria_user')->withTimestamps();
     }
 
+    public function setores()
+    {
+        return $this->belongsToMany(Setor::class, 'categoria_setor');
+    }
 }

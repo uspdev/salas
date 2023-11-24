@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoriaRequest;
 use App\Models\Categoria;
+use App\Models\Setor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Uspdev\Replicado\Pessoa;
 use App\Utils\ReplicadoUtils;
+use Uspdev\Replicado\Estrutura;
 
 class CategoriaController extends Controller
 {
@@ -51,9 +53,12 @@ class CategoriaController extends Controller
     {
         $sigla_unidade = ReplicadoUtils::dumpUnidade(config('salas.codUnidade'), ['sglund']);
 
+        $setores = Estrutura::listarSetores(config('codUnidade'));
+
         return view('categoria.show', [
             'categoria' => $categoria,
-            'sigla_unidade' => $sigla_unidade[0]['sglund']
+            'sigla_unidade' => $sigla_unidade[0]['sglund'],
+            'setores' => $setores
         ]);
     }
 
@@ -167,5 +172,35 @@ class CategoriaController extends Controller
 
         return redirect("/categorias/{$categoria->id}")
             ->with('alert-sucess', "{$user->name} foi excluído(a) de {$categoria->nome}");
+    }
+
+    public function updateSetores(Request $request, Categoria $categoria)
+    {
+        $this->authorize('admin');
+
+        $categoria->setores()->detach();
+
+        if(is_null($request->setores))
+            return redirect()->route('categorias.show', $categoria->id)->with('alert-success', "Setores cadastrados em {$categoria->nome} atualizados com sucesso");
+
+        foreach($request->setores as $codset){
+
+            $setor = Setor::firstWhere('codset', $codset);
+
+            if(!$setor){
+                $dumpSetor = Estrutura::dump($codset);
+
+                $setor = new Setor();
+                $setor->codset = $dumpSetor['codset'];
+                $setor->nomset = $dumpSetor['nomset'];
+                $setor->nomabvset = $dumpSetor['nomabvset'];
+                $setor->save(); 
+            }
+
+            $categoria->setores()->attach($setor->id);
+
+        }
+
+        return redirect()->route('categorias.show', $categoria->id)->with('alert-success', "Setores cadastrados em {$categoria->nome} atualizados com sucesso");
     }
 }
