@@ -9,6 +9,7 @@ Sistema em Laravel para o gerenciamento dos eventos de uma unidade de acordo com
 - Administração dos usuários permitidos para reservar dentro de uma Categoria
 - Configurar se a sala precisa ou não de aprovação
 - Administração dos usuários responsáveis por cada sala, que gerenciarão os pedidos de reservas para as salas que precisam de aprovação
+- Envio de e-mail aos solicitantes e responsáveis
 - Administração das finalidades para as reservas
 - Administração dos Perídos letivos e suas respectivas janelas de reservas
 - Criação e edição de reservas em massa caso haja repetição do evento
@@ -67,6 +68,10 @@ Na aba de edição da sala é possível gerenciar os responsáveis pela sala atr
 # Como subir a aplicação
 
 ## Instalação
+
+**Envio de e-mails**:
+
+Para que o envio de e-mails funcione deve-se configurar as variáveis MAIL... no .env.
 
 ```sh
 composer install
