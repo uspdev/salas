@@ -17,6 +17,7 @@ class RestricoesSalaRule implements Rule
     private $reserva;
     private $message;
     private $validationErrors = 0;
+    private $repeatUntil;
 
 
 
@@ -28,6 +29,13 @@ class RestricoesSalaRule implements Rule
     public function __construct($reserva)
     {
         $this->reserva = $reserva;
+
+        // inicializa o repeatUntil com a data definida pelo usuário ou ser vier null, então seta a corrente.
+        if (isset($this->reserva->repeat_until)) {
+            $this->repeatUntil = Carbon::createFromFormat('d/m/Y', $this->reserva->repeat_until);
+        } else {
+            $this->repeatUntil = Carbon::now(); 
+        }
     }
 
     /**
@@ -42,13 +50,14 @@ class RestricoesSalaRule implements Rule
 
         $sala = Sala::with('restricao')->find($value);
 
+        
         /* sala bloqueada */
         if ($sala->restricao->bloqueada == TRUE) {
             $this->message .= "A sala $sala->nome está bloqueada para reservas. " . $sala->restricao->motivo_bloqueio . "<br>";
             $this->validationErrors++;
         }
 
-
+        
         /* respeita a antecedência mínima */
         if ($sala->restricao->dias_antecedencia > (Carbon::now()->diffInDays(Carbon::createFromFormat('d/m/Y', $this->reserva->data)->format('Y-m-d'), false))) {
             $this->message .= "As reservas na sala $sala->nome precisam ser solicitadas com até " . $sala->restricao->dias_antecedencia . " dias de antecedência<br>";
@@ -56,37 +65,38 @@ class RestricoesSalaRule implements Rule
         }
 
 
-        /* verificar se a data da reserva é antes dos dia limite dinamicamente calculado */
+        /* verificar se a data da reserva e se a data repeat_until é antes dos dia limite dinamicamente calculado */
         if ($sala->restricao->tipo_restricao === 'AUTO') {
 
             $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data);
             $dataLimite = Carbon::now()->addDays($sala->restricao->dias_limite);
 
-            if ($dataReserva->isAfter($dataLimite)) {
+            
+            if ($dataReserva->isAfter($dataLimite) || $this->repeatUntil->isAfter($dataLimite)) {
                 $this->message .= "A sala $sala->nome aceita reservas somente até o dia " . Carbon::parse($dataLimite)->format('d/m/Y') . "<br>";
                 $this->validationErrors++;
             }
         }
 
-        /* verificar se a data da reserva é antes da data limite estabelecida */
+        /* verificar se a data da reserva e se a data repeat_until  é antes da data limite estabelecida */
         if ($sala->restricao->tipo_restricao === 'FIXA') {
 
             $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data);
 
-            if ($dataReserva->isAfter($sala->restricao->data_limite)) {
+            if ($dataReserva->isAfter($sala->restricao->data_limite) || $this->repeatUntil->isAfter($sala->restricao->data_limite) ) {
                 $this->message .= "A sala $sala->nome aceita reservas somente até o dia " . Carbon::parse($sala->restricao->data_limite)->format('d/m/Y') . "<br>";
                 $this->validationErrors++;
             }
         }
 
-        /* verificar se a data da reserva está dentro dos limites do período letivo */
+        /* verificar se a data da reserva e se a data repeat_until está dentro dos limites do período letivo */
         if ($sala->restricao->tipo_restricao === 'PERIODO_LETIVO') {
 
             $periodo = PeriodoLetivo::find($sala->restricao->periodo_letivo_id);
 
             $dataReserva = Carbon::createFromFormat('d/m/Y', $this->reserva->data);
 
-            if (!$dataReserva->between($periodo->data_inicio_reservas, $periodo->data_fim_reservas)) {
+            if (!$dataReserva->between($periodo->data_inicio_reservas, $periodo->data_fim_reservas) || $this->repeatUntil->isAfter($periodo->data_fim_reservas)) {
                 $this->message .= "A sala $sala->nome aceita reservas somente entre os dias " . Carbon::parse($periodo->data_inicio_reservas)->format('d/m/Y') . " e " . Carbon::parse($periodo->data_fim_reservas)->format('d/m/Y') . "<br>";
                 $this->validationErrors++;
             }
