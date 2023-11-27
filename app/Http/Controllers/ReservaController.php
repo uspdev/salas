@@ -136,14 +136,17 @@ class ReservaController extends Controller
                 }
             }
         }
-        //enviar e-mail
-        if($reserva->status == 'pendente'){
-            foreach($reserva->sala->responsaveis as $responsavel)
-                Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva));
 
-            Mail::to($reserva->user->email)->queue(new SolicitarReservaMail($reserva));
-        }else{
-            Mail::queue(new CreateReservaMail($reserva));
+        if(config('salas.emailConfigurado')){
+            //enviar e-mail
+            if($reserva->status == 'pendente'){
+                foreach($reserva->sala->responsaveis as $responsavel)
+                    Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva));
+
+                Mail::to($reserva->user->email)->queue(new SolicitarReservaMail($reserva));
+            }else{
+                Mail::queue(new CreateReservaMail($reserva));
+            }
         }
 
         return redirect("/reservas/{$reserva->id}")
@@ -273,7 +276,7 @@ class ReservaController extends Controller
 
         }
 
-        Mail::queue(new UpdateReservaMail($reserva));
+        if(config('salas.emailConfigurado')) Mail::queue(new UpdateReservaMail($reserva));
 
         return redirect("/reservas/{$reserva->id}")
             ->with('alert-success', 'Reserva atualizada com sucesso');
@@ -290,7 +293,7 @@ class ReservaController extends Controller
     {
         $this->authorize('owner', $reserva);
 
-        Mail::queue(new DeleteReservaMail($reserva));
+        if(config('salas.emailConfigurado')) Mail::queue(new DeleteReservaMail($reserva));
 
         $parent_id = null;
         if($reserva->parent_id != null) {
@@ -336,7 +339,7 @@ class ReservaController extends Controller
        }
 
        // Enviando e-mail ao ser aprovada.
-       Mail::queue(new CreateReservaMail($reserva));
+       if(config('salas.emailConfigurado')) Mail::queue(new CreateReservaMail($reserva));
 
        return redirect()->route('reservas.show', $reserva->id)->with('alert-success', 'Reserva aprovada com sucesso.');
     }

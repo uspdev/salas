@@ -54,7 +54,7 @@ class AuthServiceProvider extends ServiceProvider
                 if( $sala->categoria->id == $categoria->id ) return true;
             }
 
-            if(Gate::allows('responsavel')) return true;
+            if(Gate::allows('responsavel', $sala)) return true;
 
             if(Gate::allows('pessoa.unidade')) return Sala::find($sala_id)->categoria->vinculos == 1;
                 
