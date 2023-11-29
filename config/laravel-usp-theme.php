@@ -2,24 +2,76 @@
 
 $admin = [
     [
-        'text' => 'Nova Categoria',
-        'url' => config('app.url').'/categorias/create',
+        'type' => 'header',
+        'text' => '<i class="fa fa-bookmark"></i> Categoria',
         'can' => 'admin',
     ],
     [
-        'text' => 'Nova Sala',
-        'url' => config('app.url').'/salas/create',
+        'text' => '<i class="fas fa-plus-circle"></i> Cadastrar Categoria',
+        'url' => 'categorias/create',
+        'can' => 'admin'
+    ],
+    [
+        'text' => '<i class="fas fa-list-ul"></i> Listar Categorias',
+        'url' => 'categorias',
+        'can' => 'admin'
+    ],
+    [
+        'type' => 'divider',
+        'can'=> 'admin'
+    ],
+    [
+        'type' => 'header',
+        'text' => '<i class="fas fa-map-marker"></i> Sala',
         'can' => 'admin',
     ],
     [
-        'text' => 'Recursos',
-        'url' => config('app.url').'/recursos',
+        'text' => '<i class="fas fa-plus-circle"></i> Cadastrar Sala',
+        'url' => 'salas/create',
+        'can' => 'admin'
+    ],
+    [
+        'text' => '<i class="fas fa-list-ul"></i> Listar Salas',
+        'url' => 'salas',
+        'can' => 'admin'
+    ],
+    [
+        'type' => 'divider',
+        'can'=> 'admin'
+    ],
+    [
+        'type' => 'header',
+        'text' => '<i class="fas fa-boxes"></i> Recursos',
         'can' => 'admin',
     ],
     [
-        'text' => 'Períodos Letivos',
-        'url' => config('app.url').'/periodos_letivos',
+        'text' => '<i class="fas fa-plus-circle"></i> Cadastrar Recurso',
+        'url' => 'recursos/create',
+        'can' => 'admin'
+    ],
+    [
+        'text' => '<i class="fas fa-list-ul"></i> Listar Recursos',
+        'url' => 'recursos',
+        'can' => 'admin'
+    ],
+    [
+        'type' => 'divider',
+        'can'=> 'admin'
+    ],
+    [
+        'type' => 'header',
+        'text' => '<i class="fas fa-calendar"></i> Período Letivo',
         'can' => 'admin',
+    ],
+    [
+        'text' => '<i class="fas fa-plus-circle"></i> Cadastrar Período Letivo',
+        'url' => 'periodos_letivos/create',
+        'can' => 'admin'
+    ],
+    [
+        'text' => '<i class="fas fa-list-ul"></i> Listar Períodos Letivos',
+        'url' => 'periodos_letivos',
+        'can' => 'admin'
     ],
 ];
 
