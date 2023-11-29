@@ -27,7 +27,7 @@ Route::resource('/responsaveis', ResponsavelController::class)->only(['store', '
 Route::resource('/recursos', RecursoController::class)->only(['index', 'store', 'destroy']);
 
 // Categorias
-Route::resource('/categorias', CategoriaController::class)->except(['index']);
+Route::resource('/categorias', CategoriaController::class);
 Route::post('/categorias/adduser/{categoria}', [CategoriaController::class, 'addUser']);
 Route::post('/categorias/alterar-vinculos/{categoria}', [CategoriaController::class, 'alterarVinculos'])->name('alterar-vinculos');
 Route::delete('/categorias/removeuser/{categoria}/{user}', [CategoriaController::class, 'removeUser']);

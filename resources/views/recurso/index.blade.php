@@ -8,7 +8,7 @@
     @include('recurso.partials.form')
     <br>
     @forelse($recursos as $recurso)
-        <ul class="list-group">
+        <ul class="list-group mb-2">
             <li class="list-group-item" style="display: flex; justify-content: space-between;">    
                 {{ $recurso->nome }}
                 <form method="POST" action="/recursos/{{ $recurso->id }}">
