@@ -32,7 +32,7 @@ $admin = [
     ],
     [
         'text' => '<i class="fas fa-list-ul"></i> Listar Salas',
-        'url' => 'salas',
+        'url' => 'salas/listar',
         'can' => 'admin'
     ],
     [

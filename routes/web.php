@@ -17,6 +17,7 @@ Route::get('/reservas/{reserva}/aprovar', [ReservaController::class, 'aprovar'])
 Route::resource('/reservas', ReservaController::class)->except(['index']);
 
 // Salas
+Route::get('/salas/listar', [SalaController::class, 'listar']);
 Route::resource('/salas', SalaController::class);
 Route::post('/salas/redirect', [SalaController::class, 'redirect']);
 

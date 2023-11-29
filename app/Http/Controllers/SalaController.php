@@ -198,7 +198,14 @@ class SalaController extends Controller
         }
 
         $sala->delete();
-        return redirect("/")->with('alert-sucess', 'Sala excluída com sucesso');
+        return redirect("/")->with('alert-success', 'Sala excluída com sucesso');
+    }
+
+    public function listar()
+    {
+        $salas = Sala::all();
+
+        return view('sala.listar', compact('salas'));
     }
 
     private function mapRecursos($recursos)
