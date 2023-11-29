@@ -229,6 +229,7 @@
 
         @elseif($title == 'Nova')
             <input type="hidden" name="aprovacao" value="0">
+            <input type="hidden" name="tipo_restricao" value="NENHUMA" >
         @endif
         <button type="submit" class="btn btn-success"> Enviar </button>
         <br>
