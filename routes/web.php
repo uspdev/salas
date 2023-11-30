@@ -25,7 +25,7 @@ Route::post('/salas/redirect', [SalaController::class, 'redirect']);
 Route::resource('/responsaveis', ResponsavelController::class)->only(['store', 'destroy'])->parameters(['responsaveis' => 'responsavel']);
 
 // Recursos
-Route::resource('/recursos', RecursoController::class)->only(['index', 'store', 'destroy']);
+Route::resource('/recursos', RecursoController::class)->except(['show']);
 
 // Categorias
 Route::resource('/categorias', CategoriaController::class);
