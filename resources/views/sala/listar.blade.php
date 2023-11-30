@@ -8,7 +8,7 @@
             @foreach ($salas as $sala)
                 <ul class="list-group mb-2">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{route('salas.show', $sala->id)}}">{{$sala->nome}}</a>
+                        <a href="{{route('salas.edit', $sala->id)}}">{{$sala->nome}}</a>
                         <div class="d-inline-flex">
                             <a href="{{route('salas.edit', $sala->id)}}" class="btn btn-warning text-white mr-1"> <i class="fas fa-pen"></i> </a>
                             <form action="{{route('salas.destroy', $sala->id)}}" method="POST">
