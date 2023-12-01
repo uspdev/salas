@@ -14,7 +14,7 @@
                 </tr>
                 @forelse($recursos as $recurso)
                     <tr>
-                        <td>{{ $recurso->nome }}</td>
+                        <td><a href="{{route('recursos.edit', $recurso->id)}}">{{$recurso->nome}}</a></td>
                         <td class="d-flex justify-content-end">
                             @can('admin')
                             <form method="POST" action="{{route('recursos.destroy', $recurso->id)}}">

@@ -13,7 +13,7 @@
                     </tr>
                     @forelse($categorias as $categoria)
                         <tr>
-                            <td>{{ $categoria->nome }}</td>
+                            <td><a href="{{route('categorias.show', $categoria->id)}}">{{ $categoria->nome }}</a></td>
                             <td class="d-flex justify-content-end">
                                 @can('admin')
                                 <form method="POST" action="{{route('categorias.destroy', $categoria->id)}}">

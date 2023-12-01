@@ -13,7 +13,7 @@
                     </tr>
                     @forelse($salas as $sala)
                         <tr>
-                            <td>{{ $sala->nome }}</td>
+                            <td><a href="{{route('salas.edit', $sala->id)}}">{{ $sala->nome }}</a></td>
                             <td class="d-flex justify-content-end">
                                 @can('admin')
                                 <form method="POST" action="{{route('salas.destroy', $sala->id)}}">
