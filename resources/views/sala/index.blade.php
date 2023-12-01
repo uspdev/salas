@@ -17,41 +17,16 @@
             <h5 class="card-title">Calendário por Sala</h5>
         </div>
         <div class="card-body">
-            <div class="mb-2" style="padding: 0 1.25rem 0 1.25rem !important">
-                <select id="select-salas" class="form-control" name="sala">
-                   <option></option>
-                   @foreach($categorias as $categoria)
-                     <optgroup label="{{ $categoria->nome }}">
-                       @foreach($categoria->salas as $sala)
-                        <option value="{{ $sala->id }}">{{ $sala->nome }}</option>
-                       @endforeach
-                     </optgroup>
-                   @endforeach
-                </select>
-            </div>
-            <ul class="list-group list-group-flush">
+            <select id="select-salas" class="form-control" name="sala">
+                <option></option>
                 @foreach($categorias as $categoria)
-                <li class="list-group-item">
-                    <div class="card">
-                        <div class="card-header" id="categoria-header" type="button" data-toggle="collapse" data-target="#collapse{{ $categoria->id }}" aria-expanded="false" aria-controls="collapse{{ $categoria->id }}">
-                            @can('admin')
-                                <a href="/categorias/{{ $categoria->id }}">{{ $categoria->nome }}</a>
-                            @else
-                                {{ $categoria->nome }}
-                            @endcan
-                            <i class="far fa-plus-square"></i>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <div class="collapse" id="collapse{{ $categoria->id }}">
-                                <div class="card-body">
-                                    @include('sala.partials.table', ['salas' => $categoria->salas])
-                                </div>
-                            </div>
-                        </ul>
-                    </div>
-                </li>
+                    <optgroup label="{{ $categoria->nome }}">
+                    @foreach($categoria->salas as $sala)
+                    <option value="{{ $sala->id }}">{{ $sala->nome }} ({{$sala->capacidade}} pessoas)</option>
+                    @endforeach
+                    </optgroup>
                 @endforeach
-            </ul>
+            </select>
         </div>
     </div>
 @endsection

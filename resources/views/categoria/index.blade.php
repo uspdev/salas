@@ -5,23 +5,36 @@
     <div class="card">
         <div class="card-header"><b>Categorias</b></div>
         <div class="card-body">
-            @foreach ($categorias as $categoria)
-                <ul class="list-group mb-2">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{route('categorias.show', $categoria->id)}}">{{$categoria->nome}}</a>
-                        <div class="d-inline-flex">
-                            <a href="{{route('categorias.show', $categoria->id)}}" class="btn btn-warning text-white mr-1"> <i class="fas fa-pen"></i> </a>
-                            <form action="{{route('categorias.destroy', $categoria->id)}}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza?');">
-                                    <i class="fa fa-trash" ></i>
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                </ul>
-            @endforeach
+            <table class="table table-striped">
+                <div class="table-responsive">
+                    <tr>
+                        <th>Nome da Categoria</th>
+                        <th></th>
+                    </tr>
+                    @forelse($categorias as $categoria)
+                        <tr>
+                            <td>{{ $categoria->nome }}</td>
+                            <td class="d-flex justify-content-end">
+                                @can('admin')
+                                <form method="POST" action="{{route('categorias.destroy', $categoria->id)}}">
+                                    <a class="btn btn-success" href="{{route('categorias.show', $categoria->id)}}" role="button"
+                                        data-bs-toggle="tooltip" title="Editar">
+                                        <i class="fa fa-pen"></i>
+                                    </a>
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza?');">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                                @endcan
+                            </td>
+                        </tr>
+                    @empty
+                        <p>Não há categorias cadastradas ainda.</p>
+                    @endforelse
+                </div>
+            </table>
         </div>
     </div>
 @endsection

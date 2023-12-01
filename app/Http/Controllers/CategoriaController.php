@@ -115,7 +115,7 @@ class CategoriaController extends Controller
         $categoria->delete();
 
         return redirect('/')
-            ->with('alert-sucess', 'Categoria excluída com sucesso.');
+            ->with('alert-success', 'Categoria excluída com sucesso.');
     }
 
     public function addUser(Request $request, Categoria $categoria)
