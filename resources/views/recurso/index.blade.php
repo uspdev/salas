@@ -6,26 +6,36 @@
         <b>Recursos</b>
     </div>
     <div class="card-body">
-    @forelse($recursos as $recurso)
-        <ul class="list-group mb-2">
-            <li class="list-group-item d-flex justify-content-between align-items-center">    
-                <a href="{{route('recursos.edit', $recurso->id)}}">{{ $recurso->nome }}</a>
-                <div class="d-inline-flex">
-                    <a href="{{route('recursos.edit', $recurso->id)}}" class="btn btn-warning text-white mr-1"> <i class="fas fa-pen"></i> </a>
-                    <form method="POST" action="/recursos/{{ $recurso->id }}">
-                        @csrf
-                        @method('delete')
-                        <button type="submit" class="btn btn-danger btn" onclick="return confirm('Tem certeza?');">
-                            <i class="fa fa-trash" ></i>
-                        </button>
-                    </form>
-                </div>
-            </li>
-        </ul>
-    @empty
-        Ainda não há recursos cadastrados.
-    @endforelse
-
+        <table class="table table-striped">
+            <div class="table-responsive">
+                <tr>
+                    <th>Nome do Recurso</th>
+                    <th></th>
+                </tr>
+                @forelse($recursos as $recurso)
+                    <tr>
+                        <td>{{ $recurso->nome }}</td>
+                        <td class="d-flex justify-content-end">
+                            @can('admin')
+                            <form method="POST" action="{{route('recursos.destroy', $recurso->id)}}">
+                                <a class="btn btn-success" href="{{route('recursos.edit', $recurso->id)}}" role="button"
+                                    data-bs-toggle="tooltip" title="Editar">
+                                    <i class="fa fa-pen"></i>
+                                </a>
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza?');">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                            @endcan
+                        </td>
+                    </tr>
+                @empty
+                    <p>Não há recursos cadastrados ainda.</p>
+                @endforelse
+            </div>
+        </table>
     </div>
 </div>
 <br>
