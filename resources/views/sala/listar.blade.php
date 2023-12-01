@@ -5,23 +5,36 @@
     <div class="card">
         <div class="card-header"><b>Salas</b></div>
         <div class="card-body">
-            @foreach ($salas as $sala)
-                <ul class="list-group mb-2">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{route('salas.edit', $sala->id)}}">{{$sala->nome}}</a>
-                        <div class="d-inline-flex">
-                            <a href="{{route('salas.edit', $sala->id)}}" class="btn btn-warning text-white mr-1"> <i class="fas fa-pen"></i> </a>
-                            <form action="{{route('salas.destroy', $sala->id)}}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza?');">
-                                    <i class="fa fa-trash" ></i>
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                </ul>
-            @endforeach
+            <table class="table table-striped">
+                <div class="table-responsive">
+                    <tr>
+                        <th>Nome da Sala</th>
+                        <th></th>
+                    </tr>
+                    @forelse($salas as $sala)
+                        <tr>
+                            <td>{{ $sala->nome }}</td>
+                            <td class="d-flex justify-content-end">
+                                @can('admin')
+                                <form method="POST" action="{{route('salas.destroy', $sala->id)}}">
+                                    <a class="btn btn-success" href="{{route('salas.edit', $sala->id)}}" role="button"
+                                        data-bs-toggle="tooltip" title="Editar">
+                                        <i class="fa fa-pen"></i>
+                                    </a>
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza?');">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                                @endcan
+                            </td>
+                        </tr>
+                    @empty
+                        <p>Não há salas cadastradas ainda.</p>
+                    @endforelse
+                </div>
+            </table>
         </div>
     </div>
 @endsection
