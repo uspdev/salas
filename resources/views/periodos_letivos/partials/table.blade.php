@@ -1,11 +1,3 @@
-<div class="text-center">
-<a class="btn btn-primary m-4" href="/periodos_letivos/create" role="button"
-    data-bs-toggle="tooltip" title="Adicionar" >
-    <i class="fa fa-plus"></i>
-</a>
-</div>
-
-
 <table class="table table-striped">
     <div class="table-responsive">
         <tr>

@@ -13,6 +13,11 @@ use Uspdev\Replicado\Estrutura;
 
 class CategoriaController extends Controller
 {
+    public function index(){
+        $categorias = Categoria::all();
+        
+        return view('categoria.index', compact('categorias'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -110,7 +115,7 @@ class CategoriaController extends Controller
         $categoria->delete();
 
         return redirect('/')
-            ->with('alert-sucess', 'Categoria excluída com sucesso.');
+            ->with('alert-success', 'Categoria excluída com sucesso.');
     }
 
     public function addUser(Request $request, Categoria $categoria)

@@ -17,6 +17,7 @@ Route::get('/reservas/{reserva}/aprovar', [ReservaController::class, 'aprovar'])
 Route::resource('/reservas', ReservaController::class)->except(['index']);
 
 // Salas
+Route::get('/salas/listar', [SalaController::class, 'listar']);
 Route::resource('/salas', SalaController::class);
 Route::post('/salas/redirect', [SalaController::class, 'redirect']);
 
@@ -24,10 +25,10 @@ Route::post('/salas/redirect', [SalaController::class, 'redirect']);
 Route::resource('/responsaveis', ResponsavelController::class)->only(['store', 'destroy'])->parameters(['responsaveis' => 'responsavel']);
 
 // Recursos
-Route::resource('/recursos', RecursoController::class)->only(['index', 'store', 'destroy']);
+Route::resource('/recursos', RecursoController::class)->except(['show']);
 
 // Categorias
-Route::resource('/categorias', CategoriaController::class)->except(['index']);
+Route::resource('/categorias', CategoriaController::class);
 Route::post('/categorias/adduser/{categoria}', [CategoriaController::class, 'addUser']);
 Route::post('/categorias/alterar-vinculos/{categoria}', [CategoriaController::class, 'alterarVinculos'])->name('alterar-vinculos');
 Route::delete('/categorias/removeuser/{categoria}/{user}', [CategoriaController::class, 'removeUser']);

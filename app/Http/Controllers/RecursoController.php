@@ -22,6 +22,34 @@ class RecursoController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $this->authorize('admin');
+
+        $recurso = new Recurso();
+
+        return view('recurso.create', compact('recurso'));
+    }
+
+    public function edit(Recurso $recurso)
+    {
+        $this->authorize('admin');
+
+        return view('recurso.edit', compact('recurso'));
+    }
+
+    public function update(RecursoRequest $request, Recurso $recurso)
+    {
+        $this->authorize('admin');
+
+        $validated = $request->validated();
+
+        $recurso->nome = $validated['nome'];
+        $recurso->save();
+
+        return redirect()->route('recursos.index')->with('alert-success', 'Recurso atualizado com sucesso.');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +63,7 @@ class RecursoController extends Controller
         $recurso = Recurso::create($request->validated());
 
         return redirect('/recursos')
-            ->with('alert-sucess', 'Recurso criado com sucesso.');
+            ->with('alert-success', 'Recurso criado com sucesso.');
     }
 
     /**
@@ -49,6 +77,6 @@ class RecursoController extends Controller
         $recurso->delete();
 
         return redirect('/recursos')
-            ->with('alert-sucess', 'Recurso excluído com sucesso.');
+            ->with('alert-success', 'Recurso excluído com sucesso.');
     }
 }

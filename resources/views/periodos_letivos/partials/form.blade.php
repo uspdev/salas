@@ -1,7 +1,9 @@
 <div class="card">
     <div class="card">
         <div class="card-header">
-            Período Letivo
+            <b>
+                {{$title}} Período Letivo
+            </b>
         </div>
         <div class="card-body">
             <form method="POST" action="/periodos_letivos">
@@ -42,7 +44,7 @@
                             value="{{ old('data_fim_reservas', $periodo->data_fim_reservas) }}" required>
                     </div>
                 </div>
-                <div class="col-12 mb-3">
+                <div class="mb-3">
                     <button type="submit" class="btn btn-success">Enviar</button>
                                    
                 <a class="btn btn-secondary" href="/periodos_letivos" role="button"

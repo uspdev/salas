@@ -2,24 +2,76 @@
 
 $admin = [
     [
-        'text' => 'Nova Categoria',
-        'url' => config('app.url').'/categorias/create',
+        'type' => 'header',
+        'text' => '<i class="fa fa-bookmark"></i> Categoria',
         'can' => 'admin',
     ],
     [
-        'text' => 'Nova Sala',
-        'url' => config('app.url').'/salas/create',
+        'text' => '<i class="fas fa-plus-circle"></i> Cadastrar Categoria',
+        'url' => 'categorias/create',
+        'can' => 'admin'
+    ],
+    [
+        'text' => '<i class="fas fa-list-ul"></i> Listar Categorias',
+        'url' => 'categorias',
+        'can' => 'admin'
+    ],
+    [
+        'type' => 'divider',
+        'can'=> 'admin'
+    ],
+    [
+        'type' => 'header',
+        'text' => '<i class="fas fa-map-marker"></i> Sala',
         'can' => 'admin',
     ],
     [
-        'text' => 'Recursos',
-        'url' => config('app.url').'/recursos',
+        'text' => '<i class="fas fa-plus-circle"></i> Cadastrar Sala',
+        'url' => 'salas/create',
+        'can' => 'admin'
+    ],
+    [
+        'text' => '<i class="fas fa-list-ul"></i> Listar Salas',
+        'url' => 'salas/listar',
+        'can' => 'admin'
+    ],
+    [
+        'type' => 'divider',
+        'can'=> 'admin'
+    ],
+    [
+        'type' => 'header',
+        'text' => '<i class="fas fa-boxes"></i> Recursos',
         'can' => 'admin',
     ],
     [
-        'text' => 'Períodos Letivos',
-        'url' => config('app.url').'/periodos_letivos',
+        'text' => '<i class="fas fa-plus-circle"></i> Cadastrar Recurso',
+        'url' => 'recursos/create',
+        'can' => 'admin'
+    ],
+    [
+        'text' => '<i class="fas fa-list-ul"></i> Listar Recursos',
+        'url' => 'recursos',
+        'can' => 'admin'
+    ],
+    [
+        'type' => 'divider',
+        'can'=> 'admin'
+    ],
+    [
+        'type' => 'header',
+        'text' => '<i class="fas fa-calendar"></i> Período Letivo',
         'can' => 'admin',
+    ],
+    [
+        'text' => '<i class="fas fa-plus-circle"></i> Cadastrar Período Letivo',
+        'url' => 'periodos_letivos/create',
+        'can' => 'admin'
+    ],
+    [
+        'text' => '<i class="fas fa-list-ul"></i> Listar Períodos Letivos',
+        'url' => 'periodos_letivos',
+        'can' => 'admin'
     ],
 ];
 
@@ -38,25 +90,25 @@ $reservas = [
 
 $menu = [
     [
-        'text' => 'Hoje',
+        'text' => '<i class="fa fa-calendar-check" aria-hidden="true"></i> Hoje',
         'url' => config('app.url').'/',
     ],
     [
-        'text' => 'Calendário por Sala',
+        'text' => '<i class="fa fa-calendar-times" aria-hidden="true"></i> Calendário por Sala',
         'url' => config('app.url').'/salas',
     ],
     [
-        'text' => 'Nova reserva',
+        'text' => '<i class="fa fa-calendar-plus" aria-hidden="true"></i> Nova reserva',
         'url' => config('app.url').'/reservas/create',
         'can' => 'logado',
     ],
     [
-        'text' => 'Minhas Reservas',
+        'text' => '<i class="fa fa-user-check" aria-hidden="true"></i> Minhas Reservas',
         'url' => config('app.url').'/reservas/my',
         'can' => 'logado',
     ],
     [
-        'text' => 'Administração',
+        'text' => '<i class="fa fa-user-cog" aria-hidden="true"></i> Administração',
         'submenu' => $admin,
         'can' => 'admin',
     ],
