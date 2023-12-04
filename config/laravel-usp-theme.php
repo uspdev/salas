@@ -90,25 +90,25 @@ $reservas = [
 
 $menu = [
     [
-        'text' => 'Hoje',
+        'text' => '<i class="fa fa-calendar-check" aria-hidden="true"></i> Hoje',
         'url' => config('app.url').'/',
     ],
     [
-        'text' => 'Calendário por Sala',
+        'text' => '<i class="fa fa-calendar-times" aria-hidden="true"></i> Calendário por Sala',
         'url' => config('app.url').'/salas',
     ],
     [
-        'text' => 'Nova reserva',
+        'text' => '<i class="fa fa-calendar-plus" aria-hidden="true"></i> Nova reserva',
         'url' => config('app.url').'/reservas/create',
         'can' => 'logado',
     ],
     [
-        'text' => 'Minhas Reservas',
+        'text' => '<i class="fa fa-user-check" aria-hidden="true"></i> Minhas Reservas',
         'url' => config('app.url').'/reservas/my',
         'can' => 'logado',
     ],
     [
-        'text' => 'Administração',
+        'text' => '<i class="fa fa-user-cog" aria-hidden="true"></i> Administração',
         'submenu' => $admin,
         'can' => 'admin',
     ],
