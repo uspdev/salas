@@ -17,9 +17,11 @@ use App\Mail\DeleteReservaMail;
 use App\Mail\SolicitarReservaMail;
 use App\Mail\UpdateReservaMail;
 use App\Models\Finalidade;
+use App\Models\ResponsavelReserva;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Permission;
+use Uspdev\Replicado\Pessoa;
 
 class ReservaController extends Controller
 {
@@ -83,10 +85,13 @@ class ReservaController extends Controller
         } 
 
         $finalidades = Finalidade::all();
+
+        $reserva = new Reserva();
+        $reserva->tipo_responsaveis = 'eu';
         
         return view('reserva.create', [
             'irmaos' => false,
-            'reserva' => new Reserva(),
+            'reserva' => $reserva,
             'settings' => $settings,
             'categorias' => $categorias,
             'finalidades' => $finalidades,
@@ -116,6 +121,43 @@ class ReservaController extends Controller
             $mensagem = "Reserva(s) realizada(s) com sucesso.";
 
         $reserva = Reserva::create($validated);
+
+        $responsaveis = collect();
+
+        switch ($request->tipo_responsaveis) {
+            case 'eu':
+                $responsavel = ResponsavelReserva::firstOrCreate([
+                    'nome' => auth()->user()->name,
+                    'codpes' => auth()->user()->codpes
+                ]);
+                $responsaveis->push($responsavel);
+
+                break;
+            
+            case 'unidade':
+                foreach ($request->responsaveis_unidade as $responsavel_codpes) {
+                    $responsavel = ResponsavelReserva::firstOrCreate([
+                        'nome' => Pessoa::obterNome($responsavel_codpes),
+                        'codpes' => $responsavel_codpes
+                    ]);
+                    $responsaveis->push($responsavel);
+                }
+                
+                break;
+            
+            case 'externo':
+                foreach($request->responsaveis_externo as $responsavel_nome){
+                    $responsavel = ResponsavelReserva::firstOrCreate([
+                        'nome' => $responsavel_nome
+                    ]);
+                    $responsaveis->push($responsavel);
+                }
+
+                break;
+        }
+
+        $reserva->responsaveis()->sync($responsaveis->pluck('id'));
+
         $created = '';
         if (array_key_exists('repeat_days', $validated) && array_key_exists('repeat_until', $validated)) {
             $reserva->parent_id = $reserva->id;
