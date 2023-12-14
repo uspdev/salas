@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('content')
-    <form method="POST" action="/reservas/{{ $reserva->id }}">
+    <form id="form-reserva"  method="POST" action="/reservas/{{ $reserva->id }}" data-ajax="{{ route('SenhaunicaFindUsers') }}">
         @csrf
         @method('patch')
         @include('reserva.partials.form', ['title' => "Editar reserva"])
@@ -43,4 +43,6 @@
         });
 
     </script>
+
+    @include('reserva.partials.select2-responsaveis-js')
 @stop

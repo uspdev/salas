@@ -268,14 +268,52 @@ class ReservaController extends Controller
     {
         $this->authorize('owner', $reserva);
 
+        $validated = $request->validated();
+
+        $responsaveis = collect();
+
+        switch ($request->tipo_responsaveis) {
+            case 'eu':
+                $responsavel = ResponsavelReserva::firstOrCreate([
+                    'nome' => auth()->user()->name,
+                    'codpes' => auth()->user()->codpes
+                ]);
+                $responsaveis->push($responsavel);
+
+                break;
+            
+            case 'unidade':
+                foreach ($request->responsaveis_unidade as $responsavel_codpes) {
+                    $responsavel = ResponsavelReserva::firstOrCreate([
+                        'nome' => Pessoa::obterNome($responsavel_codpes),
+                        'codpes' => $responsavel_codpes
+                    ]);
+                    $responsaveis->push($responsavel);
+                }
+                
+                break;
+            
+            case 'externo':
+                foreach($request->responsaveis_externo as $responsavel_nome){
+                    $responsavel = ResponsavelReserva::firstOrCreate([
+                        'nome' => $responsavel_nome
+                    ]);
+                    $responsaveis->push($responsavel);
+                }
+
+                break;
+        }
+
+        $reserva->responsaveis()->sync($responsaveis->pluck('id'));
+
         // 1 - caso de edição de reserva sem repetições
         if(!isset($request->rep_bool) or empty($request->rep_bool)) {
-            $reserva->update($request->validated());
+            $reserva->update($validated);
         }
         
         // 2 - edição da reserva pai, caso com repeticões, entretanto, foi marcado Não, então as filhos serão excluídos
         if(isset($request->rep_bool) and $request->rep_bool=='Não') {
-            $reserva->update($request->validated());
+            $reserva->update($validated);
 
             foreach($reserva->children()->get() as $child) {
                 // não podemos apagar a reserva principal
@@ -294,7 +332,6 @@ class ReservaController extends Controller
 
         // 3 - edição da reserva pai, caso com repeticões, mas o padrão de repetição foi alterado
         if(isset($request->rep_bool) and $request->rep_bool=='Sim') {
-            $validated = $request->validated();
             $reserva->update($validated);
             // deletar as filhas antigas
             foreach($reserva->children()->get() as $child) {

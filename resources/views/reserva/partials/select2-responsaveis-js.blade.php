@@ -8,11 +8,17 @@
 
         $('#btn-add-responsavel-externo-input').on('click', function(){
             if($(":input[name='responsaveis_externo[]']").length < 2){
-                selectExterno.clone().prependTo(addResponsavelExterno).val("");
+                selectExterno.first().clone().prependTo(addResponsavelExterno).val("");
             }else{
-                selectExterno.clone().prependTo(addResponsavelExterno).val("");
+                selectExterno.first().clone().prependTo(addResponsavelExterno).val("");
                 $(this).css('display', 'none');
             }
+        });
+
+        $('#btn-limpar-responsaveis-externo-input').on('click', function(){
+            addResponsavelExterno.find(":input[name='responsaveis_externo[]']").remove();
+            selectExterno.first().clone().prependTo(addResponsavelExterno).val("");
+            $('#btn-add-responsavel-externo-input').css('display', 'inline-block');
         });
 
         $('[name=tipo_responsaveis]').on('change', function(e){

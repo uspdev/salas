@@ -57,15 +57,26 @@
         </div>
         <div class="add-responsavel-unidade mb-3">
             <select name="responsaveis_unidade[]" class="form-control form-control-sm" multiple="multiple" data-placeholder="Buscar pessoa">
-                @foreach ($reserva->responsaveis as $responsavel)
-                    <option value="{{$responsavel->codpes}}" selected="seleted">{{$responsavel->codpes}} {{$responsavel->nome}}</option>   
-                @endforeach
+                @if ($reserva->tipo_responsaveis == 'unidade')
+                    @foreach ($reserva->responsaveis as $responsavel)
+                        <option value="{{$responsavel->codpes}}" selected="seleted">{{$responsavel->codpes}} {{$responsavel->nome}}</option>   
+                    @endforeach
+                @endif
             </select>
         </div>
 
         <div class="add-responsavel-externo mb-3">
-            <input type="text" name="responsaveis_externo[]" class="form-control mb-2" placeholder="Nome completo do responsável..." value="{{old('tipo_responsaveis', $reserva->tipo_responsaveis) == 'externo' ? old('responsaveis_externo', $reserva->responsaveis) : ''}}">
-            <a class="btn btn-primary btn-sm" id="btn-add-responsavel-externo-input"><i class="fas fa-plus-circle"></i> Adicionar mais um responsável</a>
+            @if ($reserva->tipo_responsaveis == 'externo')
+                @foreach ($reserva->responsaveis as $responsavel)
+                    <input type="text" name="responsaveis_externo[]" class="form-control mb-2" placeholder="Nome completo do responsável..." value="{{$responsavel->nome}}">
+                @endforeach
+            @else
+                <input type="text" name="responsaveis_externo[]" class="form-control mb-2" placeholder="Nome completo do responsável..." value="">
+            @endif
+            @if (count($reserva->responsaveis) < 3)
+                <a class="btn btn-primary btn-sm" id="btn-add-responsavel-externo-input"><i class="fas fa-plus-circle"></i> Adicionar mais um responsável</a>
+            @endif
+            <a class="btn btn-secondary btn-sm" id="btn-limpar-responsaveis-externo-input"><i class="fas fa-eraser"></i> Apagar responsáveis</a>
         </div>
 
         <div class="row">
