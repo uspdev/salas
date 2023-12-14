@@ -67,7 +67,7 @@
                 </tr>
                 <tr>
                     <td>{{ $reserva->user->name }} - {{ $reserva->user->codpes }}</td>
-                    <td>{{$reserva->responsaveis->pluck('nome')->implode(', ')}}</td>
+                    <td>{{$reserva->responsaveis->count() > 0 ? $reserva->responsaveis->pluck('nome')->implode(', ') : 'Sem responsáveis'}}</td>
                     <td>{{ $reserva->data }}</td>
                     <td>{{ $reserva->horario_inicio }} a {{ $reserva->horario_fim }}</td>
                     <td>
