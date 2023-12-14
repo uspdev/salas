@@ -16,8 +16,8 @@ class CreateReservasResponsaveisReservasTable extends Migration
         Schema::create('reservas_responsaveis_reservas', function (Blueprint $table) {
             $table->id();
             $table->integer('reserva_id')->unsigned();
-            $table->foreign('reserva_id')->references('id')->on('reservas');
-            $table->foreignId('responsavel_reserva_id')->constrained('responsaveis_reservas');
+            $table->foreign('reserva_id')->references('id')->on('reservas')->cascadeOnDelete();
+            $table->foreignId('responsavel_reserva_id')->constrained('responsaveis_reservas')->cascadeOnDelete();
             $table->timestamps();
         });
     }
