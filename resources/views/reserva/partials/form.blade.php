@@ -70,12 +70,12 @@
                 @foreach ($reserva->responsaveis as $responsavel)
                     <input type="text" name="responsaveis_externo[]" class="form-control mb-2" placeholder="Nome completo do responsável..." value="{{$responsavel->nome}}">
                 @endforeach
+                <a class="btn btn-primary btn-sm" id="btn-add-responsavel-externo-input" @if(count($reserva->responsaveis) > 2) style="display: none" @endif><i class="fas fa-plus-circle"></i> Adicionar mais um responsável</a>
             @else
                 <input type="text" name="responsaveis_externo[]" class="form-control mb-2" placeholder="Nome completo do responsável..." value="">
-            @endif
-            @if (count($reserva->responsaveis) < 3)
                 <a class="btn btn-primary btn-sm" id="btn-add-responsavel-externo-input"><i class="fas fa-plus-circle"></i> Adicionar mais um responsável</a>
             @endif
+
             <a class="btn btn-secondary btn-sm" id="btn-limpar-responsaveis-externo-input"><i class="fas fa-eraser"></i> Apagar responsáveis</a>
         </div>
 
