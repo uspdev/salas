@@ -84,6 +84,10 @@ class ReservaController extends Controller
 
         $finalidades = Finalidade::all();
         
+        foreach($categorias as $categoria)
+            foreach($categoria->salas as $salaKey => $sala)
+                if(!is_null($sala->restricao) && $sala->restricao->bloqueada) $categoria->salas->forget($salaKey);
+
         return view('reserva.create', [
             'irmaos' => false,
             'reserva' => new Reserva(),
