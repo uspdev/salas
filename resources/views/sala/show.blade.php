@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header" type="button" data-toggle="collapse" data-target="#collapse{{ $sala->id }}" aria-expanded="false" aria-controls="collapse{{ $sala->id }}">
-                <h4 class="m-0 d-flex align-items-center">{{$sala->nome}} @if($sala->restricao->bloqueada ?? false)<span class="badge badge-warning ml-2">Sala Bloqueada</span>@endif</h4>
+                <h4 class="m-0 d-flex align-items-center">{{$sala->nome}} @if($sala->restricao->bloqueada ?? false)<span class="badge badge-warning ml-2">Sala Bloqueada</span><span class="badge badge-warning ml-2">Motivo do bloqueio: {{$sala->restricao->motivo_bloqueio}}</span>@endif</h4>
             <i class="far fa-plus-square"></i>
         </div>
     </div>
@@ -11,10 +11,6 @@
             @include('sala.partials.fields')
         </div>
     </div>
-
-    @if ($sala->restricao->motivo_bloqueio ?? false)
-        <div class="alert alert-warning mt-2">Motivo do bloqueio: {{$sala->restricao->motivo_bloqueio}}</div>
-    @endif
 
     <div class="d-flex flex-wrap w-100 justify-content-center mt-3">
         @foreach ($finalidades as $finalidade)
