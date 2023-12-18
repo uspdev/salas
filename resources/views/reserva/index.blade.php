@@ -42,10 +42,14 @@
 
             <br>
             <div class="row">
-                <div class="col-sm input-group">
-                    <input type="text" class="datepicker" id="input_busca_data" name="busca_data" type="text" placeholder="Data" value="{{ request()->busca_data ?? '' }}">      
-                    <input type="text" class="form-control" id="input_busca_nome" name="busca_nome" type="text" placeholder="Título da reserva" value="{{ request()->busca_nome }}" style="margin-left: 1%;">
-                </div>                 
+                    <div class="col-1">
+                        <b>Data:</b>
+                        <input type="text" class="datepicker form-control" id="input_busca_data" name="busca_data" type="text" value="{{ request()->busca_data ?? '' }}">      
+                    </div>
+                    <div class="col-sm">
+                        <b>Título da Reserva:</b>
+                        <input type="text" class="form-control" id="input_busca_nome" name="busca_nome" type="text" value="{{ request()->busca_nome }}">
+                    </div>
             </div>
             <br>
             <div class="row">
