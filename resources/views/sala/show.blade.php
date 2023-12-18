@@ -11,6 +11,11 @@
             @include('sala.partials.fields')
         </div>
     </div>
+
+    @if ($sala->restricao->motivo_bloqueio ?? false)
+        <div class="alert alert-warning mt-2">Motivo do bloqueio: {{$sala->restricao->motivo_bloqueio}}</div>
+    @endif
+
     <div class="d-flex flex-wrap w-100 justify-content-center mt-3">
         @foreach ($finalidades as $finalidade)
             <div class="flex-item rounded" style="background-color: {{$finalidade->cor}}">{{$finalidade->legenda}}</div>
