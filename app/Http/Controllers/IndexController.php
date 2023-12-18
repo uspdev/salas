@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use App\Models\Finalidade;
+use App\Models\Recurso;
 use App\Models\Reserva;
 use App\Models\Sala;
 use Carbon\Carbon;
@@ -30,6 +31,12 @@ class IndexController extends Controller
             })
             ->when($request->salas_filter, function ($query) use ($request){
                 $query->whereIn('sala_id', $request->salas_filter);
+            })
+            ->when($request->recursos_filter, function ($query) use ($request){
+                $salas = Sala::whereHas('recursos', function($query) use ($request){
+                    $query->whereIn('recursos.id', $request->recursos_filter);
+                })->pluck('id');
+                $query->whereIn('sala_id', $salas->toArray());
             });
 
         $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
@@ -41,7 +48,9 @@ class IndexController extends Controller
             'finalidades' => Finalidade::all(),
             'finalidades_filter' => $request->finalidades_filter ?? [],
             'salas' => Sala::all(),
-            'salas_filter' => $request->salas_filter ?? []
+            'salas_filter' => $request->salas_filter ?? [],
+            'recursos' => Recurso::all(),
+            'recursos_filter' => $request->recursos_filter ?? [],
         ]);
     }
 
@@ -57,7 +66,9 @@ class IndexController extends Controller
             'finalidades' => Finalidade::all(),
             'finalidades_filter' => $request->finalidades_filter ?? [],
             'salas' => Sala::all(),
-            'salas_filter' => $request->salas_filter ?? []
+            'salas_filter' => $request->salas_filter ?? [],
+            'recursos' => Recurso::all(),
+            'recursos_filter' => $request->recursos_filter ?? [],
         ]);
     }
 }
