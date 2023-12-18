@@ -37,6 +37,10 @@ class IndexController extends Controller
                     $query->whereIn('recursos.id', $request->recursos_filter);
                 })->pluck('id');
                 $query->whereIn('sala_id', $salas->toArray());
+            })
+            ->when($request->capacidade_filter, function($query) use ($request){
+                $salas = Sala::where('capacidade', '>=', $request->capacidade_filter)->pluck('id');
+                $query->whereIn('sala_id', $salas->toArray());
             });
 
         $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
@@ -51,6 +55,7 @@ class IndexController extends Controller
             'salas_filter' => $request->salas_filter ?? [],
             'recursos' => Recurso::all(),
             'recursos_filter' => $request->recursos_filter ?? [],
+            'capacidade_filter' => $request->capacidade_filter ?? ''
         ]);
     }
 
@@ -69,6 +74,7 @@ class IndexController extends Controller
             'salas_filter' => $request->salas_filter ?? [],
             'recursos' => Recurso::all(),
             'recursos_filter' => $request->recursos_filter ?? [],
+            'capacidade_filter' => $request->capacidade_filter ?? ''
         ]);
     }
 }
