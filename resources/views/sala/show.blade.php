@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header" type="button" data-toggle="collapse" data-target="#collapse{{ $sala->id }}" aria-expanded="false" aria-controls="collapse{{ $sala->id }}">
-                <h4 class="m-0 d-flex align-items-center">{{$sala->nome}} @if($sala->restricao->bloqueada)<span class="badge badge-warning ml-2">Sala Bloqueada</span>@endif</h4>
+                <h4 class="m-0 d-flex align-items-center">{{$sala->nome}} @if($sala->restricao->bloqueada ?? false)<span class="badge badge-warning ml-2">Sala Bloqueada</span>@endif</h4>
             <i class="far fa-plus-square"></i>
         </div>
     </div>
@@ -53,7 +53,7 @@
             eventDisplay: 'block',
             allDaySlot: false,
             selectAllow: function(info){
-                @if($sala->restricao->bloqueada)
+                @if($sala->restricao->bloqueada ?? false)
                     return false;
                 @endif
 
