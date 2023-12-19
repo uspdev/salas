@@ -40,7 +40,7 @@
                 <div class=" col-sm input-group">
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-success"> Buscar </button>
-                        <a class="btn btn-secondary" id="btn-limpar-filtros">Limpar filtros</a>
+                        <a class="btn btn-secondary" id="btn-limpar-filtros">Limpar</a>
                     </span>      
                 </div>
             </div>
