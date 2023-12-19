@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-body">
-        <form method="GET" action="/search">
+        <form method="GET" action="/search" id="form-filtros">
             <b>Categorias:</b>
             <select name="filter[]" class="select2 form-control" multiple="multiple">
                 @foreach($categorias as $categoria)
@@ -56,6 +56,7 @@
                 <div class=" col-sm input-group">
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-success"> Buscar </button>
+                        <a class="btn btn-secondary" id="btn-limpar-filtros">Limpar filtros</a>
                     </span>      
                 </div>
             </div>
