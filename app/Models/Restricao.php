@@ -25,7 +25,7 @@ class Restricao extends Model
         'bloqueada',
         'sala_id',
         'periodo_letivo_id',
-        
+        'aprovacao'
 
     ];
 

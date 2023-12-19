@@ -174,7 +174,8 @@ class SalaController extends Controller
                 'dias_limite'          => $validated['dias_limite'],
                 'duracao_minima'       => $validated['duracao_minima'],
                 'duracao_maxima'       => $validated['duracao_maxima'],
-                'periodo_letivo_id'    => $validated['periodo_letivo']
+                'periodo_letivo_id'    => $validated['periodo_letivo'],
+                'aprovacao'            => $validated['aprovacao']
             ]
             );
         
