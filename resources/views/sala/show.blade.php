@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header" type="button" data-toggle="collapse" data-target="#collapse{{ $sala->id }}" aria-expanded="false" aria-controls="collapse{{ $sala->id }}">
-            <span><b>{{ $sala->nome }}</b></span>
+                <h4 class="m-0 d-flex align-items-center">{{$sala->nome}} @if($sala->restricao->bloqueada ?? false)<span class="badge badge-warning ml-2">Sala Bloqueada. Motivo: {{$sala->restricao->motivo_bloqueio}}</span>@endif</h4>
             <i class="far fa-plus-square"></i>
         </div>
     </div>
@@ -11,6 +11,7 @@
             @include('sala.partials.fields')
         </div>
     </div>
+
     <div class="d-flex flex-wrap w-100 justify-content-center mt-3">
         @foreach ($finalidades as $finalidade)
             <div class="flex-item rounded" style="background-color: {{$finalidade->cor}}">{{$finalidade->legenda}}</div>
@@ -53,6 +54,10 @@
             eventDisplay: 'block',
             allDaySlot: false,
             selectAllow: function(info){
+                @if($sala->restricao->bloqueada ?? false)
+                    return false;
+                @endif
+
                 if(parseInt({{Gate::allows('responsavel', App\Models\Sala::find($sala->id))}}))
                     return true;
                 if (info.start < Date.now())
