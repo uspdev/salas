@@ -18,5 +18,12 @@
 			dayNamesShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],
             dayNamesMin:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],
         });
+
+        $(document).ready(function() {
+            $("#btn-limpar-filtros").on('click', function(){
+                $('#form-filtros').find(':input').val('');
+                $('.select2').val('val').trigger('change');
+            });
+        });
     </script>
 @endsection
