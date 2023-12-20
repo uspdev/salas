@@ -7,10 +7,12 @@
         <div class="card-body">
             <table class="table table-striped">
                 <div class="table-responsive">
-                    <tr>
-                        <th>Nome da Categoria</th>
-                        <th></th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Nome da Categoria</th>
+                            <th></th>
+                        </tr>
+                    </thead>
                     @forelse($categorias as $categoria)
                         <tr>
                             <td><a href="{{route('categorias.show', $categoria->id)}}">{{ $categoria->nome }}</a></td>
