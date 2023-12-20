@@ -8,36 +8,38 @@
     <div class="card">
         <div class="card-header"><b>Salas</b></div>
         <div class="card-body">
-            <b>Categorias:</b>
-            <select name="categorias_filter[]" class="select2 form-control" multiple="multiple">
-                @foreach($categorias as $categoria)
-                    <option value="{{$categoria->id}}" {{ in_array($categoria->id, $categorias_filter) ? 'selected' : ''}}>{{$categoria->nome}}</option>
-                @endforeach
-            </select>
+            <form method="GET" action="{{route('salas.listar')}}" id="form-filtros">
+                <b>Categorias:</b>
+                <select name="categorias_filter[]" class="select2 form-control" multiple="multiple">
+                    @foreach($categorias as $categoria)
+                        <option value="{{$categoria->id}}" {{ in_array($categoria->id, $categorias_filter) ? 'selected' : ''}}>{{$categoria->nome}}</option>
+                    @endforeach
+                </select>
 
-            <div class="row mt-2">
-                <div class="col-sm">
-                    <b>Recursos:</b>
-                    <select name="recursos_filter[]" id="" class="select2 form-control" multiple="multiple">
-                        @foreach ($recursos as $recurso)
-                            <option value="{{$recurso->id}}" {{in_array($recurso->id, $recursos_filter) ? 'selected' : ''}}>{{$recurso->nome}}</option>
-                        @endforeach
-                    </select>
+                <div class="row mt-2">
+                    <div class="col-sm">
+                        <b>Recursos:</b>
+                        <select name="recursos_filter[]" id="" class="select2 form-control" multiple="multiple">
+                            @foreach ($recursos as $recurso)
+                                <option value="{{$recurso->id}}" {{in_array($recurso->id, $recursos_filter) ? 'selected' : ''}}>{{$recurso->nome}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-sm">
+                        <b>Capacidade Mínima:</b>
+                        <input type="number" min="0" class="form-control" name="capacidade_filter" value="{{old('capacidade_filter', $capacidade_filter)}}">
+                    </div>
                 </div>
-                <div class="col-sm">
-                    <b>Capacidade Mínima:</b>
-                    <input type="number" min="0" class="form-control" name="capacidade_filter" value="{{old('capacidade_filter', $capacidade_filter)}}">
-                </div>
-            </div>
 
-            <div class="row mt-2">
-                <div class=" col-sm input-group">
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-success"> Buscar </button>
-                        <a class="btn btn-secondary" id="btn-limpar-filtros">Limpar</a>
-                    </span>      
+                <div class="row mt-2">
+                    <div class=" col-sm input-group">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-success"> Buscar </button>
+                            <a class="btn btn-secondary" id="btn-limpar-filtros">Limpar</a>
+                        </span>      
+                    </div>
                 </div>
-            </div>
+            </form>
 
             <br>
             <table class="table table-striped">
@@ -82,4 +84,15 @@
             </table>
         </div>
     </div>
+@endsection
+
+@section('javascripts_bottom')
+    <script>
+        $(document).ready(function() {
+            $('#btn-limpar-filtros').on('click', function(){
+                $('#form-filtros').find(':input').val("");
+                $('.select2').val('val').trigger('change');
+            });
+        });
+    </script>
 @endsection
