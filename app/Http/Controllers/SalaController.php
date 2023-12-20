@@ -204,8 +204,22 @@ class SalaController extends Controller
 
     public function listar(Request $request)
     {
+        $salas = Sala::make()
+                    ->when($request->categorias_filter, function($query) use ($request){
+                        $query->whereIn('categoria_id', $request->categorias_filter);
+                    })
+                    ->when($request->recursos_filter, function($query) use ($request){
+                        $query->whereHas('recursos', function($query) use ($request){
+                            $query->whereIn('recursos.id', $request->recursos_filter);
+                        });
+                    })
+                    ->when($request->capacidade_filter, function($query) use ($request){
+                        $query->where('capacidade', '>=', $request->capacidade_filter);
+                    });;
+
+
         return view('sala.listar', [
-            'salas' => Sala::all(),
+            'salas' => $salas->paginate(20),
             'recursos' => Recurso::all(),
             'recursos_filter' => $request->recursos_filter ?? [],
             'categorias' => Categoria::all(),
