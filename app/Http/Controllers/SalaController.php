@@ -10,6 +10,7 @@ use App\Models\Reserva;
 use App\Models\Sala;
 use App\Models\Restricao;
 use App\Models\PeriodoLetivo;
+use Illuminate\Http\Request;
 
 class SalaController extends Controller
 {
@@ -201,11 +202,16 @@ class SalaController extends Controller
         return redirect("/")->with('alert-success', 'Sala excluída com sucesso');
     }
 
-    public function listar()
+    public function listar(Request $request)
     {
-        $salas = Sala::all();
-
-        return view('sala.listar', compact('salas'));
+        return view('sala.listar', [
+            'salas' => Sala::all(),
+            'recursos' => Recurso::all(),
+            'recursos_filter' => $request->recursos_filter ?? [],
+            'categorias' => Categoria::all(),
+            'categorias_filter' => $request->categorias_filter ?? [],
+            'capacidade_filter' => $request->capacidade_filter ?? ''
+        ]);
     }
 
     private function mapRecursos($recursos)
