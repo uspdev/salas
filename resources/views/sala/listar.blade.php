@@ -58,7 +58,7 @@
                             <td><a @can('admin') href="{{route('salas.edit', $sala->id)}}" @endcan>{{ $sala->nome }}</a></td>
                             <td>{{$sala->categoria->nome}}</td>
                             <td>{{$sala->capacidade}} pessoas</td>
-                            <td><i class="fa fa-calendar-plus fa-lg"></i> <i class="ml-2 fa fa-calendar fa-lg"></i></td>
+                            <td> <a href="{{route('salas.show', $sala->id)}}" title="Calendário da sala"><i class="fa fa-calendar fa-lg"></i></a> @if(Gate::allows('members', $sala->id) && !($sala->restricao->bloqueada ?? false)) <a href="{{route('reservas.create', ['sala' => $sala->id])}}" title="Cadastrar reserva na sala"><i class="fa fa-calendar-plus fa-lg ml-2"></i></a>@endif</td>
                             @can('admin')
                             <td class="text-right">
                                 <form method="POST" action="{{route('salas.destroy', $sala->id)}}">
