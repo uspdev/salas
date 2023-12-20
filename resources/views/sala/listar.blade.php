@@ -1,7 +1,10 @@
 @extends('main')
 
 @section('content')
-    <a href="{{route('salas.create')}}" class="btn btn-success mb-3">Cadastrar Sala</a>
+    @can ('admin')
+        <a href="{{route('salas.create')}}" class="btn btn-success mb-3">Cadastrar Sala</a>
+    @endcan
+
     <div class="card">
         <div class="card-header"><b>Salas</b></div>
         <div class="card-body">
@@ -13,7 +16,7 @@
                     </tr>
                     @forelse($salas as $sala)
                         <tr>
-                            <td><a href="{{route('salas.edit', $sala->id)}}">{{ $sala->nome }}</a></td>
+                            <td><a @can('admin') href="{{route('salas.edit', $sala->id)}}" @endcan>{{ $sala->nome }}</a></td>
                             <td class="d-flex justify-content-end">
                                 @can('admin')
                                 <form method="POST" action="{{route('salas.destroy', $sala->id)}}">

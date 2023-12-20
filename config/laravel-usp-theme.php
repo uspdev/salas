@@ -98,6 +98,10 @@ $menu = [
         'url' => config('app.url').'/salas',
     ],
     [
+        'text' => '<i class="fa fa-filter" aria-hidden="true"></i> Filtro de Recursos',
+        'url' => config('app.url').'/salas/listar',
+    ],
+    [
         'text' => '<i class="fa fa-calendar-plus" aria-hidden="true"></i> Nova reserva',
         'url' => config('app.url').'/reservas/create',
         'can' => 'logado',
