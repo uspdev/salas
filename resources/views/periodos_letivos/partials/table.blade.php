@@ -1,13 +1,15 @@
 <table class="table table-striped">
     <div class="table-responsive">
-        <tr>
-            <th>Período Letivo</th>
-            <th>Data de início <br>do período letivo</th>
-            <th>Data de término <br>do período letivo</th>
-            <th>Data de início das reservas <br>para o período letivo</th>
-            <th>Data de término das reservas <br>para o período letivo</th>
-            <th></th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Período Letivo</th>
+                <th>Data de início <br>do período letivo</th>
+                <th>Data de término <br>do período letivo</th>
+                <th>Data de início das reservas <br>para o período letivo</th>
+                <th>Data de término das reservas <br>para o período letivo</th>
+                <th></th>
+            </tr>
+        </thead>
         @forelse($periodos as $periodo)
             <tr>
                 <td>{{ $periodo->codigo }}</td>

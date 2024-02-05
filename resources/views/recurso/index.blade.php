@@ -8,10 +8,12 @@
     <div class="card-body">
         <table class="table table-striped">
             <div class="table-responsive">
-                <tr>
-                    <th>Nome do Recurso</th>
-                    <th></th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Nome do Recurso</th>
+                        <th></th>
+                    </tr>
+                </thead>
                 @forelse($recursos as $recurso)
                     <tr>
                         <td><a href="{{route('recursos.edit', $recurso->id)}}">{{$recurso->nome}}</a></td>

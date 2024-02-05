@@ -10,6 +10,7 @@ use App\Models\Reserva;
 use App\Models\Sala;
 use App\Models\Restricao;
 use App\Models\PeriodoLetivo;
+use Illuminate\Http\Request;
 
 class SalaController extends Controller
 {
@@ -205,11 +206,30 @@ class SalaController extends Controller
         return redirect("/")->with('alert-success', 'Sala excluída com sucesso');
     }
 
-    public function listar()
+    public function listar(Request $request)
     {
-        $salas = Sala::all();
+        $salas = Sala::make()
+                    ->when($request->categorias_filter, function($query) use ($request){
+                        $query->whereIn('categoria_id', $request->categorias_filter);
+                    })
+                    ->when($request->recursos_filter, function($query) use ($request){
+                        $query->whereHas('recursos', function($query) use ($request){
+                            $query->whereIn('recursos.id', $request->recursos_filter);
+                        });
+                    })
+                    ->when($request->capacidade_filter, function($query) use ($request){
+                        $query->where('capacidade', '>=', $request->capacidade_filter);
+                    });;
 
-        return view('sala.listar', compact('salas'));
+
+        return view('sala.listar', [
+            'salas' => $salas->paginate(20),
+            'recursos' => Recurso::all(),
+            'recursos_filter' => $request->recursos_filter ?? [],
+            'categorias' => Categoria::all(),
+            'categorias_filter' => $request->categorias_filter ?? [],
+            'capacidade_filter' => $request->capacidade_filter ?? ''
+        ]);
     }
 
     private function mapRecursos($recursos)
