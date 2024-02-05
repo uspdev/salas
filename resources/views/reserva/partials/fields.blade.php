@@ -58,6 +58,7 @@
             <div class="table-responsive">
                 <tr>
                     <th>Cadastrada por</th>
+                    <th>Responsáveis</th>
                     <th>Data</th>
                     <th>Horário</th>
                     <th>Sala</th>
@@ -66,6 +67,7 @@
                 </tr>
                 <tr>
                     <td>{{ $reserva->user->name }} - {{ $reserva->user->codpes }}</td>
+                    <td>{{$reserva->responsaveis->count() > 0 ? $reserva->responsaveis->pluck('nome')->implode(', ') : 'Sem responsáveis'}}</td>
                     <td>{{ $reserva->data }}</td>
                     <td>{{ $reserva->horario_inicio }} a {{ $reserva->horario_fim }}</td>
                     <td>

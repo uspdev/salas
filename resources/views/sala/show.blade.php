@@ -67,6 +67,26 @@
             views: {
                 timeGrid: {
                     selectable: true,
+                    eventContent: function(info){
+                        let div = document.createElement('div');
+                        let eventTime = document.createElement('div');
+                        let start = new Date(info.event.start);
+                        let end = new Date(info.event.end);
+
+                        let horarioDeInicio = ("0" + start.getHours()).slice(-2) + ':' + ("0" + start.getMinutes()).slice(-2);
+                        let horarioDeFim = ("0" + end.getHours()).slice(-2) + ':' + ("0" + end.getMinutes()).slice(-2);
+
+                        let nomesResponsaveis = info.event.extendedProps.responsaveis.join(', ');
+
+                        eventTime.classList.add('fc-event-time');
+                        eventTime.innerHTML = horarioDeInicio + ' - ' + horarioDeFim;
+
+                        div.innerHTML =  info.event.title + '<br>' + nomesResponsaveis;
+
+                        let arrayDomNodes = [eventTime, div];
+
+                        return {domNodes: arrayDomNodes};
+                    },
                     select: function(time){
                         if (parseInt({{Gate::allows('members', $sala->id)}})) {
                             window.location.assign("{{route('reservas.create')}}"
@@ -80,6 +100,23 @@
 
                 dayGridMonth: {
                     selectable: true,
+                    eventContent: function(info){
+                        let bold = document.createElement('b');
+                        let div = document.createElement('div');
+                        let start = new Date(info.event.start);
+                        let horarioDeInicio = ("0" + start.getHours()).slice(-2) + ':' + ("0" + start.getMinutes()).slice(-2);
+
+                        let nomesResponsaveis = info.event.extendedProps.responsaveis.join(', ');
+
+                        bold.innerHTML = horarioDeInicio; 
+
+                        div.innerHTML = info.event.title + '<br>' + nomesResponsaveis;
+                        div.classList.add('text-wrap');
+
+                        let arrayDomNodes = [bold, div]
+
+                        return {domNodes: arrayDomNodes};
+                    },
                     select: function(time){
                         if (parseInt({{Gate::allows('members', $sala->id)}})) {
                             window.location.assign("{{route('reservas.create')}}"

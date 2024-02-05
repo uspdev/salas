@@ -84,7 +84,10 @@ class SalaController extends Controller
                 'end' => $reserva->fim,
                 'url' => route('reservas.show', $reserva->id),
                 'color' => $reserva->status == 'pendente' ? config('salas.cores.pendente') : ($reserva->finalidade->cor ?? config('salas.cores.semFinalidade')),
-                'textColor' => 'black'
+                'textColor' => 'black',
+                'extendedProps' => [
+                    'responsaveis'=> $reserva->responsaveis->pluck('nome')
+                ]
             ];
 
         }

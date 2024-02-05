@@ -107,4 +107,8 @@ class Reserva extends Model implements Auditable
     public function finalidade(){
         return $this->belongsTo(Finalidade::class);
     }
+    
+    public function responsaveis(){
+        return $this->belongsToMany(ResponsavelReserva::class, 'reservas_responsaveis_reservas', 'reserva_id', 'responsavel_reserva_id')->withTimestamps();
+    }
 }
