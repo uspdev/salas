@@ -116,7 +116,7 @@ class ReservaController extends Controller
 
         $this->authorize('members', $validated['sala_id']);
 
-        if(Sala::find($validated['sala_id'])->aprovacao)
+        if(Sala::find($validated['sala_id'])->restricao->aprovacao)
         {
             $validated['status'] = 'pendente';
             $mensagem = "Reserva(s) enviada(s) para análise com sucesso.";

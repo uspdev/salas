@@ -115,10 +115,10 @@ class AuthServiceProvider extends ServiceProvider
             if(Gate::allows('admin')) return true;
 
             // Se a sala não necessita de aprovação retorna true.
-            if(!$reserva->sala->aprovacao) return true;
+            if(!$reserva->sala->restricao->aprovacao) return true;
 
             // Se a sala necessita de aprovação e está pendente retorna true.
-            if($reserva->sala->aprovacao && $reserva->status == 'pendente') return true;
+            if($reserva->sala->restricao->aprovacao && $reserva->status == 'pendente') return true;
 
             return false;
         });

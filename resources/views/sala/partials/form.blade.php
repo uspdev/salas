@@ -54,14 +54,14 @@
                 <div class="col-sm form-group">
                     <b>Necessita de aprovação?</b>
                     <div class="form-check">
-                        <input name="aprovacao" type="radio" class="form-check-input radio-aprovacao" id="aprovacao-sim" value="1" {{$sala->aprovacao ? 'checked' : ''}}>
+                        <input name="aprovacao" type="radio" class="form-check-input radio-aprovacao" id="aprovacao-sim" value="1" {{$sala->restricao->aprovacao ? 'checked' : ''}}>
                         <label for="aprovacao-sim">Sim</label>
                     </div>
                     <div class="form-check">
-                        <input name="aprovacao" type="radio" class="form-check-input radio-aprovacao" id="aprovacao-nao" value="0" {{!$sala->aprovacao ? 'checked' : ''}}>
+                        <input name="aprovacao" type="radio" class="form-check-input radio-aprovacao" id="aprovacao-nao" value="0" {{!$sala->restricao->aprovacao ? 'checked' : ''}}>
                         <label for="aprovacao-nao">Não</label>
                     </div>
-                    <div id="responsavel-box" @if (!$sala->aprovacao) style="display: none" @endif>
+                    <div id="responsavel-box" @if (!$sala->restricao->aprovacao) style="display: none" @endif>
                         <b>Responsáveis</b>
                         <div class="d-flex flex-inline form-group">
                             <input name="codpes" type="text" placeholder="Número USP" class="w-25 form-control" id="numero-usp" form="form-add-responsavel" required> 
