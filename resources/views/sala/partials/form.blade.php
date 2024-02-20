@@ -41,7 +41,7 @@
                 <table>
                     @foreach($recursos as $recurso)
                         <tr>
-                            <td><input {{ $recurso->checked ? 'checked' : null }} type="checkbox" class="recurso" name="recursos[]" value="{{ $recurso->id }}"></td>
+                            <td><input dusk={{ "recurso_" . $recurso->id}} {{ $recurso->checked ? 'checked' : null }} type="checkbox" class="recurso" name="recursos[]" value="{{ $recurso->id }}"></td>
                             <td>{{ $recurso->nome }}</td>
                         </tr>
                     @endforeach
