@@ -10,7 +10,7 @@
                     <option value="{{$setor['codset']}}" {{$categoria->setores->contains('codset', $setor['codset']) ? 'selected': ''}}>{{$setor['nomabvset']}} - {{$setor['nomset']}}</option>
                 @endforeach
             </select>
-            <button class="btn btn-success mt-3" type="submit">Salvar</button>
+            <button dusk="salvar_setores" class="btn btn-success mt-3" type="submit">Salvar</button>
         </form>
     </div>
 </div>

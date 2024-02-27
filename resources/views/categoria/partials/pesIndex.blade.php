@@ -8,7 +8,7 @@
     <div class="card card-body">
         <ul class="list-group">
             @forelse($categoria->users as $user)
-                <li class="list-group-item" id="pesIndexList">
+                <li class="list-group-item" id="id_{{ $user->codpes }}">
                     {{ $user->codpes }} - {{ $user->name }}
                     <form method="POST" action="/categorias/removeuser/{{ $categoria->id }}/{{ $user->id }}">
                         @csrf
