@@ -202,7 +202,7 @@ class CategoriasTest extends DuskTestCase {
      * Deleta uma categoria.
      *
      * @return void
-     * @depends testCriaCategoriaValida
+     * @depends testEditaCategoria
      */
 
     public function testDeletaCategoria() {

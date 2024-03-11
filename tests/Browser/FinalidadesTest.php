@@ -160,7 +160,7 @@ class FinalidadesTest extends DuskTestCase {
      * Exclui uma finalidade.
      *
      * @return void
-     * @depends testCriaFinalidadeValida
+     * @depends testEditaFinalidade
      */
 
     public function testExcluiFinalidade () {

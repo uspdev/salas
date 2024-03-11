@@ -77,7 +77,7 @@ class SalasTest extends DuskTestCase {
                     ->select('categoria_id', 1)
                     ->click('@recurso_1')
                     ->press('Enviar')
-                    ->assertPathIs('/salas/*/')
+                    ->assertPathIs('/salas/*')
                     ->assertSee('sala_teste');
         });
 
