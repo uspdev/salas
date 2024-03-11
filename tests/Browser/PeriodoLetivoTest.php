@@ -69,7 +69,7 @@ class PeriodoLetivoTest extends DuskTestCase {
                     ->assertPathIs('/periodos_letivos/create');
         });
 
-        // Cria um periodo
+        // Cria um periodo valido
         $this->browse(function (Browser $browser) {
             $browser->visit('/periodos_letivos/create')
                     ->type('codigo', '20241')
@@ -83,7 +83,7 @@ class PeriodoLetivoTest extends DuskTestCase {
 
         });
 
-        // Cria um periodo incorretamente
+        // Cria um periodo invalido
         $this->browse(function (Browser $browser) {
             $browser->visit('/periodos_letivos/create')
                     ->type('codigo', '20241')
@@ -108,6 +108,19 @@ class PeriodoLetivoTest extends DuskTestCase {
                     ->assertSee('A data de término das reservas para o período letivo deve ser após a data de início das reservas para o período letivo.');
 
         });
+
+        // Cria um periodo duplicado
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/periodos_letivos/create')
+                    ->type('codigo', '20241')
+                    ->type('data_inicio', '01/01/2024')
+                    ->type('data_fim', '12/30/2024')
+                    ->type('data_inicio_reservas', '02/01/2024')
+                    ->type('data_fim_reservas', '11/01/2024')
+                    ->press('Enviar')
+                    ->assertPathIs('/periodos_letivos/create');
+        });
+
     }
 
 
@@ -146,7 +159,8 @@ class PeriodoLetivoTest extends DuskTestCase {
             $browser->visit('/periodos_letivos')
                     ->click('.btn-danger')
                     ->acceptDialog()
-                    ->assertSee('20231');
+                    ->visit('/periodos_letivos/create/1')
+                    ->assertSee('404');
 
         });
     }
