@@ -16,7 +16,6 @@ class FinalidadeController extends Controller
     public function index()
     {
         $finalidades = Finalidade::all();
-
         return view('settings.finalidades.index', compact('finalidades'));
     }
 
@@ -25,8 +24,8 @@ class FinalidadeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create () {
+        $this->authorize('admin');
         return view('settings.finalidades.create');
     }
 
@@ -38,8 +37,8 @@ class FinalidadeController extends Controller
      */
     public function store(FinalidadeRequest $request)
     {
+        $this->authorize('admin');
         $validated = $request->validated();
-
         $finalidade = Finalidade::create($validated);
 
         return redirect()->route('finalidades.index')
@@ -54,6 +53,7 @@ class FinalidadeController extends Controller
      */
     public function edit(Finalidade $finalidade)
     {
+        $this->authorize('admin');
         return view('settings.finalidades.edit', compact('finalidade'));
     }
 
@@ -66,8 +66,8 @@ class FinalidadeController extends Controller
      */
     public function update(FinalidadeRequest $request, Finalidade $finalidade)
     {
+        $this->authorize('admin');
         $validated = $request->validated();
-
         $finalidade->update($validated);
 
         return redirect()->route('finalidades.index')
@@ -82,8 +82,8 @@ class FinalidadeController extends Controller
      */
     public function destroy(Finalidade $finalidade)
     {
+        $this->authorize('admin');
         $finalidade->delete();
-
         return redirect()->route('finalidades.index')
             ->with('alert-success', 'Finalidade excluída com sucesso.');
     }
