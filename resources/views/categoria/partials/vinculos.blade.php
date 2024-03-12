@@ -28,7 +28,9 @@
                   <b>Nenhum</b> (Apenas as pessoas cadastradas manualmente)
                 </label>
             </div>
+            @can('admin')
             <button class="btn btn-success" type="submit">Salvar</button>
+            @endcan
         </form>
     </div>
 </div>
