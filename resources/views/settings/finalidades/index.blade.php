@@ -1,9 +1,11 @@
 @extends('main')
 @section('content')
 
+@can ('admin')
 <div class="mb-3">
     <a href="{{route('finalidades.create')}}" class="btn btn-success">Adicionar Finalidade</a>
 </div>
+@endcan
 
 <div class="card">
     <div class="card-header">
