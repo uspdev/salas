@@ -1,6 +1,7 @@
 <div class="card">
     <div class="card-header">
         <b>{{ $categoria->nome }}</b>
+        @can('admin')
         <div>
             <form action="/categorias/{{  $categoria->id  }}" method="POST">
                 <a class="btn btn-success" href="/categorias/{{  $categoria->id  }}/edit" role="button" data-bs-toggle="tooltip" title="Editar">
@@ -13,6 +14,7 @@
                 </button>
             </form>
         </div>
+        @endcan
     </div>
     <div class="card-body">
     @include('categoria.partials.vinculos')

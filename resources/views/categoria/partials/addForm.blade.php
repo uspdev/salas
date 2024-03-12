@@ -8,7 +8,9 @@
             <div class="mb-3">
                 <input name="codpes" type="addpes" class="form-control" placeholder="Número USP">
             </div>
+            @can('admin')
             <button class="btn btn-success" type="submit">Enviar</button>
+            @endcan
         </form>
     </div>
 </div>
