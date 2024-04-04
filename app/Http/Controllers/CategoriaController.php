@@ -162,6 +162,8 @@ class CategoriaController extends Controller
 
     public function alterarVinculos(Request $request, Categoria $categoria){
 
+        $this->authorize('admin');
+
         $categoria->vinculos = $request->input('vinculo');
         $categoria->save();
 
