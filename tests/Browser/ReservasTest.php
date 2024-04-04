@@ -233,11 +233,68 @@ class ReservasTest extends DuskTestCase {
         });
     }
 
-    // Edita reserva
-    // Exclui reserva
+    /**
+     * Edita uma reserva
+     *
+     * @return void
+     * @depends testCriaReservaValida
+     */
+
+     public function testEditaReserva () {
+        
+        // Login como administrador
+        $this->browse(function (Browser $browser) {
+            $this->loginUserAdm();
+            $browser->loginAs(User::where('codpes', 1)->first())
+                    ->visit('/reservas/my')
+                    ->assertSee('Minhas Reservas');
+        });
+
+        // Edita uma reserva
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/reservas/1/edit')
+                    ->type('nome', 'reserva_teste_editada')
+                    ->type('data', '14/02/2021')
+                    ->type('horario_inicio', '9:00')
+                    ->type('horario_fim', '10:00')
+                    ->type('descricao', 'reserva_editada')
+                    ->press('Enviar')
+                    ->assertPathIs('/reservas')
+                    ->visit('/reservas/1')
+                    ->assertSee('reserva_editada')
+                    ->assertSee('14/02/2021')
+                    ->assertSee('9:00')
+                    ->assertSee('10:00');
+        });
+     }
 
 
+    /**
+     * Exclui uma reserva
+     *
+     * @return void
+     * @depends testCriaReservaValida
+     */
 
+     public function testExcluiReserva () {
+        
+        // Login como administrador
+        $this->browse(function (Browser $browser) {
+            $this->loginUserAdm();
+            $browser->loginAs(User::where('codpes', 1)->first())
+                    ->visit('/reservas/my')
+                    ->assertSee('Minhas Reservas');
+        });
+
+        // Exclui uma reserva
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/reservas/1')
+                    ->press('Excluir')
+                    ->acceptDialog()
+                    ->assertPathIs('/reservas');
+
+        });
+     }
 
 
     /**
