@@ -9,7 +9,7 @@
                 </a>
                 @csrf
                 @method('delete')
-                <button class="btn btn-danger" type="submit" name="tipo" value="one" data-bs-toggle="tooltip" title="Excluir" onclick="return confirm('Tem certeza?');">
+                <button class="btn btn-danger" type="submit" name="deletar_categoria" value="one" data-bs-toggle="tooltip" title="Excluir" onclick="return confirm('Tem certeza?');">
                     <i class="fa fa-trash" ></i>
                 </button>
             </form>

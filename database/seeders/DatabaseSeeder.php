@@ -14,11 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            PeriodoLetivoSeeder::class,
             UserSeeder::class,
             CategoriaSeeder::class,
             RecursoSeeder::class,
             SalaSeeder::class,
-            ReservaSeeder::class,
+            ReservaSeeder::class
         ]);
 
     }
