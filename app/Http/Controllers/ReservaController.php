@@ -180,6 +180,7 @@ class ReservaController extends Controller
                     $new->parent_id = $reserva->id;
                     $new->data = $date->format('d/m/Y');
                     $new->save();
+                    $new->responsaveis()->sync($responsaveis->pluck('id'));
                     $created .= "<li><a href='/reservas/{$new->id}'> {$date->format('d/m/Y')}- {$new->nome}</a></li>";
                 }
             }
