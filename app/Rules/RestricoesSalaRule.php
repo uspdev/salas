@@ -30,9 +30,13 @@ class RestricoesSalaRule implements Rule
     {
         $this->reserva = $reserva;
 
-        // inicializa o repeatUntil com a data definida pelo usuário ou ser vier null, então seta a corrente.
+        // Inicializa o repeatUntil com a data definida pelo usuário, se for null ou estiver com o formato errado de data atribue a data corrente.
         if (isset($this->reserva->repeat_until)) {
-            $this->repeatUntil = Carbon::createFromFormat('d/m/Y', $this->reserva->repeat_until);
+            try {
+                $this->repeatUntil = Carbon::createFromFormat('d/m/Y', $this->reserva->repeat_until);
+            } catch (\Throwable $th) {
+                $this->repeatUntil = Carbon::now(); 
+            }
         } else {
             $this->repeatUntil = Carbon::now(); 
         }

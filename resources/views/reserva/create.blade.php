@@ -28,6 +28,7 @@
 
         $('#rep_bool_Nao').click( function() { 
                 $('#repeat_container').hide();
+                $('#repFormControl').val('');
             }   
         );
 
