@@ -13,6 +13,13 @@ use Carbon\Carbon;
 class ReservaRequest extends FormRequest
 {
     /**
+     * Indicates if the validator should stop on the first rule failure.
+     *
+     * @var bool
+     */
+    protected $stopOnFirstFailure = true;
+
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -45,11 +52,11 @@ class ReservaRequest extends FormRequest
             'horario_inicio' => 'required|date_format:G:i|',
             'horario_fim' => 'required|date_format:G:i|after:horario_inicio|',
             'finalidade_id' => 'required|integer',
-            'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray()), new RestricoesSalaRule($this) ],
             'descricao' => 'nullable',
             'repeat_until' => ['required_with:repeat_days', 'nullable', 'date_format:d/m/Y'],
             'repeat_days.*' => 'integer|between:0,7',
-            'data' => ['required', 'date_format:d/m/Y', new verifyRoomAvailability($this, $id)],
+            'data' => ['bail', 'required', 'date_format:d/m/Y', new verifyRoomAvailability($this, $id)],
+            'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray()), new RestricoesSalaRule($this) ],
             'tipo_responsaveis' => 'required'
         ];
 
@@ -70,6 +77,7 @@ class ReservaRequest extends FormRequest
         return [
             'nome.required' => 'O título não pode ficar em branco.',
             'data.required' => 'A data não pode ficar em branco.',
+            'data.date_format' => 'A data deve ser válida e inserida no formato dia/mês/ano.',
             'horario_inicio.required' => 'O horário de início não pode ficar em branco.',
             'horario_fim.required' => 'O horário de fim não pode ficar em branco.',
             'horario_inicio.date_format' => 'Digite o horário no formato 0:00. Exemplo: 9:00',
