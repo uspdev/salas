@@ -30,8 +30,15 @@ class RestricoesSalaRule implements Rule
     {
         $this->reserva = $reserva;
 
+        // Verifica se o formato da data é válido para o campo repeat_until.
+        try {
+            $date_is_valid = Carbon::parse($this->reserva->repeat_until);
+        } catch (\Throwable $th) {
+            $date_is_valid = false;
+        }
+
         // inicializa o repeatUntil com a data definida pelo usuário ou ser vier null, então seta a corrente.
-        if (isset($this->reserva->repeat_until)) {
+        if (isset($this->reserva->repeat_until) && $date_is_valid) {
             $this->repeatUntil = Carbon::createFromFormat('d/m/Y', $this->reserva->repeat_until);
         } else {
             $this->repeatUntil = Carbon::now(); 

@@ -84,6 +84,7 @@ class ReservaRequest extends FormRequest
             'horario_fim.date_format' => 'Digite o horário no formato 0:00. Exemplo: 9:00',
             'sala_id.required' => 'Selecione uma sala.',
             'repeat_until.required_with' => 'Selecione uma data para o fim da repetição.',
+            'repeat_until.date_format' => 'A data de repetição deve ser válida e inserida no formato dia/mês/ano.',
             'data.after_or_equal' => 'Não é possível fazer reservas em dias passados.',
             'horario_inicio.after' => 'Não é possível fazer reservas em um horário passado.',
         ];
