@@ -379,28 +379,29 @@ class ReservaController extends Controller
     {
         $this->authorize('owner', $reserva);
 
-        if(config('salas.emailConfigurado')) Mail::queue(new DeleteReservaMail($reserva));
+        $sala = $reserva->sala;
+        $parent_id = $reserva->parent_id;
+        $purge = !is_null($request->input('purge'));
 
-        $parent_id = null;
-        if($reserva->parent_id != null) {
-            $parent_id = $reserva->parent_id;
-        }
+        if(config('salas.emailConfigurado')) Mail::queue(new DeleteReservaMail($reserva, $purge));
 
-        if($reserva->is_parent){
+        if($purge){
             Reserva::where('parent_id', $reserva->parent_id)->delete();
             request()->session()->flash('alert-success', 'Todas instâncias da reserva foram excluídas com sucesso.');
-            return redirect('/');
-        } else {
-            $reserva->delete();
-            request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
+        }
+        else{
+            if($reserva->is_parent){
+                $reserva->delete();
+                $new_parent_id = Reserva::firstWhere('parent_id', $parent_id)->id;
+                Reserva::where('parent_id', $parent_id)->update(['parent_id' => $new_parent_id]);
+                request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
+            }else{
+                $reserva->delete();
+                request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
+            }
         }
 
-        if($parent_id == null) {
-            return redirect('/');
-        } else {
-            return redirect('/reservas/' . $parent_id);
-        }
-        
+        return redirect()->route('salas.show', [$sala]);
     }
 
     /**

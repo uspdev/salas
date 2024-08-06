@@ -14,15 +14,17 @@ class DeleteReservaMail extends Mailable
 {
     use Queueable, SerializesModels;
     private $reserva;
+    private $purge;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Reserva $reserva)
+    public function __construct(Reserva $reserva, bool $purge = false)
     {
         $this->reserva = $reserva;
+        $this->purge = $purge;
     }
 
     /**
@@ -38,6 +40,7 @@ class DeleteReservaMail extends Mailable
                     ->to($user->email)
                     ->with([
                         'reserva' => $this->reserva,
+                        'purge' => $this->purge
                     ]);
     }
 }

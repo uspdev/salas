@@ -31,9 +31,41 @@
             <b>{{ $reserva->nome }}</b>
         </div>
         @can('owner', $reserva)
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Excluir Reserva</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+
+                <!-- Modifica a pergunta de exclusão caso a reserva tenha repetições -->
+                @if (is_null($reserva->parent_id))
+                    <div class="modal-body">
+                        Deseja realmente excluir esta reserva?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" id="btn-excluir">Excluir</button>
+                    </div>
+                @else
+                    <div class="modal-body">
+                        Deseja excluir somente esta instância ou todas as repetições da reserva?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-purge btn btn-secondary">Somente esta intância</button>
+                        <button type="button" class="btn-purge btn btn-danger" data-purge="1">Todas as repetições</button>
+                    </div>
+                @endif
+
+            </div>
+            </div>
+        </div>
         <div class="adm-icons">
             <div>
-                <form action="/reservas/{{  $reserva->id  }}" method="POST">
+                <form action="/reservas/{{  $reserva->id  }}" method="POST" id="form-excluir">
                     @csrf
                     @method('delete')
                     @can('reserva.editar', $reserva)
@@ -42,8 +74,9 @@
                         </a>
                     @endcan
 
-                    <button class="btn btn-danger" type="submit" title="Excluir" 
-                        onclick="return confirm('Tem certeza que deseja excluir a(s) reserva(s)?');" >
+                    @if(!is_null($reserva->parent_id)) <input type="hidden" name="purge" id="purge"> @endif
+
+                    <button data-toggle="modal" data-target="#deleteModal" class="btn btn-danger" type="button" title="Excluir" >
                         <i class="fa fa-trash" ></i>
                     </button>
                 </form>
