@@ -379,12 +379,13 @@ class ReservaController extends Controller
     {
         $this->authorize('owner', $reserva);
 
-        if(config('salas.emailConfigurado')) Mail::queue(new DeleteReservaMail($reserva));
-
         $sala = $reserva->sala;
         $parent_id = $reserva->parent_id;
+        $purge = !is_null($request->input('purge'));
 
-        if(!is_null($request->input('purge'))){
+        if(config('salas.emailConfigurado')) Mail::queue(new DeleteReservaMail($reserva, $purge));
+
+        if($purge){
             Reserva::where('parent_id', $reserva->parent_id)->delete();
             request()->session()->flash('alert-success', 'Todas instâncias da reserva foram excluídas com sucesso.');
         }

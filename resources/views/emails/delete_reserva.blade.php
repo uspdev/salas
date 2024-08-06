@@ -5,7 +5,7 @@
 <p><b>Sala:</b> {{$reserva->sala->nome}} </p>
 <p><b>Finalidade:</b> {{$reserva->finalidade->legenda}} </p>
 
-@if($reserva->irmaos())
+@if($purge)
     <p><b>Datas:</b>
     @foreach($reserva->irmaos() as $reserva)
         {{$reserva->data}},
