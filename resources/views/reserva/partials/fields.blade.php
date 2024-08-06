@@ -35,7 +35,7 @@
             <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Excluir Reservas</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Excluir Reserva</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -55,7 +55,7 @@
                         Deseja excluir somente esta instância ou todas as repetições da reserva?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn-purge btn btn-secondary" data-purge="0">Somente esta intância</button>
+                        <button type="button" class="btn-purge btn btn-secondary">Somente esta intância</button>
                         <button type="button" class="btn-purge btn btn-danger" data-purge="1">Todas as repetições</button>
                     </div>
                 @endif
@@ -76,7 +76,7 @@
 
                     @if(!is_null($reserva->parent_id)) <input type="hidden" name="purge" id="purge"> @endif
 
-                    <button data-toggle="modal" data-target="#deleteModal" class="btn btn-danger" type="submit" title="Excluir" >
+                    <button data-toggle="modal" data-target="#deleteModal" class="btn btn-danger" type="button" title="Excluir" >
                         <i class="fa fa-trash" ></i>
                     </button>
                 </form>

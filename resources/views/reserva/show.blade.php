@@ -7,8 +7,12 @@
 <script>
   $(document).ready(function(){
     $('.btn-purge').on('click', function(e) {
-      let purge = $(e.target).data('purge');
-      $('#purge').val(purge);
+      $('#purge').val($(e.target).data('purge')); // Atribui o valor 1 para o input de id 'purge', com base no botão clicado no questionamento de exclusão.
+      $('#form-excluir').submit();
+    });
+
+    $('#btn-excluir').click(function(){
+      $('#form-excluir').submit();
     });
   });
 </script>
