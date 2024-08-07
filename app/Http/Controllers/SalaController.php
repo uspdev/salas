@@ -57,6 +57,12 @@ class SalaController extends Controller
 
         $validated = $request->validated();
 
+        // Conferindo se nesta categoria já há uma sala de mesmo nome.
+        if(Sala::where('nome', $validated['nome'])->where('categoria_id', $validated['categoria_id'])->get()->isNotEmpty())
+        {
+            return redirect()->route('salas.create')->with('alert-danger', 'Já existe sala com este nome nesta categoria.')->withInput();
+        }
+
         $sala = Sala::create($validated);
 
         if(array_key_exists('recursos', $validated)) {
