@@ -60,7 +60,13 @@ class RecursoController extends Controller
     public function store(RecursoRequest $request)
     {
         $this->authorize('admin');
-        $recurso = Recurso::create($request->validated());
+
+        $validated = $request->validated();
+
+        if(Recurso::where('nome', $validated['nome'])->get()->isNotEmpty())
+            return redirect()->route('recursos.create')->with('alert-danger', 'Já existe recurso com este nome.')->withInput();
+
+        Recurso::create($validated);
 
         return redirect('/recursos')
             ->with('alert-success', 'Recurso criado com sucesso.');
