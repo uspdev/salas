@@ -36,7 +36,7 @@ class AuthServiceProvider extends ServiceProvider
          * As pessoas só podem editar e excluir reservas feitas por elas mesma
          **/
         Gate::define('owner', function ($user, $instance) {
-            if(Gate::allows('admin')) return true;
+            if(Gate::allows('admin') || Gate::allows('responsavel', $instance->sala)) return true;
             if($instance->user_id == $user->id) return true;
             return false;
         });

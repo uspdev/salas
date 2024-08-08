@@ -13,17 +13,17 @@ class SolicitarReservaMail extends Mailable
 {
     use Queueable, SerializesModels;
     private $reserva;
-    private $signed_url;
+    private $signed_urls;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Reserva $reserva, $signed_url = null)
+    public function __construct(Reserva $reserva, $signed_urls = null)
     {
         $this->reserva = $reserva;
-        $this->signed_url = $signed_url;
+        $this->signed_urls = $signed_urls;
     }
 
     /**
@@ -38,7 +38,7 @@ class SolicitarReservaMail extends Mailable
                     ->subject('Novo pedido de reserva solicitado - Sistema Reserva de Salas')
                     ->with([
                         'reserva' => $this->reserva,
-                        'signed_url' => $this->signed_url,
+                        'signed_urls' => $this->signed_urls,
                     ]);
     }
 }

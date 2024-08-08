@@ -194,8 +194,9 @@ class ReservaController extends Controller
             if($reserva->status == 'pendente'){
                 foreach($reserva->sala->responsaveis as $responsavel)
                 {
-                    $signedUrl = URL::temporarySignedRoute('reservas.show', now()->addMinutes(5), ['reserva' => $reserva->id, 'user_id' => $responsavel->id]);
-                    Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva, $signedUrl));
+                    $signedUrls['aprovar'] = URL::signedRoute('reservas.aprovar', ['reserva' => $reserva->id, 'user_id' => $responsavel->id]);
+                    $signedUrls['recusar'] = URL::signedRoute('reservas.show', ['reserva' => $reserva->id, 'user_id' => $responsavel->id]);
+                    Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva, $signedUrls));
                 }
 
                 Mail::to($reserva->user->email)->queue(new SolicitarReservaMail($reserva));
@@ -421,7 +422,12 @@ class ReservaController extends Controller
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function aprovar(Reserva $reserva) {
+    public function aprovar(Request $request, Reserva $reserva) {
+        if($request->hasValidSignature())
+        {
+            Auth::login(User::find($request->user_id));
+        }
+
        $this->authorize('responsavel', $reserva->sala);
        
        if($reserva->parent_id != null){
