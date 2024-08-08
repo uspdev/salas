@@ -18,8 +18,11 @@ use App\Mail\SolicitarReservaMail;
 use App\Mail\UpdateReservaMail;
 use App\Models\Finalidade;
 use App\Models\ResponsavelReserva;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Spatie\Permission\Models\Permission;
 use Uspdev\Replicado\Pessoa;
 
@@ -190,7 +193,10 @@ class ReservaController extends Controller
             //enviar e-mail
             if($reserva->status == 'pendente'){
                 foreach($reserva->sala->responsaveis as $responsavel)
-                    Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva));
+                {
+                    $signedUrl = URL::temporarySignedRoute('reservas.show', now()->addMinutes(5), ['reserva' => $reserva->id, 'user_id' => $responsavel->id]);
+                    Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva, $signedUrl));
+                }
 
                 Mail::to($reserva->user->email)->queue(new SolicitarReservaMail($reserva));
             }else{
@@ -209,9 +215,13 @@ class ReservaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Reserva $reserva)
+    public function show(Request $request, Reserva $reserva)
     {
         //$this->authorize('members',$reserva->sala_id);
+        if($request->hasValidSignature())
+        {
+            Auth::login(User::find($request->user_id));
+        }
 
         return view('reserva.show', [
             'reserva' => $reserva,

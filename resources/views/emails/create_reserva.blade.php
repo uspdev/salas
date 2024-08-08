@@ -21,5 +21,10 @@
 
 <p><b>Status da reserva:</b> {{ucfirst($reserva->status)}} </p>
 
+@if (!is_null($signed_url))
+    <a href="{{$signed_url}}">Analisar pedido</a>
+    <br>
+@endif
+
 <br>
 <p>Mensagem automática do sistema de reserva de salas: {{route('home')}}</p>
