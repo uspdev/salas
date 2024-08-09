@@ -23,6 +23,7 @@
         @foreach($categorias as $categoria)
             <optgroup label="{{ $categoria->nome }}">
               @foreach($categoria->salas as $sala)
+              @if (Gate::allows('members', $sala->id))
                 @if( old('sala_id') == '' and isset($reserva->sala_id) )
                   <option value="{{ $sala->id }}" {{ ($reserva->sala_id ==
                   $sala->id) || (isset($_GET['sala']) && $_GET['sala'] == $sala->id) ? 'selected' : '' }} >{{ $sala->nome }} [ Capacidade: {{
@@ -56,6 +57,7 @@
                       @endforelse
                   </option>
                 @endif
+              @endif
               @endforeach
             </optgroup>
         @endforeach
