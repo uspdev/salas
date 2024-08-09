@@ -39,6 +39,7 @@ class CreateReservaMail extends Mailable
                     ->with([
                         'reserva' => $this->reserva,
                         'data' => $this->reserva->getRawOriginal('data'),
+                        'signed_urls' => null
                     ]);
     }
 }

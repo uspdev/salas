@@ -60,7 +60,8 @@ class ReservaRequest extends FormRequest
             'tipo_responsaveis' => 'required'
         ];
 
-        if(!Gate::allows('responsavel', Sala::find($this->sala_id))){
+        $sala = Sala::find($this->sala_id); 
+        if(!is_null($sala) && !Gate::allows('responsavel', $sala)){
             array_push($rules['data'], 'after_or_equal:today');
             $date_today = Carbon::createFromFormat('d/m/Y', date('d/m/Y'));
             $date_input = Carbon::createFromFormat('d/m/Y', $this->data);

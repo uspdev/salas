@@ -18,8 +18,11 @@ use App\Mail\SolicitarReservaMail;
 use App\Mail\UpdateReservaMail;
 use App\Models\Finalidade;
 use App\Models\ResponsavelReserva;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Spatie\Permission\Models\Permission;
 use Uspdev\Replicado\Pessoa;
 
@@ -190,7 +193,11 @@ class ReservaController extends Controller
             //enviar e-mail
             if($reserva->status == 'pendente'){
                 foreach($reserva->sala->responsaveis as $responsavel)
-                    Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva));
+                {
+                    $signedUrls['aprovar'] = URL::signedRoute('reservas.aprovar', ['reserva' => $reserva->id, 'user_id' => $responsavel->id]);
+                    $signedUrls['recusar'] = URL::signedRoute('reservas.show', ['reserva' => $reserva->id, 'user_id' => $responsavel->id]);
+                    Mail::to($responsavel->email)->queue(new SolicitarReservaMail($reserva, $signedUrls));
+                }
 
                 Mail::to($reserva->user->email)->queue(new SolicitarReservaMail($reserva));
             }else{
@@ -209,9 +216,13 @@ class ReservaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Reserva $reserva)
+    public function show(Request $request, Reserva $reserva)
     {
         //$this->authorize('members',$reserva->sala_id);
+        if($request->hasValidSignature())
+        {
+            Auth::login(User::find($request->user_id));
+        }
 
         return view('reserva.show', [
             'reserva' => $reserva,
@@ -411,7 +422,12 @@ class ReservaController extends Controller
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function aprovar(Reserva $reserva) {
+    public function aprovar(Request $request, Reserva $reserva) {
+        if($request->hasValidSignature())
+        {
+            Auth::login(User::find($request->user_id));
+        }
+
        $this->authorize('responsavel', $reserva->sala);
        
        if($reserva->parent_id != null){
