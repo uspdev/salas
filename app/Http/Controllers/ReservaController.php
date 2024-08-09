@@ -74,10 +74,15 @@ class ReservaController extends Controller
             elseif (Gate::allows('pessoa.usp'))
                 $categorias_usp = Categoria::where('vinculos', 2)->get();
 
+            $salas_responsavel_categoria = auth()->user()->salasResponsavel->map(function ($item, $key) {
+                return $item->categoria;
+            });
+
             $categorias = new Collection();
             $categorias = $categorias->merge($categorias_list);
             $categorias = $categorias->merge($categorias_eca);
             $categorias = $categorias->merge($categorias_usp);
+            $categorias = $categorias->merge($salas_responsavel_categoria);
 
             $categorias_setores = Categoria::whereHas('setores')->get();
 
