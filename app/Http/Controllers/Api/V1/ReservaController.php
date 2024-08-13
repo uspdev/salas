@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Finalidade;
 use App\Models\Reserva;
 use App\Models\Sala;
 use Carbon\Carbon;
@@ -19,5 +20,16 @@ class ReservaController extends Controller
      */
     public function porSala(Sala $sala){
        return Reserva::where('sala_id', $sala->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
+    }
+
+    /**
+     * Retorna as reservas com a finalidade marcadas para o dia corrente.
+     * 
+     * @param Finalidade $finalidade
+     * 
+     * @return object
+     */
+    public function porFinalidade(Finalidade $finalidade){
+       return Reserva::where('finalidade_id', $finalidade->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
     }
 }
