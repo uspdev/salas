@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\ReservaResource;
 use App\Models\Finalidade;
 use App\Models\Reserva;
 use App\Models\Sala;
@@ -19,7 +20,9 @@ class ReservaController extends Controller
      * @return object
      */
     public function porSala(Sala $sala){
-       return Reserva::where('sala_id', $sala->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
+       $reservas = Reserva::where('sala_id', $sala->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
+
+       return ReservaResource::collection($reservas);
     }
 
     /**
@@ -30,6 +33,8 @@ class ReservaController extends Controller
      * @return object
      */
     public function porFinalidade(Finalidade $finalidade){
-       return Reserva::where('finalidade_id', $finalidade->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
+       $reservas = Reserva::where('finalidade_id', $finalidade->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
+
+       return ReservaResource::collection($reservas);
     }
 }
