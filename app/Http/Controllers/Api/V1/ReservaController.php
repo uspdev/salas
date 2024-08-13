@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\CategoriaResource;
 use App\Http\Resources\V1\ReservaResource;
+use App\Models\Categoria;
 use App\Models\Finalidade;
 use App\Models\Reserva;
 use App\Models\Sala;
@@ -19,7 +21,7 @@ class ReservaController extends Controller
      * 
      * @return object
      */
-    public function porSala(Sala $sala){
+    public function porSala(Sala $sala) : object {
        $reservas = Reserva::where('sala_id', $sala->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
 
        return ReservaResource::collection($reservas);
@@ -32,9 +34,20 @@ class ReservaController extends Controller
      * 
      * @return object
      */
-    public function porFinalidade(Finalidade $finalidade){
+    public function porFinalidade(Finalidade $finalidade) : object {
        $reservas = Reserva::where('finalidade_id', $finalidade->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
 
        return ReservaResource::collection($reservas);
+    }
+
+    /**
+     * Retorna as informações e salas da categoria.
+     * 
+     * @param Categoria $categoria
+     * 
+     * @return object
+     */
+    public function porCategoria(Categoria $categoria) : object {
+        return new CategoriaResource($categoria);
     }
 }
