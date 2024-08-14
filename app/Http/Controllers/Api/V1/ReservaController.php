@@ -37,4 +37,15 @@ class ReservaController extends Controller
 
        return ReservaResource::collection($reservas);
     }
+
+    /**
+     * Retorna todas as reservas do dia corrente.
+     * 
+     * @return object
+     */
+    public function getReservas() : object {
+       $reservas = Reserva::where('data', Carbon::now()->format('Y-m-d'))->get();
+
+       return ReservaResource::collection($reservas);
+    }
 }
