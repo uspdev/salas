@@ -15,6 +15,7 @@ Route::prefix('v1')->group(function(){
     Route::get('categorias', [CategoriaController::class, 'index']);
     Route::get('categorias/{categoria}', [CategoriaController::class, 'show']);
 
+    Route::get('salas', [SalaController::class, 'index']);
     Route::get('salas/{sala}', [SalaController::class, 'show']);
 
     Route::get('finalidades', [FinalidadeController::class, 'index']);

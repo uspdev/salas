@@ -10,6 +10,15 @@ use Illuminate\Http\Request;
 class SalaController extends Controller
 {
     /**
+     * Retorna todas as salas.
+     * 
+     * @return object
+     */
+    public function index() : object {
+       return SalaResource::collection(Sala::all());
+    }
+
+    /**
      * Retorna as informações da sala.
      * 
      * @param Sala $sala
