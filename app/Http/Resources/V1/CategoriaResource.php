@@ -14,8 +14,13 @@ class CategoriaResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $vinculos = ['0' => 'Nenhum', '1' => 'Pessoas da unidade', '2' => 'Pessoas da USP'];
+
         return [
+            'id' => $this->id,
             'nome' => $this->nome,
+            'vinculo_cadastrado' => $vinculos[$this->vinculos],
+            'setores_cadastrados' => $this->setores->pluck('nomset'),
             'salas' => SalaResource::collection($this->salas)
         ];
     }

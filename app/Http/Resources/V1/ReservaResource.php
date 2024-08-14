@@ -17,13 +17,15 @@ class ReservaResource extends JsonResource
         return [
             'nome' => $this->nome,
             'sala' => $this->sala->nome,
+            'sala_id' => $this->sala->id,
             'data' => $this->data,
             'horario_inicio' => $this->horario_inicio,
             'horario_fim' => $this->horario_fim,
             'finalidade' => $this->finalidade->legenda,
             'descricao' => $this->descricao,
-            'cadastrada_por' => $this->user->name,
             'status' => $this->status,
+            'cadastrada_por' => $this->user->name,
+            'responsaveis' => $this->responsaveis->pluck('nome'),
         ];
     }
 }

@@ -42,6 +42,14 @@ class ReservaController extends Controller
     }
 
     /**
+     * Retorna todas as categorias.
+     * 
+     * @return object
+     */
+    public function categorias() : object {
+        return Categoria::all()->select(['id', 'nome']);
+    }
+    /**
      * Retorna as informações e salas da categoria.
      * 
      * @param Categoria $categoria
