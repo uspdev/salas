@@ -8,7 +8,12 @@ use Illuminate\Http\Request;
 
 class FinalidadeController extends Controller
 {
-    public function index() : object {
-        return Finalidade::all()->select('id', 'legenda');
+    /**
+     * Retorna todas as finalidades.
+     * 
+     * @return array
+     */
+    public function index() : array {
+        return ['data' => Finalidade::all()->select('id', 'legenda')];
     }
 }

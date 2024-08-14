@@ -15,8 +15,8 @@ class CategoriaController extends Controller
      * 
      * @return object
      */
-    public function index() : object {
-        return Categoria::all()->select(['id', 'nome']);
+    public function index() : array {
+        return ['data' => Categoria::all()->select(['id', 'nome'])];
     }
 
     /**
