@@ -21,6 +21,7 @@ Sistema em Laravel para o gerenciamento dos eventos de uma unidade de acordo com
     - Data limite fixa (data máxima para uma reserva)
     - Data limite dinâmica (máximo de dias a partir da solicitação para uma reserva)
     - Datas limites definidas pelo Período Letivo (janelas de reserva por período letivo)
+- Consumo de dados via API, recuperando informações acerca das salas, categorias e reservas do dia
  
 # Gerenciando Pessoas Cadastradas na Categoria
 
@@ -65,6 +66,11 @@ Mas todo gerenciamento de finalidades como adicionar, editar ou excluir, pode se
 
 Na aba de edição da sala é possível gerenciar os responsáveis pela sala através do número USP, bem como configurar se a sala necessita de aprovação ou não para a reserva. No caso de precisar de aprovação, quando uma pessoa autorizada tentar realizar uma reserva na sala, a reserva será feita com um *status* de pendente, um e-mail será enviado para os responsáveis da sala e estes devem analisar o pedido de reserva no sistema, aprovando ou recusando.
 
+# Consumo de dados via API
+
+Através da API, é possível consultar as informações básicas sobre as salas, as categorias, as finalidades de reserva e as reservas do dia, sendo possível filtrar as reservas do dia por sala ou finalidade. Todas as infomações são retornadas em formato JSON.
+
+Os _endpoints_ disponíveis e seus respectivos retornos estão listados [aqui](docs/endpoints_api.md).
 
 # Como subir a aplicação
 
@@ -114,3 +120,4 @@ Este sistema foi transferido da FFLCH para o USPDev.
 - 14/11/2023: Não permitindo realizar reservas no passado.
 - 16/11/2023: Adicionada interface de restrições por sala.
 - 24/11/2023: Cadastro de períodos letivos e cadastro de solicitantes por setor na categora.
+- 14/08/2024: Possibilitando consumo de dados via API.
