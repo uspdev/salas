@@ -20,7 +20,7 @@ class ReservaController extends Controller
      * @return object
      */
     public function getReservasPorSala(Sala $sala) : object {
-       $reservas = Reserva::where('sala_id', $sala->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
+       $reservas = Reserva::where('sala_id', $sala->id)->where('data', Carbon::now()->format('Y-m-d'))->where('status', 'aprovada')->get();
 
        return ReservaResource::collection($reservas);
     }
@@ -33,7 +33,7 @@ class ReservaController extends Controller
      * @return object
      */
     public function getReservasPorFinalidade(Finalidade $finalidade) : object {
-       $reservas = Reserva::where('finalidade_id', $finalidade->id)->where('data', Carbon::now()->format('Y-m-d'))->get();
+       $reservas = Reserva::where('finalidade_id', $finalidade->id)->where('data', Carbon::now()->format('Y-m-d'))->where('status', 'aprovada')->get();
 
        return ReservaResource::collection($reservas);
     }
@@ -44,7 +44,7 @@ class ReservaController extends Controller
      * @return object
      */
     public function getReservas() : object {
-       $reservas = Reserva::where('data', Carbon::now()->format('Y-m-d'))->get();
+       $reservas = Reserva::where('data', Carbon::now()->format('Y-m-d'))->where('status', 'aprovada')->get();
 
        return ReservaResource::collection($reservas);
     }
