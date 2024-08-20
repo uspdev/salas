@@ -162,7 +162,6 @@ Exemplo de _response_:
         "horario_fim": "12:00",
         "finalidade": "Pós-Graduação",
         "descricao": "Recepção dos novos alunos da pós-graduação.",
-        "status": "aprovada",
         "cadastrada_por": "João da Silva",
         "responsaveis": ["Silvério Rocha", "Armando de Souza"]
     }, {
@@ -175,7 +174,6 @@ Exemplo de _response_:
         "horario_fim": "16:40",
         "finalidade": "Graduação",
         "descricao": "Aula magna aberta para todos os ingressantes",
-        "status": "pendente",
         "cadastrada_por": "Fulano de Andrade",
         "responsaveis": ["Fulano de Andrade"]
     }, {
@@ -188,7 +186,6 @@ Exemplo de _response_:
         "horario_fim": "21:00",
         "finalidade": "Graduação",
         "descricao": "Recepção dos novos alunos do período noturno da graduação.",
-        "status": "aprovada",
         "cadastrada_por": "Ciclano de Moura",
         "responsaveis": ["Ciclano de Moura"]
     }]
@@ -217,7 +214,6 @@ Exemplo de _response_:
         "horario_fim": "16:40",
         "finalidade": "Graduação",
         "descricao": "Aula magna aberta para todos os ingressantes",
-        "status": "pendente",
         "cadastrada_por": "Fulano de Andrade",
         "responsaveis": ["Fulano de Andrade"]
     }, {
@@ -230,7 +226,6 @@ Exemplo de _response_:
         "horario_fim": "21:00",
         "finalidade": "Graduação",
         "descricao": "Recepção dos novos alunos do período noturno da graduação.",
-        "status": "aprovada",
         "cadastrada_por": "Ciclano de Moura",
         "responsaveis": ["Ciclano de Moura"]
     }]
@@ -255,7 +250,6 @@ Exemplo de _response_:
         "horario_fim": "12:00",
         "finalidade": "Pós-Graduação",
         "descricao": "Recepção dos novos alunos da pós-graduação.",
-        "status": "aprovada",
         "cadastrada_por": "João da Silva",
         "responsaveis": ["Silvério Rocha", "Armando de Souza"]
     }, {
@@ -268,7 +262,6 @@ Exemplo de _response_:
         "horario_fim": "21:00",
         "finalidade": "Graduação",
         "descricao": "Recepção dos novos alunos do período noturno da graduação.",
-        "status": "aprovada",
         "cadastrada_por": "Ciclano de Moura",
         "responsaveis": ["Ciclano de Moura"]
     }]
@@ -294,7 +287,6 @@ Exemplo de _response_:
         "horario_fim": "16:30",
         "finalidade": "Graduação",
         "descricao": "Última reunião da comissão de recepção.",
-        "status": "aprovada",
         "cadastrada_por": "Ciclano de Moura",
         "responsaveis": ["Ciclano de Moura"]
     }, {
@@ -307,7 +299,6 @@ Exemplo de _response_:
         "horario_fim": "17:00",
         "finalidade": "Evento",
         "descricao": "Último dia do Simpósio de Inverno.",
-        "status": "aprovada",
         "cadastrada_por": "Fulano de Andrade",
         "responsaveis": ["Fulano de Andrade"]
     }]
@@ -333,7 +324,6 @@ Exemplo de _response_:
         "horario_fim": "16:30",
         "finalidade": "Graduação",
         "descricao": "Última reunião da comissão de recepção.",
-        "status": "aprovada",
         "cadastrada_por": "Ciclano de Moura",
         "responsaveis": ["Ciclano de Moura"]
     }]
