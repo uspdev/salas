@@ -72,6 +72,12 @@ Através da API, é possível consultar as informações básicas sobre as salas
 
 Os _endpoints_ disponíveis e seus respectivos retornos estão listados [aqui](docs/endpoints_api.md).
 
+## Utilizando a API com Drupal
+
+Ao utilizar o sistema de gerenciamento de conteúdo [Drupal](https://www.drupal.org/), é possível fazer uso da API utilizando o módulo Views Json Source, que pode ser instalado via composer com o comando `composer require drupal/views_json_source`.
+
+Com este módulo unido ao Drupal, é possível consumir os dados da API e apresentá-los em componentes da página, como views e blocos. Desta forma, os dados apresentados sempre estarão em sincronia com o sistema de reservas, visto que ao modificar as reservas no sistema de reservas, estas modificações também serão apresentadas via API.
+
 # Como subir a aplicação
 
 ## Instalação
