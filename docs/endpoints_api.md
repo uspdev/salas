@@ -147,6 +147,7 @@ Exemplo de _response_:
 ```json
 {
     "data": [{
+        "id": 128,
         "nome": "Recepção da Pós-Graduação",
         "sala": "Sala 01",
         "sala_id": 1,
@@ -159,6 +160,7 @@ Exemplo de _response_:
         "cadastrada_por": "João da Silva",
         "responsaveis": ["Silvério Rocha", "Armando de Souza"]
     }, {
+        "id": 134,
         "nome": "Aula Magna",
         "sala": "Auditório",
         "sala_id": 16,
@@ -171,6 +173,7 @@ Exemplo de _response_:
         "cadastrada_por": "Fulano de Andrade",
         "responsaveis": ["Fulano de Andrade"]
     }, {
+        "id": 151,
         "nome": "Recepção da Graduação",
         "sala": "Sala 01",
         "sala_id": 1,
@@ -194,6 +197,7 @@ Exemplo de _response_:
 ```json
 {
     "data": [{
+        "id": 134,
         "nome": "Aula Magna",
         "sala": "Auditório",
         "sala_id": 16,
@@ -206,6 +210,7 @@ Exemplo de _response_:
         "cadastrada_por": "Fulano de Andrade",
         "responsaveis": ["Fulano de Andrade"]
     }, {
+        "id": 151,
         "nome": "Recepção da Graduação",
         "sala": "Sala 01",
         "sala_id": 1,
@@ -230,6 +235,7 @@ Exemplo de _response_:
 ```json
 {
     "data": [{
+        "id": 128,
         "nome": "Recepção da Pós-Graduação",
         "sala": "Sala 01",
         "sala_id": 1,
@@ -242,6 +248,7 @@ Exemplo de _response_:
         "cadastrada_por": "João da Silva",
         "responsaveis": ["Silvério Rocha", "Armando de Souza"]
     }, {
+        "id": 151,
         "nome": "Recepção da Graduação",
         "sala": "Sala 01",
         "sala_id": 1,
