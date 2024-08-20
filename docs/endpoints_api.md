@@ -29,6 +29,9 @@ Exemplo de _response_:
 
 - `/api/v1/salas/{sala_id}`: retorna as informações de uma sala.
 
+Exemplo de *request*:
+`https://salas.usp/api/v1/salas/16`
+
 Exemplo de _response_:
 ```json
 {
@@ -69,6 +72,9 @@ Exemplo de _response_:
 ---
 
 - `/api/v1/categorias/{categoria_id}`: retorna as informações de uma categoria.
+
+Exemplo de *request*:
+`https://salas.usp/api/v1/categorias/1`
 
 Exemplo de _response_:
 ```json
@@ -189,9 +195,14 @@ Exemplo de _response_:
 }
 ```
 
----
+Para este *endpoint* três parâmetros estão disponíveis para filtrar as reservas, sendo estes: finalidade, sala e data.
 
-- `/api/v1/reservas/finalidades/{finalidade_id}`: retorna todas as reservas do dia corrente com uma determinada finalidade.
+Estes parâmetros podem ser passados e combinados via método GET, seguem alguns exemplos:
+
+- `/api/v1/reservas?finalidade={finalidade_id}`: retorna todas as reservas do dia corrente com uma determinada finalidade.
+
+Exemplo de *request*:
+`https://salas.usp/api/v1/reservas?finalidade=1`
 
 Exemplo de _response_:
 ```json
@@ -226,10 +237,10 @@ Exemplo de _response_:
 }
 ```
 
----
+- `/api/v1/reservas?sala={sala_id}`: retorna todas as reservas do dia corrente em uma determinada sala.
 
-
-- `/api/v1/reservas/salas/{sala_id}`: retorna todas as reservas do dia corrente em uma determinada sala.
+Exemplo de *request*:
+`https://salas.usp/api/v1/reservas?sala=1`
 
 Exemplo de _response_:
 ```json
@@ -264,4 +275,67 @@ Exemplo de _response_:
 }
 ```
 
----
+- `/api/v1/reservas?data={Y-m-d}`: retorna todas as reservas da data passada.
+
+Exemplo de *request*:
+`https://salas.usp/api/v1/reservas?data=2024-08-12`
+
+
+Exemplo de _response_:
+```json
+{
+    "data": [{
+        "id": 114,
+        "nome": "Reunião da Comissão de Recepção",
+        "sala": "Sala 01",
+        "sala_id": 1,
+        "data": "12/08/2024",
+        "horario_inicio": "15:00",
+        "horario_fim": "16:30",
+        "finalidade": "Graduação",
+        "descricao": "Última reunião da comissão de recepção.",
+        "status": "aprovada",
+        "cadastrada_por": "Ciclano de Moura",
+        "responsaveis": ["Ciclano de Moura"]
+    }, {
+        "id": 97,
+        "nome": "Simpósio de Inverno",
+        "sala": "Auditório",
+        "sala_id": 16,
+        "data": "12/08/2024",
+        "horario_inicio": "19:00",
+        "horario_fim": "17:00",
+        "finalidade": "Evento",
+        "descricao": "Último dia do Simpósio de Inverno.",
+        "status": "aprovada",
+        "cadastrada_por": "Fulano de Andrade",
+        "responsaveis": ["Fulano de Andrade"]
+    }]
+}
+```
+
+- `/api/v1/reservas?data={Y-m-d}&finalidade={finalidade_id}`: retorna todas as reservas da data passada com a finalidade em questão.
+
+Exemplo de *request*:
+`https://salas.usp/api/v1/reservas?data=2024-08-12&finalidade=1`
+
+
+Exemplo de _response_:
+```json
+{
+    "data": [{
+        "id": 114,
+        "nome": "Reunião da Comissão de Recepção",
+        "sala": "Sala 01",
+        "sala_id": 1,
+        "data": "12/08/2024",
+        "horario_inicio": "15:00",
+        "horario_fim": "16:30",
+        "finalidade": "Graduação",
+        "descricao": "Última reunião da comissão de recepção.",
+        "status": "aprovada",
+        "cadastrada_por": "Ciclano de Moura",
+        "responsaveis": ["Ciclano de Moura"]
+    }]
+}
+```
