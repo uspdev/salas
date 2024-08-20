@@ -24,7 +24,6 @@ class ReservaResource extends JsonResource
             'horario_fim' => $this->horario_fim,
             'finalidade' => $this->finalidade->legenda,
             'descricao' => $this->descricao,
-            'status' => $this->status,
             'cadastrada_por' => $this->user->name,
             'responsaveis' => $this->responsaveis->pluck('nome'),
         ];
