@@ -13,50 +13,30 @@ use Illuminate\Http\Request;
 class ReservaController extends Controller
 {
     /**
-     * Retorna as reservas da sala marcadas para o dia corrente.
+     * Retorna todas as reservas com base nos filtros passados pelo método GET.
+     * Se nenhum filtro for passado será retornado todas as reservas do dia corrente.
      * 
-     * @param Sala $sala
+     * Três filtros estão disponíveis:
+     * - sala        // Recebe o id da sala.
+     * - finalidade  // Recebe o id da finalidade.
+     * - data        // Deve estar no formato 'Y-m-d'
      * 
-     * @return object
-     */
-    public function getReservasPorSala(Sala $sala) : object {
-       $reservas = Reserva::where('sala_id', $sala->id)->where('data', Carbon::now()->format('Y-m-d'))->where('status', 'aprovada')->get();
-
-       return ReservaResource::collection($reservas);
-    }
-
-    /**
-     * Retorna as reservas com a finalidade marcadas para o dia corrente.
-     * 
-     * @param Finalidade $finalidade
+     * @param Request $request
      * 
      * @return object
      */
-    public function getReservasPorFinalidade(Finalidade $finalidade) : object {
-       $reservas = Reserva::where('finalidade_id', $finalidade->id)->where('data', Carbon::now()->format('Y-m-d'))->where('status', 'aprovada')->get();
+    public function getReservas(Request $request) : object {
+       $data = is_null($request->input('data')) ? Carbon::now()->format('Y-m-d') : $request->input('data');
 
-       return ReservaResource::collection($reservas);
-    }
-
-    /**
-     * Retorna as reservas da data passada.
-     * 
-     * @param String $data Deve ser passada no formato 'Y-m-d'.
-     * 
-     * @return object
-     */
-    public function getReservasPorData(String $data) : object {
        $reservas = Reserva::where('data', $data)->where('status', 'aprovada')->get();
-       return ReservaResource::collection($reservas);
-    }
 
-    /**
-     * Retorna todas as reservas do dia corrente.
-     * 
-     * @return object
-     */
-    public function getReservas() : object {
-       $reservas = Reserva::where('data', Carbon::now()->format('Y-m-d'))->where('status', 'aprovada')->get();
+       if(!is_null($request->input('finalidade'))){
+         $reservas = $reservas->where('finalidade_id', $request->input('finalidade'));
+       }
+
+       if(!is_null($request->input('sala'))){
+         $reservas = $reservas->where('sala_id', $request->input('sala'));
+       }
 
        return ReservaResource::collection($reservas);
     }
