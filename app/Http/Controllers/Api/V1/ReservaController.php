@@ -39,6 +39,18 @@ class ReservaController extends Controller
     }
 
     /**
+     * Retorna as reservas da data passada.
+     * 
+     * @param String $data Deve ser passada no formato 'Y-m-d'.
+     * 
+     * @return object
+     */
+    public function getReservasPorData(String $data) : object {
+       $reservas = Reserva::where('data', $data)->where('status', 'aprovada')->get();
+       return ReservaResource::collection($reservas);
+    }
+
+    /**
      * Retorna todas as reservas do dia corrente.
      * 
      * @return object
