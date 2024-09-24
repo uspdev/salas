@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;/////////////////////////////////////////////////////////////////////////////////////////////////
-
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
 use App\Models\Finalidade;
