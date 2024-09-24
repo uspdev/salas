@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;/////////////////////////////////////////////////////////////////////////////////////////////////
+
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
 use App\Models\Finalidade;
@@ -159,6 +161,14 @@ class SalaController extends Controller
             return redirect()->route('salas.edit', ['sala' => $sala->id])->with('alert-danger', 'A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.');
 
         $sala->update($validated);
+
+        if (!$validated['aprovacao'] && count($sala->responsaveis) > 0) {
+            $responsavel_ids = [];
+            foreach($sala->responsaveis as $responsavel) {
+                $responsavel_ids[] = $responsavel->id;
+            }
+            $sala->responsaveis()->detach($responsavel_ids);
+        }
 
         if(array_key_exists('recursos', $validated)) {
             $sala->recursos()->sync($validated['recursos']);
