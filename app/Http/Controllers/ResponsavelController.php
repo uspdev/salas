@@ -32,6 +32,7 @@ class ResponsavelController extends Controller
         $responsavel->save();
 
         $sala->restricao->aprovacao = 1;
+        $sala->restricao->save();                     // sem isso, o registro na tabela restricoes não é atualizado, ainda que haja a linha a seguir
         $sala->save();
 
         return redirect()->route('salas.edit',['sala' => $request->input('sala'), 'responsaveis' => $sala->responsaveis])->with('alert-success', $user->name.' adicionado como responsável.');
@@ -43,6 +44,7 @@ class ResponsavelController extends Controller
         // Se tiver apenas um responsável altera a sala para não precisar de aprovação ao deletar este único responsável.
         if(count($responsavel->sala->responsaveis) == 1){
             $responsavel->sala->restricao->aprovacao = 0;
+            $responsavel->sala->restricao->save();    // sem isso, o registro na tabela restricoes não é atualizado, ainda que haja a linha a seguir
             $responsavel->sala->save();
         }
 
