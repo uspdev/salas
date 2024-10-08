@@ -127,3 +127,24 @@ Este sistema foi transferido da FFLCH para o USPDev.
 - 16/11/2023: Adicionada interface de restrições por sala.
 - 24/11/2023: Cadastro de períodos letivos e cadastro de solicitantes por setor na categora.
 - 14/08/2024: Possibilitando consumo de dados via API.
+
+
+#####################
+## Funcionalidades ##
+#####################
+
+- usuários não logados podem consultar as reservas de hoje (menu "Hoje"), calendário por sala (menu "Calendário por Sala"), e a relação de salas (menu "Filtro de Recursos");
+- usuários logados podem, em adição, solicitar novas reservas (menu "Nova reserva"), bem como consultar relação das reservas que ele solicitou (menu "Minhas Reservas");
+- "owners": quem cadastrou reservas pode editá-las e excluí-las;
+- responsáveis por salas podem aprovar, recusar, editar e excluir reservas solicitadas nas suas salas;
+- admins também podem aprovar, recusar, editar e excluir quaisquer reservas;
+- admins podem, em adição, cadastrar e consultar categorias, cadastrar e consultar salas, cadastrar e consultar recursos, cadastrar e consultar períodos letivos, cadastrar e consultar finalidades, cadastrar e consultar usuários e assumir outras identidades.
+
+
+###################
+## Configurações ##
+###################
+
+No arquivo de configuração .env:
+- SENHAUNICA_ADMINS define os admins do sistema;
+- SENHAUNICA_GERENTES não está sendo utilizado.
