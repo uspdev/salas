@@ -114,6 +114,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('reserva.editar', function($user, $reserva){
             if(Gate::allows('admin')) return true;
 
+            // se não há nenhum tipo de restrição, retorna true
+            if($reserva->sala->restricao == null) return true;
+
             // Se a sala não necessita de aprovação retorna true.
             if(!$reserva->sala->restricao->aprovacao) return true;
 
