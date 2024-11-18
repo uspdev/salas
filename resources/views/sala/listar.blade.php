@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </form>
-
+{{ $salas->appends(request()->query())->links() }}
             <br>
             <table class="table table-striped">
                 <div class="table-responsive">
