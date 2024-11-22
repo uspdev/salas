@@ -27,9 +27,12 @@
                 <label for="" class="required"><b>Finalidade</b></label>
                 <br>
                 <select name="finalidade_id" class="form-control form-select" required>
-                    @foreach ($finalidades as $finalidade)
-                        <option value="{{$finalidade->id}}">{{$finalidade->legenda}}</option>
-                    @endforeach
+                @foreach ($finalidades as $finalidade)
+                    <option value="{{ $finalidade->id }}" 
+                            {{ old('finalidade_id', $reserva->finalidade_id) == $finalidade->id ? 'selected' : '' }}>
+                        {{ $finalidade->legenda }}
+                    </option>
+                @endforeach
                 </select>
             </div>
         </div>
