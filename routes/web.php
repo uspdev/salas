@@ -11,6 +11,12 @@ use App\Http\Controllers\ResponsavelController;
 use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
 
+// Todas as rotas passam pelo middleware de redirecionamento
+// Isso se faz necessário pois há itens de menu diferentes que usam as mesmas rotas, e queremos ser capazes de aplicar os highlights no menu corretamente
+Route::middleware('redirectreusedroutes')->group(function() {
+
+
+
 // Reservas
 Route::get('/reservas/my', [ReservaController::class, 'my']);
 Route::get('/reservas/{reserva}/aprovar', [ReservaController::class, 'aprovar'])->name('reservas.aprovar');
@@ -18,6 +24,7 @@ Route::resource('/reservas', ReservaController::class)->except(['index']);
 
 // Salas
 Route::get('/salas/listar', [SalaController::class, 'listar'])->name('salas.listar');
+Route::resource('/filtro_de_recursos', SalaController::class);
 Route::resource('/salas', SalaController::class);
 Route::post('/salas/redirect', [SalaController::class, 'redirect']);
 
@@ -52,3 +59,7 @@ Route::resource('finalidades', FinalidadeController::class)->except(['show']);
 Route::resource('/periodos_letivos', PeriodoLetivoController::class)->parameters([
     'periodos_letivos' => 'periodo',
 ]);;
+
+
+
+});

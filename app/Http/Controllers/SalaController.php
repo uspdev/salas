@@ -23,6 +23,7 @@ class SalaController extends Controller
     {
         $categorias = Categoria::with(['salas'])->get();
 
+        \UspTheme::activeUrl('/salas');
         return view('sala.index', [
             'categorias' => $categorias
         ]);
@@ -37,6 +38,7 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
+        \UspTheme::activeUrl('salas/create');
         return view('sala.create', [
             'sala' => new Sala(),
             'categorias' => Categoria::all(),
@@ -60,7 +62,9 @@ class SalaController extends Controller
         // Conferindo se nesta categoria já há uma sala de mesmo nome.
         if(Sala::where('nome', $validated['nome'])->where('categoria_id', $validated['categoria_id'])->get()->isNotEmpty())
         {
-            return redirect()->route('salas.create')->with('alert-danger', 'Já existe sala com este nome nesta categoria.')->withInput();
+            \UspTheme::activeUrl('salas/create');
+            session()->put('alert-danger', 'Já existe sala com este nome nesta categoria.');
+            return redirect()->route('salas.create')->withInput();
         }
 
         $sala = Sala::create($validated);
@@ -69,8 +73,9 @@ class SalaController extends Controller
             $sala->recursos()->attach($validated['recursos']);
         }
 
-        return redirect("/salas/{$sala->id}")
-            ->with('alert-sucess', 'Sala criada com sucesso');
+        \UspTheme::activeUrl('/salas');
+        session()->put('alert-success', 'Sala criada com sucesso');
+        return redirect("/salas/{$sala->id}");
     }
 
     /**
@@ -101,6 +106,7 @@ class SalaController extends Controller
 
         $finalidades = Finalidade::all();
 
+        \UspTheme::activeUrl('/salas');
         return view('sala.show', [
             'sala' => $sala,
             'recursos' => Recurso::all(),
@@ -119,25 +125,25 @@ class SalaController extends Controller
         $this->authorize('admin');
 
         $sala->load('recursos');
-
         $recursos = Recurso::get()->map(function($recurso) use ($sala) {
             $recurso->checked = data_get($sala->recursos->firstWhere('id', $recurso->id), 'pivot.recurso_id') ?? null;
             return $recurso;
         });
 
-        
+
         $sala->restricao = Restricao::firstOrCreate([
             'sala_id' => $sala->id
         ]);
 
-       
 
+        \UspTheme::activeUrl((session('origem') === 'filtro_de_recursos') ? '/filtro_de_recursos' : 'salas/listar');
         return view('sala.edit', [
             'sala' => $sala,
             'categorias' => Categoria::all(),
             'recursos' => $recursos,
             'responsaveis' => $sala->responsaveis,
             'periodos' => PeriodoLetivo::all(),
+            'origem' => session('origem')
             ]);
     }
 
@@ -151,12 +157,15 @@ class SalaController extends Controller
     public function update(SalaRequest $request, Sala $sala)
     {
         $this->authorize('admin');
-        
+
         $validated = $request->validated();
 
-                
-        if($validated['aprovacao'] && count($sala->responsaveis) < 1)
-            return redirect()->route('salas.edit', ['sala' => $sala->id])->with('alert-danger', 'A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.');
+
+        if($validated['aprovacao'] && count($sala->responsaveis) < 1) {
+            \UspTheme::activeUrl('salas/listar');
+            session()->put('alert-danger', 'A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.');
+            return redirect()->route('salas.edit', ['sala' => $sala->id]);
+        }
 
         $sala->update($validated);
 
@@ -179,8 +188,8 @@ class SalaController extends Controller
             $sala->recursos()->detach($recurso_ids);
         }
 
-        
-        
+
+
 
         $sala->restricao()->update(
             [
@@ -196,10 +205,11 @@ class SalaController extends Controller
                 'aprovacao'            => $validated['aprovacao']
             ]
             );
-        
 
-        return redirect("/salas/{$sala->id}")
-            ->with('alert-success', 'Sala atualizada com sucesso');
+
+        \UspTheme::activeUrl(session('origem') === 'filtro_de_recursos' ? '/filtro_de_recursos' : '/salas');
+        session()->put('alert-success', 'Sala atualizada com sucesso');
+        return redirect("/salas/{$sala->id}");
     }
 
     /**
@@ -211,13 +221,26 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        if($sala->reservas->isNotEmpty()){
-            return redirect("/salas/{$sala->id}")
-            ->with('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');
+        if($sala->reservas->isNotEmpty()) {
+            $sala->load('recursos');
+            $recursos = Recurso::get()->map(function($recurso) use ($sala) {
+                $recurso->checked = data_get($sala->recursos->firstWhere('id', $recurso->id), 'pivot.recurso_id') ?? null;
+                return $recurso;
+            });
+            $sala->restricao = Restricao::firstOrCreate([
+                'sala_id' => $sala->id
+            ]);
+
+            \UspTheme::activeUrl((session('origem') === 'filtro_de_recursos') ? '/filtro_de_recursos' : 'salas/listar');
+            session()->put('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');
+            return redirect("/" . (session('origem') === 'filtro_de_recursos' ? 'filtro_de_recursos' : 'salas') . "/{$sala->id}");
         }
 
         $sala->delete();
-        return redirect("/")->with('alert-success', 'Sala excluída com sucesso');
+
+        \UspTheme::activeUrl('/');
+        session()->put('alert-success', 'Sala excluída com sucesso');
+        return redirect("/");
     }
 
     public function listar(Request $request)
@@ -236,13 +259,15 @@ class SalaController extends Controller
                     });;
 
 
+        \UspTheme::activeUrl(session('origem') === 'filtro_de_recursos' ? '/filtro_de_recursos' : 'salas/listar');
         return view('sala.listar', [
             'salas' => $salas->paginate(20),
             'recursos' => Recurso::all(),
             'recursos_filter' => $request->recursos_filter ?? [],
             'categorias' => Categoria::all(),
             'categorias_filter' => $request->categorias_filter ?? [],
-            'capacidade_filter' => $request->capacidade_filter ?? ''
+            'capacidade_filter' => $request->capacidade_filter ?? '',
+            'origem' => session('origem')
         ]);
     }
 

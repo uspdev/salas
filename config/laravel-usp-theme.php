@@ -78,12 +78,12 @@ $admin = [
 $reservas = [
     [
         'text' => '<i class="fas fa-list"></i> Minhas Reservas',
-        'url' => config('app.url').'/reservas/my',
+        'url' => '/reservas/my',
         'can' => 'logado',
     ],
     [
         'text' => '<i class="fas fa-plus-square"></i> Nova reserva',
-        'url' => config('app.url').'/reservas/create',
+        'url' => '/reservas/create',
         'can' => 'logado',
     ],
 ];
@@ -91,24 +91,24 @@ $reservas = [
 $menu = [
     [
         'text' => '<i class="fa fa-calendar-check" aria-hidden="true"></i> Hoje',
-        'url' => config('app.url').'/',
+        'url' => '/',
     ],
     [
         'text' => '<i class="fa fa-calendar-times" aria-hidden="true"></i> Calendário por Sala',
-        'url' => config('app.url').'/salas',
+        'url' => '/salas',
     ],
     [
         'text' => '<i class="fa fa-filter" aria-hidden="true"></i> Filtro de Recursos',
-        'url' => config('app.url').'/salas/listar',
+        'url' => '/filtro_de_recursos',
     ],
     [
         'text' => '<i class="fa fa-calendar-plus" aria-hidden="true"></i> Nova reserva',
-        'url' => config('app.url').'/reservas/create',
+        'url' => '/reservas/create',
         'can' => 'logado',
     ],
     [
         'text' => '<i class="fa fa-user-check" aria-hidden="true"></i> Minhas Reservas',
-        'url' => config('app.url').'/reservas/my',
+        'url' => '/reservas/my',
         'can' => 'logado',
     ],
     [
@@ -123,7 +123,7 @@ $right_menu = [
         'text' => '<i class="fas fa-cog"></i>',
         'title' => 'Configurações',
         'target' => '_blank',
-        'url' => config('app.url').'/settings',
+        'url' => '/settings',
         'align' => 'right',
         'can' => 'admin',
     ],
@@ -143,8 +143,8 @@ return [
     'skin' => env('USP_THEME_SKIN', 'uspdev'),
     'app_url' => config('app.url'),
     'logout_method' => 'POST',
-    'logout_url' => config('app.url').'/logout',
-    'login_url' => config('app.url').'/login',
+    'logout_url' => '/logout',
+    'login_url' => '/login',
     'menu' => $menu,
     'right_menu' => $right_menu,
 ];

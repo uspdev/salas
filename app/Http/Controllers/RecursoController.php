@@ -17,6 +17,7 @@ class RecursoController extends Controller
         $this->authorize('admin');
         $recursos = Recurso::all();
 
+        \UspTheme::activeUrl('recursos');
         return view('recurso.index', [
             'recursos' => $recursos,
         ]);
@@ -28,6 +29,7 @@ class RecursoController extends Controller
 
         $recurso = new Recurso();
 
+        \UspTheme::activeUrl('recursos/create');
         return view('recurso.create', compact('recurso'));
     }
 
@@ -35,6 +37,7 @@ class RecursoController extends Controller
     {
         $this->authorize('admin');
 
+        \UspTheme::activeUrl('recursos');
         return view('recurso.edit', compact('recurso'));
     }
 
@@ -47,7 +50,9 @@ class RecursoController extends Controller
         $recurso->nome = $validated['nome'];
         $recurso->save();
 
-        return redirect()->route('recursos.index')->with('alert-success', 'Recurso atualizado com sucesso.');
+        \UspTheme::activeUrl('recursos');
+        session()->put('alert-success', 'Recurso atualizado com sucesso.');
+        return redirect()->route('recursos.index');
     }
 
     /**
@@ -63,13 +68,17 @@ class RecursoController extends Controller
 
         $validated = $request->validated();
 
-        if(Recurso::where('nome', $validated['nome'])->get()->isNotEmpty())
-            return redirect()->route('recursos.create')->with('alert-danger', 'Já existe recurso com este nome.')->withInput();
+        if(Recurso::where('nome', $validated['nome'])->get()->isNotEmpty()) {
+            \UspTheme::activeUrl('recursos/create');
+            session()->put('alert-danger', 'Já existe recurso com este nome.');
+            return redirect()->route('recursos.create')->withInput();
+        }
 
         Recurso::create($validated);
 
-        return redirect('/recursos')
-            ->with('alert-success', 'Recurso criado com sucesso.');
+        \UspTheme::activeUrl('recursos');
+        session()->put('alert-success', 'Recurso criado com sucesso.');
+        return redirect('/recursos');
     }
 
     /**
@@ -82,7 +91,8 @@ class RecursoController extends Controller
         $this->authorize('admin');
         $recurso->delete();
 
-        return redirect('/recursos')
-            ->with('alert-success', 'Recurso excluído com sucesso.');
+        \UspTheme::activeUrl('recursos');
+        session()->put('alert-success', 'Recurso excluído com sucesso.');
+        return redirect('/recursos');
     }
 }

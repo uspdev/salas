@@ -35,7 +35,8 @@ class ResponsavelController extends Controller
         $sala->restricao->save();                     // sem isso, o registro na tabela restricoes não é atualizado, ainda que haja a linha a seguir
         $sala->save();
 
-        return redirect()->route('salas.edit',['sala' => $request->input('sala'), 'responsaveis' => $sala->responsaveis])->with('alert-success', $user->name.' adicionado como responsável.');
+        session()->put('alert-success', $user->name.' adicionado como responsável.');
+        return redirect()->route('salas.edit',['sala' => $request->input('sala'), 'responsaveis' => $sala->responsaveis]);
     }
 
     public function destroy(Responsavel $responsavel){
@@ -50,6 +51,7 @@ class ResponsavelController extends Controller
 
         $responsavel->delete();
 
-        return back()->with('alert-success', 'Responsável removido.');
+        session()->put('alert-success', 'Responsável removido.');
+        return back();
     }
 }

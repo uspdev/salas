@@ -15,7 +15,8 @@ class CategoriaController extends Controller
 {
     public function index(){
         $categorias = Categoria::all();
-        
+
+        \UspTheme::activeUrl('categorias');
         return view('categoria.index', compact('categorias'));
     }
     /**
@@ -27,6 +28,7 @@ class CategoriaController extends Controller
     {
         $this->authorize('admin');
 
+        \UspTheme::activeUrl('categorias/create');
         return view('categoria.create', [
             'categoria' => new Categoria(),
         ]);
@@ -45,8 +47,9 @@ class CategoriaController extends Controller
 
         $categoria = Categoria::create($request->validated());
 
-        return redirect("/categorias/{$categoria->id}")
-            ->with('alert-sucess', 'Categoria criada com sucesso.');
+        \UspTheme::activeUrl('categorias');
+        session()->put('alert-success', 'Categoria criada com sucesso.');
+        return redirect("/categorias/{$categoria->id}");
     }
 
     /**
@@ -60,6 +63,7 @@ class CategoriaController extends Controller
 
         $setores = Estrutura::listarSetores(config('codUnidade'));
 
+        \UspTheme::activeUrl('categorias');
         return view('categoria.show', [
             'categoria' => $categoria,
             'sigla_unidade' => $sigla_unidade[0]['sglund'],
@@ -76,6 +80,7 @@ class CategoriaController extends Controller
     {
         $this->authorize('admin');
 
+        \UspTheme::activeUrl('categorias');
         return view('categoria.edit', [
             'categoria' => $categoria,
         ]);
@@ -94,8 +99,9 @@ class CategoriaController extends Controller
 
         $categoria->update($request->validated());
 
-        return redirect("/categorias/{$categoria->id}")
-            ->with('alert-sucess', 'Categoria atualizada com sucesso.');
+        \UspTheme::activeUrl('categorias');
+        session()->put('alert-success', 'Categoria atualizada com sucesso.');
+        return redirect("/categorias/{$categoria->id}");
     }
 
     /**
@@ -108,14 +114,16 @@ class CategoriaController extends Controller
         $this->authorize('admin');
 
         if($categoria->salas->isNotEmpty()){
-            return redirect("/categorias/{$categoria->id}")
-                ->with('alert-danger', 'Não é possível deletar essa categoria pois ela contém salas');   
+            \UspTheme::activeUrl('categorias');
+            session()->put('alert-danger', 'Não é possível deletar essa categoria pois ela contém salas');
+            return redirect("/categorias/{$categoria->id}");
         }
 
         $categoria->delete();
 
-        return redirect('/')
-            ->with('alert-success', 'Categoria excluída com sucesso.');
+        \UspTheme::activeUrl('');
+        session()->put('alert-success', 'Categoria excluída com sucesso.');
+        return redirect('/');
     }
 
     public function addUser(Request $request, Categoria $categoria)
@@ -134,8 +142,9 @@ class CategoriaController extends Controller
         $pessoa = Pessoa::dump($request->codpes);
 
         if (!$pessoa) {
-            return redirect("/categorias/{$categoria->id}")
-                ->with('alert-danger', 'Número USP inválido');
+            \UspTheme::activeUrl('categorias');
+            session()->put('alert-danger', 'Número USP inválido');
+            return redirect("/categorias/{$categoria->id}");
         }
 
         if(count(User::where('codpes', $pessoa['codpes'])->get()) == 0)
@@ -152,11 +161,12 @@ class CategoriaController extends Controller
         // com o user_id e a categoria_id solicitados.
         if (!$categoria->users->contains($user)) {
             $categoria->users()->attach($user);
-            request()->session()->flash('alert-success', "{$user->name} cadastrado(a) em {$categoria->nome}");
+            session()->put('alert-success', "{$user->name} cadastrado(a) em {$categoria->nome}");
         } else {
-            request()->session()->flash('alert-warning', "{$user->name} já está cadastrado(a) em {$categoria->nome}");
+            session()->put('alert-warning', "{$user->name} já está cadastrado(a) em {$categoria->nome}");
         }
 
+        \UspTheme::activeUrl('categorias');
         return redirect("/categorias/{$categoria->id}");
     }
 
@@ -167,7 +177,8 @@ class CategoriaController extends Controller
         $categoria->vinculos = $request->input('vinculo');
         $categoria->save();
 
-        request()->session()->flash('alert-success', "Vínculos cadastrados em {$categoria->nome} alterados.");
+        \UspTheme::activeUrl('categorias');
+        session()->put('alert-success', "Vínculos cadastrados em {$categoria->nome} alterados.");
         return redirect()->route('categorias.show', ['categoria' => $categoria->id]);
     }
 
@@ -177,8 +188,9 @@ class CategoriaController extends Controller
 
         $categoria->users()->detach($user->id);
 
-        return redirect("/categorias/{$categoria->id}")
-            ->with('alert-sucess', "{$user->name} foi excluído(a) de {$categoria->nome}");
+        \UspTheme::activeUrl('categorias');
+        session()->put('alert-success', "{$user->name} foi excluído(a) de {$categoria->nome}");
+        return redirect("/categorias/{$categoria->id}");
     }
 
     public function updateSetores(Request $request, Categoria $categoria)
@@ -187,8 +199,11 @@ class CategoriaController extends Controller
 
         $categoria->setores()->detach();
 
-        if(is_null($request->setores))
-            return redirect()->route('categorias.show', $categoria->id)->with('alert-success', "Setores cadastrados em {$categoria->nome} atualizados com sucesso");
+        if(is_null($request->setores)) {
+            \UspTheme::activeUrl('categorias');
+            session()->put('alert-success', "Setores cadastrados em {$categoria->nome} atualizados com sucesso");
+            return redirect()->route('categorias.show', $categoria->id);
+        }
 
         foreach($request->setores as $codset){
 
@@ -201,13 +216,15 @@ class CategoriaController extends Controller
                 $setor->codset = $dumpSetor['codset'];
                 $setor->nomset = $dumpSetor['nomset'];
                 $setor->nomabvset = $dumpSetor['nomabvset'];
-                $setor->save(); 
+                $setor->save();
             }
 
             $categoria->setores()->attach($setor->id);
 
         }
 
-        return redirect()->route('categorias.show', $categoria->id)->with('alert-success', "Setores cadastrados em {$categoria->nome} atualizados com sucesso");
+        \UspTheme::activeUrl('categorias');
+        session()->put('alert-success', "Setores cadastrados em {$categoria->nome} atualizados com sucesso");
+        return redirect()->route('categorias.show', $categoria->id);
     }
 }

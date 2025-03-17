@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-header"><b>Salas</b></div>
         <div class="card-body">
-            <form method="GET" action="{{route('salas.listar')}}" id="form-filtros">
+            <form method="GET" action="{{ $origem ? $origem : route('salas.listar') }}" id="form-filtros">
                 <b>Categorias:</b>
                 <select name="categorias_filter[]" class="select2 form-control" multiple="multiple">
                     @foreach($categorias as $categoria)
@@ -36,7 +36,7 @@
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-success"> Buscar </button>
                             <a class="btn btn-secondary" id="btn-limpar-filtros">Limpar</a>
-                        </span>      
+                        </span>
                     </div>
                 </div>
             </form>
@@ -57,7 +57,7 @@
                             <td><a @can('admin') href="{{route('salas.edit', $sala->id)}}" @endcan>{{ $sala->nome }}</a></td>
                             <td>{{$sala->categoria->nome}}</td>
                             <td>{{$sala->capacidade}} pessoas</td>
-                            <td> 
+                            <td>
                                 @can('admin')
                                     <form method="POST" action="{{route('salas.destroy', $sala->id)}}" class="d-inline">
                                         <a class="btn btn-success" href="{{route('salas.edit', $sala->id)}}" role="button"
@@ -72,9 +72,9 @@
                                     </form>
                                 @endcan
 
-                                <a href="{{route('salas.show', $sala->id)}}" title="Calendário da sala" class="btn btn-info"><i class="fa fa-calendar"></i></a> 
+                                <a href="{{route('salas.show', $sala->id)}}" title="Calendário da sala" class="btn btn-info"><i class="fa fa-calendar"></i></a>
 
-                                @if(Gate::allows('members', $sala->id) && !($sala->restricao->bloqueada ?? false)) 
+                                @if(Gate::allows('members', $sala->id) && !($sala->restricao->bloqueada ?? false))
                                     <a href="{{route('reservas.create', ['sala' => $sala->id])}}" title="Cadastrar reserva na sala" class="btn btn-primary"><i class="fa fa-calendar-plus"></i></a>
                                 @endif
 
