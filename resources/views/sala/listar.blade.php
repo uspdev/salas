@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-header"><b>Salas</b></div>
         <div class="card-body">
-            <form method="GET" action="{{route('salas.listar')}}" id="form-filtros">
+            <form method="GET" action="{{ $origem ? $origem : route('salas.listar') }}" id="form-filtros">
                 <b>Categorias:</b>
                 <select name="categorias_filter[]" class="select2 form-control" multiple="multiple">
                     @foreach($categorias as $categoria)

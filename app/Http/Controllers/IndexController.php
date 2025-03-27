@@ -34,6 +34,7 @@ class IndexController extends Controller
 
         $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
 
+        \UspTheme::activeUrl('/');
         return view('home', [
             'categorias' => Categoria::all(),
             'filter' => ($request->filter) ?: [],
@@ -50,6 +51,7 @@ class IndexController extends Controller
         $data = today();
         $reservas = Reserva::whereDate('data', $data)->orderBy('horario_inicio', 'ASC')->paginate(20);
 
+        \UspTheme::activeUrl('/');
         return view('home', [
             'categorias' => Categoria::all(),
             'filter' => ($request->filter) ?: [],

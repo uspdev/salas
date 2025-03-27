@@ -41,8 +41,8 @@ class FinalidadeController extends Controller
         $validated = $request->validated();
         $finalidade = Finalidade::create($validated);
 
-        return redirect()->route('finalidades.index')
-            ->with('alert-success', 'Finalidade criada com sucesso.');
+        session()->put('alert-success', 'Finalidade criada com sucesso.');
+        return redirect()->route('finalidades.index');
     }
 
     /**
@@ -70,8 +70,8 @@ class FinalidadeController extends Controller
         $validated = $request->validated();
         $finalidade->update($validated);
 
-        return redirect()->route('finalidades.index')
-            ->with('alert-success', 'Finalidade atualizada com sucesso.');
+        session()->put('alert-success', 'Finalidade atualizada com sucesso.');
+        return redirect()->route('finalidades.index');
     }
 
     /**
@@ -84,7 +84,7 @@ class FinalidadeController extends Controller
     {
         $this->authorize('admin');
         $finalidade->delete();
-        return redirect()->route('finalidades.index')
-            ->with('alert-success', 'Finalidade excluída com sucesso.');
+        session()->put('alert-success', 'Finalidade excluída com sucesso.');
+        return redirect()->route('finalidades.index');
     }
 }

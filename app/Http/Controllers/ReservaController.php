@@ -45,6 +45,7 @@ class ReservaController extends Controller
 
         $reservas->orderBy('data','desc');
 
+        \UspTheme::activeUrl('/reservas/my');
         return view('reserva.my', [
             'reservas' => $reservas->get(),
         ]);
@@ -90,17 +91,18 @@ class ReservaController extends Controller
                 if(Gate::allows('pessoa.setor', $categoria))
                     $categorias = $categorias->merge([$categoria]);
 
-        } 
+        }
 
         $finalidades = Finalidade::all();
 
         $reserva = new Reserva();
         $reserva->tipo_responsaveis = 'eu';
-        
+
         foreach($categorias as $categoria)
             foreach($categoria->salas as $salaKey => $sala)
                 if(!is_null($sala->restricao) && $sala->restricao->bloqueada) $categoria->salas->forget($salaKey);
 
+        \UspTheme::activeUrl('/reservas/create');
         return view('reserva.create', [
             'irmaos' => false,
             'reserva' => $reserva,
@@ -131,7 +133,7 @@ class ReservaController extends Controller
             $validated['status'] = 'pendente';
             $mensagem = "Reserva(s) enviada(s) para análise com sucesso.";
         }
-        else 
+        else
             $mensagem = "Reserva(s) realizada(s) com sucesso.";
 
         $reserva = Reserva::create($validated);
@@ -147,7 +149,7 @@ class ReservaController extends Controller
                 $responsaveis->push($responsavel);
 
                 break;
-            
+
             case 'unidade':
                 foreach ($request->responsaveis_unidade as $responsavel_codpes) {
                     $responsavel = ResponsavelReserva::firstOrCreate([
@@ -156,9 +158,9 @@ class ReservaController extends Controller
                     ]);
                     $responsaveis->push($responsavel);
                 }
-                
+
                 break;
-            
+
             case 'externo':
                 foreach($request->responsaveis_externo as $responsavel_nome){
                     $responsavel = ResponsavelReserva::firstOrCreate([
@@ -210,8 +212,9 @@ class ReservaController extends Controller
             }
         }
 
-        return redirect("/reservas/{$reserva->id}")
-            ->with('alert-success', $mensagem . " <ul>{$created}</ul>");
+        \UspTheme::activeUrl('/reservas/my');
+        session()->put('alert-success', $mensagem . " <ul>{$created}</ul>");
+        return redirect("/reservas/{$reserva->id}");
     }
 
     /**
@@ -229,6 +232,7 @@ class ReservaController extends Controller
             Auth::login(User::find($request->user_id));
         }
 
+        \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
         return view('reserva.show', [
             'reserva' => $reserva,
             ]);
@@ -271,6 +275,7 @@ class ReservaController extends Controller
 
         $finalidades = Finalidade::all();
 
+        \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
         return view('reserva.edit', [
             'reserva' => $reserva,
             'settings' => $settings,
@@ -304,7 +309,7 @@ class ReservaController extends Controller
                 $responsaveis->push($responsavel);
 
                 break;
-            
+
             case 'unidade':
                 foreach ($request->responsaveis_unidade as $responsavel_codpes) {
                     $responsavel = ResponsavelReserva::firstOrCreate([
@@ -313,9 +318,9 @@ class ReservaController extends Controller
                     ]);
                     $responsaveis->push($responsavel);
                 }
-                
+
                 break;
-            
+
             case 'externo':
                 foreach($request->responsaveis_externo as $responsavel_nome){
                     $responsavel = ResponsavelReserva::firstOrCreate([
@@ -333,7 +338,7 @@ class ReservaController extends Controller
         if(!isset($request->rep_bool) or empty($request->rep_bool)) {
             $reserva->update($validated);
         }
-        
+
         // 2 - edição da reserva pai, caso com repeticões, entretanto, foi marcado Não, então as filhos serão excluídos
         if(isset($request->rep_bool) and $request->rep_bool=='Não') {
             $reserva->update($validated);
@@ -347,10 +352,11 @@ class ReservaController extends Controller
                 }
             }
 
-            return redirect("/reservas/{$reserva->id}")
-                     ->with('alert-danger', 'Reserva atualizada com sucesso. <br> 
-                             Entretanto, foi selecionada a opção "Não" para repetição, e portanto 
-                             todas reservas filhas foram excluídas!');
+            \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
+            session()->put('alert-danger', 'Reserva atualizada com sucesso. <br>
+                                            Entretanto, foi selecionada a opção "Não" para repetição, e portanto
+                                            todas reservas filhas foram excluídas!');
+            return redirect("/reservas/{$reserva->id}");
         }
 
         // 3 - edição da reserva pai, caso com repeticões, mas o padrão de repetição foi alterado
@@ -380,8 +386,9 @@ class ReservaController extends Controller
 
         if(config('salas.emailConfigurado')) Mail::queue(new UpdateReservaMail($reserva));
 
-        return redirect("/reservas/{$reserva->id}")
-            ->with('alert-success', 'Reserva atualizada com sucesso');
+        \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
+        session()->put('alert-success', 'Reserva atualizada com sucesso');
+        return redirect("/reservas/{$reserva->id}");
     }
 
     /**
@@ -403,28 +410,29 @@ class ReservaController extends Controller
 
         if($purge){
             Reserva::where('parent_id', $reserva->parent_id)->delete();
-            request()->session()->flash('alert-success', 'Todas instâncias da reserva foram excluídas com sucesso.');
+            session()->put('alert-success', 'Todas instâncias da reserva foram excluídas com sucesso.');
         }
         else{
             if($reserva->is_parent){
                 $reserva->delete();
                 $new_parent_id = Reserva::firstWhere('parent_id', $parent_id)->id;
                 Reserva::where('parent_id', $parent_id)->update(['parent_id' => $new_parent_id]);
-                request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
+                session()->put('alert-success', 'Reserva excluída com sucesso.');
             }else{
                 $reserva->delete();
-                request()->session()->flash('alert-success', 'Reserva excluída com sucesso.');
+                session()->put('alert-success', 'Reserva excluída com sucesso.');
             }
         }
 
+        \UspTheme::activeUrl('/salas/listar');
         return redirect()->route('salas.show', [$sala]);
     }
 
     /**
      * Muda o status da reserva para 'aprovada'.
-     * 
+     *
      * @param \App\Reserva $reserva
-     * 
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function aprovar(Request $request, Reserva $reserva) {
@@ -434,7 +442,7 @@ class ReservaController extends Controller
         }
 
        $this->authorize('responsavel', $reserva->sala);
-       
+
        if($reserva->parent_id != null){
             // Aprova todas as recorrências da reserva.
             Reserva::where('parent_id', $reserva->parent_id)->get()->map(function($res){
@@ -449,6 +457,8 @@ class ReservaController extends Controller
        // Enviando e-mail ao ser aprovada.
        if(config('salas.emailConfigurado')) Mail::queue(new CreateReservaMail($reserva));
 
-       return redirect()->route('reservas.show', $reserva->id)->with('alert-success', 'Reserva aprovada com sucesso.');
+       \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
+       session()->put('alert-success', 'Reserva aprovada com sucesso.');
+       return redirect()->route('reservas.show', $reserva->id);
     }
 }
