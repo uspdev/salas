@@ -109,6 +109,7 @@ class ReservaController extends Controller
             'settings' => $settings,
             'categorias' => $categorias,
             'finalidades' => $finalidades,
+            'salas' => Sala::all(),
         ]);
     }
 
@@ -123,6 +124,8 @@ class ReservaController extends Controller
     {
         $validated = $request->validated();
         $validated['user_id'] = auth()->user()->id;
+        if (isset($validated['extras']))
+            $validated['extras'] = json_encode($validated['extras']);
 
         $this->authorize('members', $validated['sala_id']);
 
@@ -196,6 +199,8 @@ class ReservaController extends Controller
             }
         }
 
+        $reserva->reagendarTarefa_AprovacaoAutomatica();
+
         if(config('salas.emailConfigurado')){
             //enviar e-mail
             if($reserva->status == 'pendente'){
@@ -235,6 +240,7 @@ class ReservaController extends Controller
         \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
         return view('reserva.show', [
             'reserva' => $reserva,
+            'salas' => Sala::all(),
             ]);
     }
 
@@ -280,7 +286,8 @@ class ReservaController extends Controller
             'reserva' => $reserva,
             'settings' => $settings,
             'categorias' => $categorias,
-            'finalidades' => $finalidades
+            'finalidades' => $finalidades,
+            'salas' => Sala::all(),
         ]);
     }
 
@@ -297,6 +304,8 @@ class ReservaController extends Controller
         $this->authorize('owner', $reserva);
 
         $validated = $request->validated();
+        if (isset($validated['extras']))
+            $validated['extras'] = json_encode($validated['extras']);
 
         $responsaveis = collect();
 
@@ -384,6 +393,8 @@ class ReservaController extends Controller
 
         }
 
+        $reserva->reagendarTarefa_AprovacaoAutomatica();
+
         if(config('salas.emailConfigurado')) Mail::queue(new UpdateReservaMail($reserva));
 
         \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
@@ -405,6 +416,8 @@ class ReservaController extends Controller
         $sala = $reserva->sala;
         $parent_id = $reserva->parent_id;
         $purge = !is_null($request->input('purge'));
+
+        $reserva->removerTarefa_AprovacaoAutomatica();
 
         if(config('salas.emailConfigurado')) Mail::queue(new DeleteReservaMail($reserva, $purge));
 
@@ -453,6 +466,8 @@ class ReservaController extends Controller
             $reserva->status = 'aprovada';
             $reserva->save();
        }
+
+       $reserva->removerTarefa_AprovacaoAutomatica();
 
        // Enviando e-mail ao ser aprovada.
        if(config('salas.emailConfigurado')) Mail::queue(new CreateReservaMail($reserva));

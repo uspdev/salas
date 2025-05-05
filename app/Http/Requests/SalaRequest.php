@@ -25,7 +25,7 @@ class SalaRequest extends FormRequest
      */
     public function rules()
     {
-        
+
         return [
             'nome'                  => 'required',
             'categoria_id'          => 'required',
@@ -41,6 +41,9 @@ class SalaRequest extends FormRequest
             'duracao_minima'        => 'nullable|numeric',
             'duracao_maxima'        => 'nullable|numeric',
             'tipo_restricao'        => ['required', new TipoRestricaoRule($this->data_limite, $this->dias_limite, $this->periodo_letivo)],
+            'instrucoes_reserva'    => 'nullable',
+            'aceite_reserva'        => 'nullable',
+            'prazo_aprovacao'       => 'nullable|integer',
         ];
     }
 
@@ -51,6 +54,7 @@ class SalaRequest extends FormRequest
         'categoria_id.required' => 'A categoria não pode ficar em branco.',
         'capacidade.required'   => 'A capacidade não pode ficar em branco.',
         'capacidade.integer'    => 'A capacidade deve ser um número.',
+        'prazo_aprovacao.integer' => 'O prazo de aprovação deve ser um número.',
     ];
     }
 }

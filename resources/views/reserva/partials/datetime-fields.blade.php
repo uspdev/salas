@@ -19,7 +19,7 @@
     <div class="col-sm form-group">
         <label for="" class="required"><b>Sala </b></label>
         <br>
-        <select id="salas_select" class="form-control" name="sala_id" onchange="changeUrlFromSalaId()">
+        <select id="salas_select" class="form-control" name="sala_id" onchange="salaChanged(this.value)">
         @foreach($categorias as $categoria)
             <optgroup label="{{ $categoria->nome }}">
               @foreach($categoria->salas as $sala)
@@ -65,6 +65,13 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-sm form-group">
+        @include('reserva.partials.instrucoes-da-sala-badge')
+        @include('reserva.partials.instrucoes-da-sala')
+    </div>
+</div>
+
 @if($reserva->id == null or ($reserva->parent_id != null and ($reserva->id == $reserva->parent_id )))
     <div class="row">
         <div class="col-sm form-group">
@@ -72,14 +79,14 @@
             <div class="checkFlex">
                 <div class="card">
                     <div class="card-body">
-                        <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool" 
+                        <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool"
                             @if (old('rep_bool') == 'Não') checked @endif>
                             <label for="rep_bool_Nao">Não</label>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool" 
+                        <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool"
                           @if (old('rep_bool') == 'Sim' or ($reserva->parent_id != null and ($reserva->id == $reserva->parent_id ))) checked @endif>
                           <label for="rep_bool_Sim">Sim</label>
                     </div>
@@ -89,3 +96,39 @@
     </div>
     @include('reserva.partials.repeat')
 @endif
+
+<script type="text/javascript">
+    var categorias = @json($categorias);
+
+    $(document).ready(function() {
+        salaChanged($('#salas_select').val());
+    });
+
+    function salaChanged(sala_id) {
+        var sala = categorias.flatMap(function (categoria) {
+            return categoria.salas;
+        }).find(function (sala) {
+            return sala.id == sala_id;
+        });
+
+        if (sala?.instrucoes_reserva) {
+            $('#instrucoes_badge').css('display', 'block');
+            $('#instrucoes').addClass('show');
+            $('#instrucoes_reserva').html(sala?.instrucoes_reserva.replace(/\n/g, '<br>'));
+        } else {
+            $('#instrucoes_badge').css('display', 'none');
+            $('#instrucoes').removeClass('show');
+            $('#instrucoes_reserva').html('');
+        }
+
+        if (sala?.aceite_reserva) {
+            $('#aceite_reserva').css('display', 'block');
+            $('#checkbox_aceite_reserva').attr('required', true);
+            $('#label_aceite_reserva').text(sala?.aceite_reserva.replace(/\n/g, '<br>'));
+        } else {
+            $('#aceite_reserva').css('display', 'none');
+            $('#checkbox_aceite_reserva').attr('required', false);
+            $('#label_aceite_reserva').text('');
+        }
+    }
+</script>

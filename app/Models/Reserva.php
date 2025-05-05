@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Jobs\AprovacaoAutomaticaReserva;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Reserva extends Model implements Auditable
@@ -70,6 +72,38 @@ class Reserva extends Model implements Auditable
         return Carbon::createFromFormat('d/m/Y H:i', $this->data.' '.$this->horario_fim);
     }
 
+    public function removerTarefa_AprovacaoAutomatica()
+    {
+        // remove jobs de aprovações automáticas de reserva
+        foreach (DB::table('jobs')->where('payload->displayName', 'App\Jobs\AprovacaoAutomaticaReserva')->get() as $job) {
+            $payload = json_decode($job->payload, true);
+            if (!empty($payload['data']['command'])) {
+                $command = unserialize($payload['data']['command']);                        // desserializa o comando
+                $property = (new \ReflectionClass($command))->getProperty('reserva_id');    // usa ReflectionClass para acessar propriedades privadas
+                $property->setAccessible(true);                                             // torna a propriedade acessível
+                $reserva_id = $property->getValue($command);
+                if ($reserva_id == $this->id)
+                    DB::table('jobs')->where('id', $job->id)->delete();
+            }
+        }
+    }
+
+    public function reagendarTarefa_AprovacaoAutomatica()
+    {
+        // este método é utilizado tanto pela criação quanto alteração de reserva
+        // quando o usuário altera uma reserva, eventualmente ele pode alterar a sala
+        // neste caso, ao invés de alterarmos a job da reserva, simplesmente a removemos e a recriamos logo em seguida, considerando os dados eventualmente alterados
+
+        $this->removerTarefa_AprovacaoAutomatica();
+
+        if($this->sala->restricao != null && $this->sala->restricao->aprovacao && !empty($this->sala->restricao->prazo_aprovacao) && ($this->sala->restricao->prazo_aprovacao > 0)) {
+            // (re)agenda job de aprovação automática de reserva
+            $job_datahora = addWorkingDays($this->created_at, $this->sala->restricao->prazo_aprovacao);
+            if ($job_datahora > now())
+                AprovacaoAutomaticaReserva::dispatch($this->id)->delay($job_datahora);
+        }
+    }
+
     public function parent()
     {
         return $this->belongsTo($this, 'parent_id');
@@ -107,7 +141,7 @@ class Reserva extends Model implements Auditable
     public function finalidade(){
         return $this->belongsTo(Finalidade::class);
     }
-    
+
     public function responsaveis(){
         return $this->belongsToMany(ResponsavelReserva::class, 'reservas_responsaveis_reservas', 'reserva_id', 'responsavel_reserva_id')->withTimestamps();
     }

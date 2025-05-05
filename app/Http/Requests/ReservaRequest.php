@@ -7,6 +7,7 @@ use App\Rules\verifyRoomAvailability;
 use Illuminate\Support\Facades\Gate;
 use App\Rules\RestricoesSalaRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
@@ -60,7 +61,7 @@ class ReservaRequest extends FormRequest
             'tipo_responsaveis' => 'required'
         ];
 
-        $sala = Sala::find($this->sala_id); 
+        $sala = Sala::find($this->sala_id);
         if(!is_null($sala) && !Gate::allows('responsavel', $sala)){
             array_push($rules['data'], 'after_or_equal:today');
             $date_today = Carbon::createFromFormat('d/m/Y', date('d/m/Y'));
@@ -70,12 +71,18 @@ class ReservaRequest extends FormRequest
             }
         }
 
+        // adiciona à $rules eventuais campos extras obrigatórios
+        $extras = config('salas.reservaCamposExtras');
+        if (!empty($extras))
+            foreach ($extras as $campo)
+                $rules['extras.' . Str::slug($campo, '_')] = 'required';
+
         return $rules;
     }
 
     public function messages()
     {
-        return [
+        $messages = [
             'nome.required' => 'O título não pode ficar em branco.',
             'data.required' => 'A data não pode ficar em branco.',
             'data.date_format' => 'A data deve ser válida e inserida no formato dia/mês/ano.',
@@ -89,5 +96,13 @@ class ReservaRequest extends FormRequest
             'data.after_or_equal' => 'Não é possível fazer reservas em dias passados.',
             'horario_inicio.after' => 'Não é possível fazer reservas em um horário passado.',
         ];
+
+        // adiciona à $messages eventuais campos extras obrigatórios
+        $extras = config('salas.reservaCamposExtras');
+        if (!empty($extras))
+            foreach ($extras as $campo)
+                $messages['extras.' . Str::slug($campo, '_') . '.required'] = 'O campo ' . $campo . ' não pode ficar em branco.';
+
+        return $messages;
     }
 }
