@@ -28,7 +28,7 @@
                 <br>
                 <select name="finalidade_id" class="form-control form-select" required>
                 @foreach ($finalidades as $finalidade)
-                    <option value="{{ $finalidade->id }}" 
+                    <option value="{{ $finalidade->id }}"
                             {{ old('finalidade_id', $reserva->finalidade_id) == $finalidade->id ? 'selected' : '' }}>
                         {{ $finalidade->legenda }}
                     </option>
@@ -58,11 +58,36 @@
                 </div>
             </div>
         </div>
+
+        @if (!empty(config('salas.reservaCamposExtras')) && is_array(config('salas.reservaCamposExtras')))
+            @php
+                $extras = json_decode($reserva->extras, true);
+            @endphp
+            @foreach (config('salas.reservaCamposExtras') as $campo)
+                @php
+                    $campo_slugged = \Illuminate\Support\Str::slug($campo, '_');
+                @endphp
+                <div class="row">
+                    <div class="col-sm form-group">
+                        <label for="" class="required"><b>{{ $campo }}</b></label>
+                        <br>
+                        <input type="text" class="form-control" name="extras[{{ $campo_slugged }}]" value="{{ old('extras.' . $campo_slugged, $extras[$campo_slugged] ?? '') }}">
+                    </div>
+                    <div class="col-sm form-group">
+                    </div>
+                    <div class="col-sm form-group">
+                    </div>
+                    <div class="col-sm form-group">
+                    </div>
+                </div>
+            @endforeach
+        @endif
+
         <div class="add-responsavel-unidade mb-3">
             <select name="responsaveis_unidade[]" class="form-control form-control-sm" multiple="multiple" data-placeholder="Buscar pessoa">
                 @if ($reserva->tipo_responsaveis == 'unidade')
                     @foreach ($reserva->responsaveis as $responsavel)
-                        <option value="{{$responsavel->codpes}}" selected="seleted">{{$responsavel->codpes}} {{$responsavel->nome}}</option>   
+                        <option value="{{$responsavel->codpes}}" selected="seleted">{{$responsavel->codpes}} {{$responsavel->nome}}</option>
                     @endforeach
                 @endif
             </select>
@@ -87,9 +112,17 @@
                 <label for="" class="required"><b>Descrição</b></label>
                 <br>
                 <textarea name="descricao" class="form-control" rows="3">{{  old('descricao', $reserva->descricao) }}</textarea>
-                <br>
             </div>
         </div>
+
+        <div class="form-group row" id="aceite_reserva">
+            <div class="col-sm-12 d-flex align-items-center" style="gap: 10px;">
+                <input class="form-control" style="width: auto; margin: 0;" type="checkbox" id="checkbox_aceite_reserva">
+                <label style="margin: 0;" id="label_aceite_reserva"></label>
+            </div>
+        </div>
+
+        <br>
         <button id="b-reservas" type="submit" class="btn btn-success">Enviar</button>
     </div>
 </div>
