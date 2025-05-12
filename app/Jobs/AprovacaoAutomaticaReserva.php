@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\CreateReservaMail;
+use App\Mail\CreateReservaAoResponsavelMail;
 use App\Models\Reserva;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -48,7 +49,10 @@ class AprovacaoAutomaticaReserva implements ShouldQueue
         }
 
         // envia e-mail ao ser aprovada
-        if (config('salas.emailConfigurado'))
+        if (config('salas.emailConfigurado')) {
             Mail::queue(new CreateReservaMail($reserva));
+            foreach($reserva->sala->responsaveis as $responsavel)
+                Mail::queue(new CreateReservaAoResponsavelMail($reserva, $responsavel));
+        }
     }
 }
