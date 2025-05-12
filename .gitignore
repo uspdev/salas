@@ -16,5 +16,10 @@ yarn-error.log
 composer.lock
 /public/vendor/
 
+# Lando
 .lando.yml
 Dockerfile.custom
+php.ini
+
+# DDEV
+.ddev
