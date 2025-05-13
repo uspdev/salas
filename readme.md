@@ -62,9 +62,15 @@ Por padrão o sistema é instalado com as seguintes finalidades para as reservas
 
 Mas todo gerenciamento de finalidades como adicionar, editar ou excluir, pode ser feito na aba de configurações. Permitindo a customização das finalidades para que melhor se adéque à unidade que for utilizar o sistema.
 
+# Realizando Reservas
+
+Ao solicitar reserva, pode-se exibir um texto com instruções de preenchimento ao usuário. Isso é configurado por sala, no cadastro das salas. Também pode-se exigir que o usuário clique numa checkbox com instruções de "aceite" (por exemplo, "Concordo com os termos e uso desta sala, etc. etc."), e isso também é configurado por sala, no cadastro das salas.
+
 # Realizando Reservas com Aprovação
 
 Na aba de edição da sala é possível gerenciar os responsáveis pela sala através do número USP, bem como configurar se a sala necessita de aprovação ou não para a reserva. No caso de precisar de aprovação, quando uma pessoa autorizada tentar realizar uma reserva na sala, a reserva será feita com um *status* de pendente, um e-mail será enviado para os responsáveis da sala e estes devem analisar o pedido de reserva no sistema, aprovando ou recusando.
+
+É possível configurar, por sala, um prazo para a aprovação ou recusa da reserva. Se, passado esse prazo, o(s) responsável(is) pela sala não aprovarem nem rejeitarem a reserva, ela será automaticamente aprovada, e e-mails serão enviados tanto para o solicitante da reserva quanto para o(s) responsável(is) pela sala.
 
 # Consumo de dados via API
 
@@ -127,6 +133,7 @@ Este sistema foi transferido da FFLCH para o USPDev.
 - 16/11/2023: Adicionada interface de restrições por sala.
 - 24/11/2023: Cadastro de períodos letivos e cadastro de solicitantes por setor na categora.
 - 14/08/2024: Possibilitando consumo de dados via API.
+- 12/05/2025: Adicionado prazo na sala para aprovação automática da reserva.
 
 
 #####################
@@ -147,4 +154,6 @@ Este sistema foi transferido da FFLCH para o USPDev.
 
 No arquivo de configuração .env:
 - SENHAUNICA_ADMINS define os admins do sistema;
-- SENHAUNICA_GERENTES não está sendo utilizado.
+- SENHAUNICA_GERENTES não está sendo utilizado;
+- RESERVA_CAMPOS_EXTRAS define eventuais campos extras de preenchimento obrigatório ao solicitar reserva;
+- MAIL_COPIAR_REMETENTE define se todos os e-mails enviados pelo sistema também serão copiados (em bcc) para o remetente.
