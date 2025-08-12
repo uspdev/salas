@@ -112,6 +112,11 @@ $menu = [
         'can' => 'logado',
     ],
     [
+        'text' =>  '<i class="fas fa-check"></i> Salas disponíveis',
+        'url' => '/salas_livres',
+        'can' => ''
+    ],
+    [
         'text' => '<i class="fa fa-user-cog" aria-hidden="true"></i> Administração',
         'submenu' => $admin,
         'can' => 'admin',
