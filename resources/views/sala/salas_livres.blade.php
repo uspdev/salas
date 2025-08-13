@@ -37,6 +37,7 @@
                 let horario_fim = $('input[name="horario_fim"]');
                 let data = $('input[name="data"]');
                 let div = document.getElementById('div');
+                let view = '';
 
                 $.ajax({
                     'url': 'salas_livres/search',
@@ -48,16 +49,15 @@
                     },
                     success: function(response) {
                         console.log(response);
-                        let view = '';
-                        if(response === 400){
+                        if(response == 400){
                             view = `<div class="alert alert-danger">Informe o horário no formato h:mm</div>`;
                             document.getElementById('div').innerHTML = view;
                         }
-                        if(response === 404){
-                            view = `<div class="alert alert-danger">Nenhuma sala disponível para o filtro solicitado</div>`;
+                        if(response == 404){
+                            view = `<div class="alert alert-danger">Nenhuma sala encontrada para o filtro solicitado</div>`;
                             document.getElementById('div').innerHTML = view;
                         }
-                        if (typeof response !== "undefined" && response.length > 0) {
+                        if (response.length > 0) {
                             response.forEach((e) => {
                                 view += `  
                                     <p>Sala: <a href="/salas/${e.id}">${e.nome}</a> da ${e.nomcat} - capacidade: ${e.capacidade} pessoas </p>

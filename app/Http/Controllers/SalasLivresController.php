@@ -17,7 +17,6 @@ class SalasLivresController extends Controller
     //pegar as reservas que não estão ocupadas nos horários solicitados
     public function search()
     {
-
         $data = Carbon::createFromFormat("d/m/Y", request()->data)->format('Y-m-d');
         $horario_inicio = request()->horario_inicio;
         $horario_fim = request()->horario_fim;        
@@ -27,10 +26,10 @@ class SalasLivresController extends Controller
             return response()->json(400);
         }
 
-        $salas = Reserva::join('salas', 'salas.id', 'reservas.sala_id')
-            ->join('categorias', 'categorias.id', 'salas.categoria_id')
-            ->select('salas.id', 'salas.capacidade', 'salas.nome', 'categorias.nome as nomcat')
-            ->whereNotIn('reservas.sala_id', function ($query) use ($horario_inicio, $horario_fim, $data) {
+        $salas = Sala::leftJoin('reservas','reservas.sala_id','salas.id')
+            ->join('categorias','categorias.id','salas.categoria_id')
+            ->select('salas.id','salas.capacidade','salas.nome','categorias.nome as nomcat')
+            ->whereNotIn('salas.id', function ($query) use ($horario_inicio, $horario_fim, $data) {
                 $query->select('reservas.sala_id')
                     ->from('reservas')
                     ->where(function ($query) use ($horario_inicio, $horario_fim, $data) {
@@ -39,22 +38,22 @@ class SalasLivresController extends Controller
                             ->whereRaw('reservas.data = ?',[$data]);
                     })
                     ->orWhere(function ($query2) use ($horario_inicio, $horario_fim, $data) {
-                        $query2->whereRaw('reservas.horario_inicio >= STR_TO_DATE(?, "%H:%i")', [$horario_inicio])
-                            ->whereRaw('reservas.horario_fim <= STR_TO_DATE(?, "%H:%i")', [$horario_fim])
+                        $query2->whereRaw('reservas.horario_inicio > STR_TO_DATE(?, "%H:%i")', [$horario_inicio])
+                            ->whereRaw('reservas.horario_fim < STR_TO_DATE(?, "%H:%i")', [$horario_fim])
                             ->whereRaw('reservas.data = ?',[$data]);
                     })
                     ->orWhere(function ($query3) use ($horario_inicio, $horario_fim, $data){
-                        $query3->whereRaw('reservas.horario_inicio <= STR_TO_DATE(?, "%H:%i")', [$horario_inicio])
-                        ->whereRaw('reservas.horario_fim >= STR_TO_DATE(?, "%H:%i")', [$horario_fim])
+                        $query3->whereRaw('reservas.horario_inicio < STR_TO_DATE(?, "%H:%i")', [$horario_fim])
+                        ->whereRaw('reservas.horario_fim > STR_TO_DATE(?, "%H:%i")', [$horario_inicio])
                         ->whereRaw('reservas.data = ?',[$data]);
                     });
             })
             ->groupBy('reservas.sala_id','salas.id','salas.capacidade','salas.nome','categorias.nome')
             ->get();
-
+            
         if ($salas->isNotEmpty()) {
             return response()->json($salas);
-        } else {
+        }else{
             return response()->json(404);
         }
     }
