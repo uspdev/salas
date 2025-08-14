@@ -6,7 +6,8 @@
             <div class="row">
                 <div class="col">
                     <label>Data</label>
-                    <input type="text" class="datepicker form-control" type="text" name="data" placeholder="Ex.: 08/09/2025">
+                    <input type="text" class="datepicker form-control" type="text" name="data">
+                    <small class="text-muted">Ex.: {{$today}}</small>
                 </div>
                 <div class="col">
                     <label>Horário início</label>
@@ -48,19 +49,18 @@
                         horario_fim: horario_fim.val()
                     },
                     success: function(response) {
-                        console.log(response);
-                        if(response == 400){
-                            view = `<div class="alert alert-danger">Informe o horário no formato h:mm</div>`;
-                            document.getElementById('div').innerHTML = view;
+                        if(response[1] == 400){
+                            view = `<div class="alert alert-danger">${response[0]}</div>`;
+                            div.innerHTML = view;
                         }
-                        if(response == 404){
-                            view = `<div class="alert alert-danger">Nenhuma sala encontrada para o filtro solicitado</div>`;
-                            document.getElementById('div').innerHTML = view;
+                        if(response[1] == 404){
+                            view = `<div class="alert alert-danger">${response[0]}</div>`;
+                            div.innerHTML = view;
                         }
-                        if (response.length > 0) {
-                            response.forEach((e) => {
+                        if(response[1] !== 400 && response[1] !== 404){
+                            response.forEach((sala, i) => {
                                 view += `  
-                                    <p>Sala: <a href="/salas/${e.id}">${e.nome}</a> da ${e.nomcat} - capacidade: ${e.capacidade} pessoas </p>
+                                    <p><a href="/salas/${sala.id}">${sala.nome}</a> da ${sala.nomcat} - capacidade: ${sala.capacidade} pessoas </p>
                                 `;
                             });
                             document.getElementById('div').innerHTML = view;
