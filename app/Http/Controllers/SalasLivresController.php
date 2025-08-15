@@ -25,9 +25,9 @@ class SalasLivresController extends Controller
         }
         
         if ($salas->isNotEmpty()) {
-            return response()->json($salas);
+            return response()->json(['content' => $salas, 'status' => 200]);
         }else{
-            return response()->json(['Nenhuma sala encontrada',404]);
+            return response()->json(['content' => 'Nenhuma sala encontrada','status' => 404]);
         }
     }
 }

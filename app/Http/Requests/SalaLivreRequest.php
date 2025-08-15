@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Exception;
-use Illuminate\Support\Facades\DB;
-use App\Exceptions\InvalidOrderException;
 use Carbon\Carbon;
 
 class SalaLivreRequest
@@ -21,13 +18,13 @@ class SalaLivreRequest
             $data = Carbon::createFromFormat("d/m/Y", $data);
         } catch (Exception) {
             return response()->json([
-                'Insira a data no formato <b>dd/mm/AAAA</b>',
-                400
+                'content' => 'Insira a data no formato <b>dd/mm/AAAA</b>',
+                'status' => 400
             ]);
         }
 
         if (!preg_match($regex_horario, $horario_inicio) || !preg_match($regex_horario, $horario_fim)) {
-            return response()->json(['Insira o horário no formato <b>H:mm</b>', 400]);
+            return response()->json(['content' => 'Insira o horário no formato <b>H:mm</b>', 'status' => 400]);
         }
     }
 }
