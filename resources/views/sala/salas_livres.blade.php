@@ -5,6 +5,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col">
+                    @csrf
                     <label>Data</label>
                     <input type="text" class="datepicker form-control" id="data" type="text" name="data">
                     <small class="text-muted">Ex.: {{$today}}</small>
@@ -40,6 +41,9 @@
                     $.ajax({
                         'url': 'salas_livres/search',
                         'type': 'GET',
+                        'headers':{
+                            'X-CSRF-TOKEN': $("input[name='_token']").val(),
+                        },
                         'data': {
                             data: $('#data').val(),
                             horario_inicio: $('#horario_inicio').val(),
@@ -50,11 +54,15 @@
                                 view = `<div class="alert alert-danger">${response['content']}</div>`;
                                 $("#div").html(view);
                             }
-                            response['content'].forEach((sala, i) => {
-                                view += `  
-                                    <p><a href="/salas/${sala.id}">${sala.nome}</a> da <b>${sala.nomcat}</b> - capacidade: ${sala.capacidade} pessoas </p>
-                                `;
-                            });
+
+                            let categorias = [...new Set(response['content'].map(c => c.nomcat))];
+                            let view = categorias.map(categoria => {
+                                let salasDaCategoria = response['content'].filter(s => s.nomcat === categoria);
+                                let lista = salasDaCategoria.map(sala => 
+                                    `<li><a href="/salas/${sala.id}">${sala.nome}</a> - capacidade: ${sala.capacidade} pessoas</li>`
+                                ).join('');
+                                return `<b>${categoria}</b><ul style="list-style-type:none;">${lista}</ul>`;
+                            }).join('');
                             $("#div").html(view);
                         }
                     });
