@@ -9,6 +9,7 @@ use App\Http\Controllers\RecursoController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\ResponsavelController;
 use App\Http\Controllers\SalaController;
+use App\Http\Controllers\SalasLivresController;
 use Illuminate\Support\Facades\Route;
 
 // Todas as rotas passam pelo middleware de redirecionamento
@@ -21,6 +22,10 @@ Route::middleware('redirectreusedroutes')->group(function() {
 Route::get('/reservas/my', [ReservaController::class, 'my']);
 Route::get('/reservas/{reserva}/aprovar', [ReservaController::class, 'aprovar'])->name('reservas.aprovar');
 Route::resource('/reservas', ReservaController::class)->except(['index']);
+
+// Salas livres
+Route::get('/salas_livres',[SalasLivresController::class, 'index']);
+Route::get('/salas_livres/search',[SalasLivresController::class, 'search'])->name('salas.livres');
 
 // Salas
 Route::get('/salas/listar', [SalaController::class, 'listar'])->name('salas.listar');

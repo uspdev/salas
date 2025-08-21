@@ -50,3 +50,14 @@
         @include('reserva.partials.table')
     </div>
 </div>
+
+<style>
+
+@media(max-width: 1330px){
+    .col-1{
+        flex: 0 0 100%;
+        max-width:100%;
+    }
+}
+
+</style>
