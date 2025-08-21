@@ -10,6 +10,7 @@ use App\Models\Categoria;
 use App\Models\Restricao;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Sala extends Model implements Auditable
 {
@@ -44,7 +45,10 @@ class Sala extends Model implements Auditable
         return $this->hasOne(Restricao::class);
     }
 
-    public static function SalasLivresQuery($horario_inicio, $horario_fim, $data){
+    public static function SalasLivresQuery(array $validated) {
+        $horario_inicio = $validated['horario_inicio'];
+        $horario_fim = $validated['horario_fim'];
+        $data = Carbon::createFromFormat('d/m/Y', $validated['data'])->format('Y-m-d');
         $query = "SELECT s.id, s.capacidade, s.nome, c.nome AS nomcat
             FROM salas s
             LEFT JOIN reservas r ON r.sala_id = s.id
@@ -52,7 +56,7 @@ class Sala extends Model implements Auditable
             WHERE s.id NOT IN (
                 SELECT r.sala_id
                 FROM reservas r
-                WHERE 
+                WHERE
                     (
                         r.horario_inicio = STR_TO_DATE(?, '%H:%i')
                         AND r.horario_fim = STR_TO_DATE(?, '%H:%i')
@@ -71,14 +75,12 @@ class Sala extends Model implements Auditable
                 )
             GROUP BY s.id, s.capacidade, s.nome, c.nome
         ";
-        return collect(
-                DB::select($query,[
-                $horario_inicio, $horario_fim, $data,
-                $horario_inicio, $horario_fim, $data,
-                $horario_fim, $horario_inicio, $data //sim, está certo
-            ])
-        );
-        
+
+        return collect(DB::select($query,[
+            $horario_inicio, $horario_fim, $data,
+            $horario_inicio, $horario_fim, $data,
+            $horario_fim, $horario_inicio, $data //sim, está certo
+        ]))->groupBy('nomcat');
     }
 
 }

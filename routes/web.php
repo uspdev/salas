@@ -25,7 +25,7 @@ Route::resource('/reservas', ReservaController::class)->except(['index']);
 
 // Salas livres
 Route::get('/salas_livres',[SalasLivresController::class, 'index']);
-Route::get('/salas_livres/search',[SalasLivresController::class, 'search']);
+Route::get('/salas_livres/search',[SalasLivresController::class, 'search'])->name('salas.livres');
 
 // Salas
 Route::get('/salas/listar', [SalaController::class, 'listar'])->name('salas.listar');

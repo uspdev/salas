@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Sala;
 use Carbon\Carbon;
 use App\Http\Requests\SalaLivreRequest;
-use Illuminate\Http\Request;
 
 class SalasLivresController extends Controller
 {
@@ -15,19 +14,10 @@ class SalasLivresController extends Controller
     }
 
     //pega as reservas que não estão ocupadas nos horários solicitados
-    public function search(Request $request)
+    public function search(SalaLivreRequest $request)
     {
-        $validacao = SalaLivreRequest::handle($request->horario_inicio, $request->horario_fim, $request->data);
-        if(!$validacao){
-            $salas = Sala::SalasLivresQuery($request->horario_inicio, $request->horario_fim,Carbon::createFromFormat('d/m/Y',$request->data)->format('Y-m-d'));
-        }else{
-            return $validacao;
-        }
-        
-        if ($salas->isNotEmpty()) {
-            return response()->json(['content' => $salas, 'status' => 200]);
-        }else{
-            return response()->json(['content' => 'Nenhuma sala encontrada','status' => 404]);
-        }
+        $salas = Sala::SalasLivresQuery($request->validated());
+
+        return response()->json($salas);
     }
 }

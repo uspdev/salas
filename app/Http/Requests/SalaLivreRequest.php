@@ -2,29 +2,45 @@
 
 namespace App\Http\Requests;
 
-use Exception;
-use Carbon\Carbon;
+use Illuminate\Foundation\Http\FormRequest;
 
-class SalaLivreRequest
+class SalaLivreRequest extends FormRequest
 {
 
-    public static function handle($horario_inicio, $horario_fim, $data)
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
     {
-        $horario_inicio = request()->horario_inicio;
-        $horario_fim = request()->horario_fim;
-        $regex_horario = '/^(?:[1-9]|1[0-9]|2[0-3]):[0-5][0-9]$/';
+        return true;
+    }
 
-        try {
-            $data = Carbon::createFromFormat("d/m/Y", $data);
-        } catch (Exception) {
-            return response()->json([
-                'content' => 'Insira a data no formato <b>dd/mm/AAAA</b>',
-                'status' => 400
-            ]);
-        }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'data' => 'required|date_format:d/m/Y',
+            'horario_inicio' => 'required|date_format:G:i|',
+            'horario_fim' => 'required|date_format:G:i|after:horario_inicio',
+        ];
+    }
 
-        if (!preg_match($regex_horario, $horario_inicio) || !preg_match($regex_horario, $horario_fim)) {
-            return response()->json(['content' => 'Insira o horário no formato <b>H:mm</b>', 'status' => 400]);
-        }
+    public function messages()
+    {
+        return [
+            'data.required' => 'A data não pode ficar em branco.',
+            'data.date_format' => 'A data deve ser válida e inserida no formato dia/mês/ano.',
+            'horario_inicio.required' => 'O horário de início não pode ficar em branco.',
+            'horario_fim.required' => 'O horário de fim não pode ficar em branco.',
+            'horario_inicio.date_format' => 'Digite o horário de início no formato 0:00. Exemplo: 9:00',
+            'horario_fim.date_format' => 'Digite o horário fim no formato 0:00. Exemplo: 9:00',
+            'horario_fim.after' => 'Horário fim precisa ser maior que o horário de início.',
+        ];
     }
 }
