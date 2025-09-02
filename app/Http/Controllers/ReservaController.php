@@ -237,7 +237,7 @@ class ReservaController extends Controller
             Auth::login(User::find($request->user_id));
         }
 
-        \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
+        // \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
         return view('reserva.show', [
             'reserva' => $reserva,
             'salas' => Sala::all(),
