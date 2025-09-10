@@ -18,4 +18,10 @@
         <input type="text" class="datepicker" id="repFormControl" name="repeat_until" value="{{  old('repeat_until', $reserva->repeat_until) }}">
         <small class="form-text text-muted">Formato: 30/12/2021</small>
     </div>
+    <div class="col-sm form-group">
+        <input type="checkbox" name="skip">
+        <label for="" class="required">Realizar reservas pulando os dias de conflito (em construção)</label>
+        
+    </div>
+
 </div>
