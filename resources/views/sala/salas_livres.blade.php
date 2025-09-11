@@ -51,7 +51,7 @@
                     @include('reserva.partials.checkFlex', ['name' => "repeat_days[4]", 'type' => "checkbox", 'value' => "4", 'label' => "Qui"])
                     @include('reserva.partials.checkFlex', ['name' => "repeat_days[5]", 'type' => "checkbox", 'value' => "5", 'label' => "Sex"])
                     @include('reserva.partials.checkFlex', ['name' => "repeat_days[6]", 'type' => "checkbox", 'value' => "6", 'label' => "Sáb"])
-                    @include('reserva.partials.checkFlex', ['name' => "repeat_days[7]", 'type' => "checkbox", 'value' => "7", 'label' => "Dom"])
+                    @include('reserva.partials.checkFlex', ['name' => "repeat_days[0]", 'type' => "checkbox", 'value' => "0", 'label' => "Dom"])
                 </div>
               </div>
           </div>
