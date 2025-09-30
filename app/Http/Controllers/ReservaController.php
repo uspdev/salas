@@ -139,6 +139,11 @@ class ReservaController extends Controller
         else
             $mensagem = "Reserva(s) realizada(s) com sucesso.";
 
+        $data_inicial = Carbon::createFromFormat('d/m/Y',$validated['data']);
+        if($validated['repeat_until'] && !in_array($data_inicial->dayOfWeek, $validated['repeat_days'])){
+            return back()->with('alert-danger','A data inicial precisa coincidir com o dia da semana da repetição')->withInput();
+        }
+        
         $reserva = Reserva::create($validated);
 
         $responsaveis = collect();
@@ -186,17 +191,36 @@ class ReservaController extends Controller
             $fim = Carbon::createFromFormat('d/m/Y', $validated['repeat_until']);
 
             $period = CarbonPeriod::between($inicio, $fim);
-
-            foreach ($period as $date) {
-                if (in_array($date->dayOfWeek, $validated['repeat_days'])) {
-                    $new = $reserva->replicate();
-                    $new->parent_id = $reserva->id;
-                    $new->data = $date->format('d/m/Y');
-                    $new->save();
-                    $new->responsaveis()->sync($responsaveis->pluck('id'));
-                    $created .= "<li><a href='/reservas/{$new->id}'> {$date->format('d/m/Y')}- {$new->nome}</a></li>";
+            
+            $datas_reserva = Reserva::whereBetween('data',[$inicio, $fim])
+            ->where('sala_id',$reserva->sala_id)->get(); //pega a sala entre os dia de inicio e fim inseridos
+            $periodo_formatado = [];
+            foreach($period as $per){
+                if (in_array($per->dayOfWeek, $reserva->repeat_days)) {
+                    $periodo_formatado[] = $per->format('d/m/Y');
                 }
             }
+            
+            $dias_validos = collect($periodo_formatado)->diff($datas_reserva->pluck('data'));
+            if($dias_validos->isEmpty()){
+                $reserva->where('id',$reserva->id)->first();
+                $reserva->delete(); //devido ao Reserva::create acima   
+                return back()->with('alert-danger', 'Esta sala não está disponível para o período selecionado.')->withInput();
+            }
+            
+            foreach($dias_validos as $data){
+                $nova_reserva = $reserva->replicate();
+                $nova_reserva->parent_id = $reserva->id;
+                $nova_reserva->data = $data;
+                $nova_reserva->save();
+                $nova_reserva->responsaveis()->sync($responsaveis->pluck('id'));
+                $created .= "<li><a href='/reservas/{$nova_reserva->id}'> {$data} - {$nova_reserva->nome} </a></li>";
+            }
+            if(in_array($validated['data'], Reserva::all()->pluck('data')->toArray())){
+                $reserva->delete(); //deletar a reserva criada caso coincida com a data de uma reserva já existente
+            }
+            session()->put('alert-success', $mensagem . " <ul>{$created}</ul>");
+            return redirect("/reservas/{$nova_reserva->id}");
         }
 
         $reserva->reagendarTarefa_AprovacaoAutomatica();

@@ -107,6 +107,9 @@ class verifyRoomAvailability implements Rule
             $period = CarbonPeriod::between($reserva->inicio, $reserva->fim);
             if ($period->overlaps($desejado)) {
                 // vamos ignorar a própria reserva
+                if(request()->skip){
+                    return true;
+                }
                 if ($this->id != $reserva->id and !in_array($reserva->id,$filhas)) {
                     $this->conflicts .= "<li><a href='/reservas/{$reserva->id}'>$reserva->nome</a></li>";
                     ++$this->n;
