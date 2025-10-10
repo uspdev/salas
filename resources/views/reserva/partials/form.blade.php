@@ -111,7 +111,7 @@
             <div class="col-sm form-group">
                 <label for="" class="required"><b>Descrição</b></label>
                 <br>
-                <textarea name="descricao" class="form-control" rows="3">{{  old('descricao', $reserva->descricao) }}</textarea>
+                <textarea name="descricao" class="form-control" rows="3" maxlength="255">{{  old('descricao', $reserva->descricao) }}</textarea>
             </div>
         </div>
 
