@@ -5,6 +5,7 @@
                name="{{ $name ?? '' }}" 
                id="id{{ $label }}" 
                value="{{ $value ?? '' }}" 
+               style="width:15px; height:15px;"
                @if(old('repeat_days.'.$value) == $value or ($reserva->parent_id != null and in_array($value, $reserva->repeat_days)))
                  checked
                @endif>

@@ -36,8 +36,8 @@ class verifyRoomAvailability implements Rule
      * @return bool
      */
     public function passes($attribute, $value)
-    { 
-        // o campo $value é o dia/mês/ano da reserva 
+    {
+        // o campo $value é o dia/mês/ano da reserva
         $this->check($value);
 
         if ($this->reserva->repeat_days && $this->reserva->repeat_until) {
@@ -57,7 +57,7 @@ class verifyRoomAvailability implements Rule
         }
 
         if($this->quantidade_de_reservas > 300){
-            $this->message = "Reservas não foram criadas! porque ultrapassam 300 reservas, 
+            $this->message = "Reservas não foram criadas! porque ultrapassam 300 reservas,
                               diminua o intervalo das reservas e tente novamente.";
             return false;
         }
@@ -97,7 +97,12 @@ class verifyRoomAvailability implements Rule
             return true;
         }
 
-        // 3. Se há conflitos vamos montar a string $conflicts indicando-os
+        // 3. Se usário escolheu pular as datas com conflitos
+        if(request()->skip){
+            return true;
+        }
+
+        // 4. Se há conflitos vamos montar a string $conflicts indicando-os
         $inicio = Carbon::createFromFormat('d/m/Y H:i', $day.' '.$this->reserva->horario_inicio);
         $fim = Carbon::createFromFormat('d/m/Y H:i', $day.' '.$this->reserva->horario_fim);
 

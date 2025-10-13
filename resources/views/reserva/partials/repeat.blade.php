@@ -19,9 +19,8 @@
         <small class="form-text text-muted">Formato: 30/12/2021</small>
     </div>
     <div class="col-sm form-group">
-        <input type="checkbox" name="skip">
-        <label for="" class="required">Realizar reservas pulando os dias de conflito (em construção)</label>
-        
+        <input type="checkbox" name="skip" id="skip">
+        <label for="" class="required">Realizar reservas pulando os dias de conflito</label>
     </div>
 
 </div>

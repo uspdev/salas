@@ -6,7 +6,6 @@ use App\Http\Requests\ReservaRequest;
 use App\Models\Reserva;
 use App\Models\Sala;
 use App\Models\Categoria;
-use App\Models\Recurso;
 use App\Service\GeneralSettings;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -23,8 +22,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
-use Spatie\Permission\Models\Permission;
 use Uspdev\Replicado\Pessoa;
+use App\Actions\PeriodoSemConflitoAction;
 
 class ReservaController extends Controller
 {
@@ -139,6 +138,11 @@ class ReservaController extends Controller
         else
             $mensagem = "Reserva(s) realizada(s) com sucesso.";
 
+        $data_inicial = Carbon::createFromFormat('d/m/Y',$validated['data']);
+        if($validated['repeat_until'] && !in_array($data_inicial->dayOfWeek, $validated['repeat_days'])){
+            return back()->with('alert-danger','A data inicial precisa coincidir com o dia da semana da repetição')->withInput();
+        }
+
         $reserva = Reserva::create($validated);
 
         $responsaveis = collect();
@@ -185,7 +189,14 @@ class ReservaController extends Controller
             $inicio = Carbon::createFromFormat('d/m/Y', $validated['data'])->addDays(1);
             $fim = Carbon::createFromFormat('d/m/Y', $validated['repeat_until']);
 
-            $period = CarbonPeriod::between($inicio, $fim);
+            $period = $validated['skip'] ?
+                PeriodoSemConflitoAction::handle(
+                    $reserva->sala_id,
+                    $inicio,
+                    $fim,
+                    $validated['horario_inicio'],
+                    $validated['horario_fim']) :
+                CarbonPeriod::between($inicio, $fim);
 
             foreach ($period as $date) {
                 if (in_array($date->dayOfWeek, $validated['repeat_days'])) {
@@ -237,7 +248,7 @@ class ReservaController extends Controller
             Auth::login(User::find($request->user_id));
         }
 
-        \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
+        // \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
         return view('reserva.show', [
             'reserva' => $reserva,
             'salas' => Sala::all(),

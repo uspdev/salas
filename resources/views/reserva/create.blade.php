@@ -27,6 +27,7 @@
         );
 
         $('#rep_bool_Nao').click( function() { 
+                $('#skip').prop('checked',false);
                 $('#repeat_container').hide();
                 $('#repFormControl').val('');
             }   
