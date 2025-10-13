@@ -20,8 +20,7 @@
     </div>
     <div class="col-sm form-group">
         <input type="checkbox" name="skip" id="skip">
-        <label for="" class="required">Realizar reservas pulando os dias de conflito (em construção)</label>
-        
+        <label for="" class="required">Realizar reservas pulando os dias de conflito</label>
     </div>
 
 </div>

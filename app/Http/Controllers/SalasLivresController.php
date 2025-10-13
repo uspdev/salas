@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sala;
 use Carbon\Carbon;
 use App\Http\Requests\SalaLivreRequest;
 use App\Models\Reserva;
+use App\Actions\SalasLivresAction;
+
 
 class SalasLivresController extends Controller
 {
@@ -18,7 +19,7 @@ class SalasLivresController extends Controller
     //pega as reservas que não estão ocupadas nos horários solicitados
     public function search(SalaLivreRequest $request)
     {
-        $salas = Sala::SalasLivresQuery($request->validated());
+        $salas = SalasLivresAction::handle($request->validated());
         return response()->json($salas);
     }
 }

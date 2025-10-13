@@ -10,7 +10,7 @@ use App\Models\Sala;
 class Recurso extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    
+
     use HasFactory;
     protected $guarded = ['id'];
 

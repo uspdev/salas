@@ -58,7 +58,8 @@ class ReservaRequest extends FormRequest
             'repeat_days.*' => 'integer|between:0,7',
             'data' => ['bail', 'required', 'date_format:d/m/Y', new verifyRoomAvailability($this, $id)],
             'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray()), new RestricoesSalaRule($this) ],
-            'tipo_responsaveis' => 'required'
+            'tipo_responsaveis' => 'required',
+            'skip' => 'nullable'
         ];
 
         $sala = Sala::find($this->sala_id);
