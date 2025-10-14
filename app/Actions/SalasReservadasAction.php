@@ -22,7 +22,7 @@ class SalasReservadasAction
         }, function ($q) use ($validated) {
             return $q->where('data', Carbon::createFromFormat('d/m/Y', $validated['data'])->format('Y-m-d'));
         });
-        
+
         return $query->toBase()->get()->unique();
     }
 }
