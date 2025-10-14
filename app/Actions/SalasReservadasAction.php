@@ -4,14 +4,15 @@ namespace App\Actions;
 
 use Carbon\Carbon;
 use App\Models\Reserva;
+use Illuminate\Support\Facades\DB;
 
 class SalasReservadasAction
 {
     public static function handle(array $validated){
         $query = Reserva::select('sala_id')
-            ->where('horario_inicio', '<', $validated['horario_fim'])
-            ->where('horario_fim', '>', $validated['horario_inicio'])
-            ->orderBy('sala_id', 'asc');
+        ->where('horario_inicio', '<', DB::raw("STR_TO_DATE('{$validated['horario_fim']}', '%H:%i')"))
+        ->where('horario_fim', '>', DB::raw("STR_TO_DATE('{$validated['horario_inicio']}', '%H:%i')"))
+        ->orderBy('sala_id', 'asc');
 
         $query->when($validated['data_limite'], function ($q) use ($validated) {
             $datas = RepeticaoSemanalAction::handle($validated['data'],
