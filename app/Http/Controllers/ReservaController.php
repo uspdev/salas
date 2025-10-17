@@ -23,7 +23,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Uspdev\Replicado\Pessoa;
-use App\Actions\PeriodoSemConflitoAction;
+use App\Actions\GetPeriodoAction;
+use App\Actions\CreateReservaAction;
 
 class ReservaController extends Controller
 {
@@ -32,7 +33,7 @@ class ReservaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function my(Request $request)
+    public function my()
     {
         $this->authorize('logado');
         $reservas = Reserva::where('user_id', auth()->user()->id);
@@ -121,8 +122,8 @@ class ReservaController extends Controller
      */
     public function store(ReservaRequest $request)
     {
-        $validated = $request->validated();
-        $validated['user_id'] = auth()->user()->id;
+        $validated = $request->validated() + ['user_id' => auth()->user()->id];
+
         if (isset($validated['extras']))
             $validated['extras'] = json_encode($validated['extras']);
 
@@ -138,76 +139,15 @@ class ReservaController extends Controller
         else
             $mensagem = "Reserva(s) realizada(s) com sucesso.";
 
-        $data_inicial = Carbon::createFromFormat('d/m/Y',$validated['data']);
-        if($validated['repeat_until'] && !in_array($data_inicial->dayOfWeek, $validated['repeat_days'])){
-            return back()->with('alert-danger','A data inicial precisa coincidir com o dia da semana da repetição')->withInput();
+        $periodo = GetPeriodoAction::handle($validated);
+
+        if ( count($periodo) > 0 ) {
+            $result = CreateReservaAction::handle($validated, $periodo);
+            $reserva = $result['reserva'];
+            $created = $result['created'];
         }
-
-        $reserva = Reserva::create($validated);
-
-        $responsaveis = collect();
-
-        switch ($request->tipo_responsaveis) {
-            case 'eu':
-                $responsavel = ResponsavelReserva::firstOrCreate([
-                    'nome' => auth()->user()->name,
-                    'codpes' => auth()->user()->codpes
-                ]);
-                $responsaveis->push($responsavel);
-
-                break;
-
-            case 'unidade':
-                foreach ($request->responsaveis_unidade as $responsavel_codpes) {
-                    $responsavel = ResponsavelReserva::firstOrCreate([
-                        'nome' => Pessoa::obterNome($responsavel_codpes),
-                        'codpes' => $responsavel_codpes
-                    ]);
-                    $responsaveis->push($responsavel);
-                }
-
-                break;
-
-            case 'externo':
-                foreach($request->responsaveis_externo as $responsavel_nome){
-                    $responsavel = ResponsavelReserva::firstOrCreate([
-                        'nome' => $responsavel_nome
-                    ]);
-                    $responsaveis->push($responsavel);
-                }
-
-                break;
-        }
-
-        $reserva->responsaveis()->sync($responsaveis->pluck('id'));
-
-        $created = '';
-        if (array_key_exists('repeat_days', $validated) && array_key_exists('repeat_until', $validated)) {
-            $reserva->parent_id = $reserva->id;
-            $reserva->save();
-
-            $inicio = Carbon::createFromFormat('d/m/Y', $validated['data'])->addDays(1);
-            $fim = Carbon::createFromFormat('d/m/Y', $validated['repeat_until']);
-
-            $period = $validated['skip'] ?
-                PeriodoSemConflitoAction::handle(
-                    $reserva->sala_id,
-                    $inicio,
-                    $fim,
-                    $validated['horario_inicio'],
-                    $validated['horario_fim']) :
-                CarbonPeriod::between($inicio, $fim);
-
-            foreach ($period as $date) {
-                if (in_array($date->dayOfWeek, $validated['repeat_days'])) {
-                    $new = $reserva->replicate();
-                    $new->parent_id = $reserva->id;
-                    $new->data = $date->format('d/m/Y');
-                    $new->save();
-                    $new->responsaveis()->sync($responsaveis->pluck('id'));
-                    $created .= "<li><a href='/reservas/{$new->id}'> {$date->format('d/m/Y')}- {$new->nome}</a></li>";
-                }
-            }
+        else {
+            return redirect()->back()->with('warning', 'Operação não completada, não há data(s) para reserva!');
         }
 
         $reserva->reagendarTarefa_AprovacaoAutomatica();
@@ -229,7 +169,7 @@ class ReservaController extends Controller
         }
 
         \UspTheme::activeUrl('/reservas/my');
-        session()->put('alert-success', $mensagem . " <ul>{$created}</ul>");
+        session()->put('alert-success', $mensagem . " <ul>$created</ul>");
         return redirect("/reservas/{$reserva->id}");
     }
 

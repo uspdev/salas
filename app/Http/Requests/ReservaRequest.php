@@ -47,19 +47,22 @@ class ReservaRequest extends FormRequest
             $id = 0;
         }
 
-
         $rules = [
             'nome' => 'required',
             'horario_inicio' => 'required|date_format:G:i|',
             'horario_fim' => 'required|date_format:G:i|after:horario_inicio|',
             'finalidade_id' => 'required|integer',
             'descricao' => 'nullable|max:255',
-            'repeat_until' => ['required_with:repeat_days', 'nullable', 'date_format:d/m/Y'],
+            'rep_bool' => 'nullable',
+            'repeat_until' => ['required_with:repeat_days', 'nullable', 'date_format:d/m/Y', 'after:data'],
+            'repeat_days' => 'required_if:rep_bool,Sim',
             'repeat_days.*' => 'integer|between:0,7',
             'data' => ['bail', 'required', 'date_format:d/m/Y', new verifyRoomAvailability($this, $id)],
             'sala_id' => ['required', Rule::in(Sala::pluck('id')->toArray()), new RestricoesSalaRule($this) ],
             'tipo_responsaveis' => 'required',
-            'skip' => 'nullable'
+            'skip' => 'nullable',
+            'responsaveis_unidade' => 'required_if:tipo_responsaveis,unidade',
+            'responsaveis_externo' => 'required_if:tipo_responsaveis,externo',
         ];
 
         $sala = Sala::find($this->sala_id);
@@ -93,10 +96,14 @@ class ReservaRequest extends FormRequest
             'horario_fim.date_format' => 'Digite o horário no formato 0:00. Exemplo: 9:00',
             'descricao.max' => 'A descrição deve conter no máximo 255 caracteres',
             'sala_id.required' => 'Selecione uma sala.',
-            'repeat_until.required_with' => 'Selecione uma data para o fim da repetição.',
+            'repeat_until.required_with' => 'Selecione uma data para o fim da repetição no campo "Repetição Semanal".',
             'repeat_until.date_format' => 'A data de repetição deve ser válida e inserida no formato dia/mês/ano.',
             'data.after_or_equal' => 'Não é possível fazer reservas em dias passados.',
             'horario_inicio.after' => 'Não é possível fazer reservas em um horário passado.',
+            'repeat_until.after' => 'Repetição semanal precisa ser posterior a data.',
+            'responsaveis_unidade.required' => 'O responsável pela unidade não pode ficar em branco.',
+            'responsaveis_externo.required' => 'O responsável externo não pode ficar em branco.',
+            'repeat_days.required_if' => 'É necessário escolher Dias de repetição.',
         ];
 
         // adiciona à $messages eventuais campos extras obrigatórios
