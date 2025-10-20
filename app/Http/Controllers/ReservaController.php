@@ -147,7 +147,7 @@ class ReservaController extends Controller
             $created = $result['created'];
         }
         else {
-            return redirect()->back()->with('warning', 'Operação não completada, não há data(s) para reserva!');
+            return redirect()->back()->with('alert-danger', 'Operação não completada, não há data(s) para reserva!')->withInput();
         }
 
         $reserva->reagendarTarefa_AprovacaoAutomatica();
