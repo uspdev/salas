@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Models\Reserva;
 use App\Models\Sala;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -10,21 +11,31 @@ use Illuminate\Http\Request;
 class CalendarController extends Controller
 {
     public function index(Request $request){
-        $salas = Sala::where('categoria_id',$request->categorias_id)->get();
         $categorias = Categoria::select('id','nome')->get();
-        $horas = range(8, 23);
-        $dataSelecionada = Carbon::createFromFormat('d/m/Y', $request->data  ?? Carbon::today()->format('d/m/Y'));
+        $dataSelecionada = Carbon::createFromFormat('d/m/Y', $request->data ?? Carbon::today()->format('d/m/Y'));
+        $res = Reserva::join('salas','salas.id','reservas.sala_id')
+        ->select(
+            'salas.nome as nome_sala',
+            'reservas.sala_id',
+            'reservas.nome',
+            'reservas.horario_inicio',
+            'reservas.horario_fim',
+            'reservas.data'
+        )
+        ->when($request->categoria_id, function($query) use ($request){
+            $query->where('salas.categoria_id',$request->categoria_id);
+        })
+        ->whereDate('reservas.data', $dataSelecionada)
+        ->get();
         
-        return view('sala.calendario', 
-        ['salas' => $salas,
-        'horas' => $horas,
-        'dataSelecionada' => $dataSelecionada,
-        'categorias' => $categorias,
-        'categorias_id' => $request->categorias_id ?? []
+        $salas = Sala::where('categoria_id',$request->categoria_id)->get();
+
+        return view('sala.calendario',[
+            'res' => collect($request)->isNotEmpty() ? $res : collect(),
+            'data' => Carbon::now(),
+            'categorias' => $categorias,
+            'categoria_id' => $request->categoria_id ?? [],
+            'salas' => $salas
         ]);
-    }
-
-    public function search(Request $request){
-
     }
 }
