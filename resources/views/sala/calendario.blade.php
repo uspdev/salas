@@ -68,13 +68,12 @@
                 bottom: 90,
                 left: 150
             },
-            //width = 1800 - margin.left - margin.right,
-            width = (window.innerWidth);
+
+        width = (window.innerWidth);
         height = (window.innerHeight + ReservaSize) - margin.top - margin.bottom;
 
         const svg = d3.select("#grafico")
             .append("svg")
-            //.attr("width", width + margin.left + margin.right)
             .attr("width", "100%")
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -86,20 +85,20 @@
         const parseHora = d3.timeParse("%H:%M");
 
         const minHora = parseHora("8:00");
-        const maxHora = parseHora("23:00");
+        const maxHora = parseHora("23:59");
 
         const x = d3.scaleTime()
-            .domain([d3.timeHour.offset(minHora, 0), d3.timeHour.offset(maxHora, 2)]) // adiciona 1h de folga
+            .domain([d3.timeHour.offset(minHora, 0), d3.timeHour.offset(maxHora, 2)])
             .range([2, width]);
 
         const salas = Array.from(new Set(reservas.map(d => d.sala)));
 
+        //retorna o nome das salas caso não haja nenhuma reserva
         if (salas.length === 0 && dados.salas_aula.length > 0) {
             salas.push(dados.salas_aula.map(c => c.nome));
         }
 
         const y = d3.scaleBand()
-            //.domain(dados.res.map(c => c.nome_sala))
             .domain(dados.salas_aula.map(c => c.nome)) //retorna todas as salas do prédio selecionado, livre ou não
             .range([1, height])
             .padding(0.1);
@@ -117,11 +116,28 @@
             .call(eixoX)
             .attr("font-size", "16px");
 
-        svg.append("g")
-            .attr("class", "eixo")
-            .call(eixoY)
-            .attr("font-size", "16px");
+        const gY = svg.append("g").call(eixoY);
 
+        gY.selectAll(".tick text")
+            .each(function(d) {
+                const sala = dados.salas_aula.find(s => s.nome === d);
+                const link = d3.select(this.parentNode);
+
+                d3.select(this).remove();
+                    
+                link.append("a")
+                    .attr("href", `/salas/${sala.id}`)
+                    .attr("target", "_blank")
+                    .append("text")
+                    .attr("x", -10)
+                    .attr("y", 5)
+                    .attr("text-anchor", "end")
+                    .attr("font-size", "14px")
+                    .attr("fill","#000")
+                    .style("cursor","pointer")
+                    .text(sala.nome);
+            });
+            
         // ======================
         // TOOLTIP
         // ======================
