@@ -94,10 +94,6 @@ $menu = [
         'url' => '/',
     ],
     [
-        'text' => '<i class="fa fa-calendar" aria-hidden="true"></i> Calendário por dia',
-        'url' => '/calendario',
-    ],
-    [
         'text' => '<i class="fa fa-calendar-times" aria-hidden="true"></i> Calendário por Sala',
         'url' => '/salas',
     ],

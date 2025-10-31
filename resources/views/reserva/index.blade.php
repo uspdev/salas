@@ -1,3 +1,5 @@
+@include('sala.calendario')
+<div class="col-md-12" style="margin-top:12px;">
 <div class="card">
     <div class="card-body">
         <form method="GET" action="/search" id="form-filtros">
@@ -50,7 +52,7 @@
         @include('reserva.partials.table')
     </div>
 </div>
-
+</div>
 <style>
 
 @media(max-width: 1330px){

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {
-    public function index(Request $request){
+    public static function index(Request $request){
         $categorias = Categoria::select('id','nome')->get();
         $dataSelecionada = Carbon::createFromFormat('d/m/Y', $request->data ?? Carbon::today()->format('d/m/Y'));
         $reservas = Reserva::join('salas','salas.id','reservas.sala_id')
@@ -35,12 +35,12 @@ class CalendarController extends Controller
         $salas = Sala::where('categoria_id',$request->categoria_id)->get();
         
         return view('sala.calendario',[
-            'reservas' => collect($request)->isNotEmpty() ? $reservas : collect(),
+            'reserva_grafico' => collect($request)->isNotEmpty() ? $reservas : collect(),
             'data' => Carbon::now(),
             'categorias' => $categorias,
             'categoria_id' => $request->categoria_id ?? [],
-            'salas' => $salas,
-            'finalidades' => $reservas->groupBy('cor'),
+            'salas_aula' => $salas,
+            'finalidade_reserva' => $reservas->groupBy('cor'),
         ]);
     }
 }

@@ -1,7 +1,4 @@
-@extends('main')
-@section('content')
-    
-<form action="/calendario" method="get">
+<form action="/search" method="get">
         <div class="col-sm-6">
             <label><b>Esolha o prédio</b></label>
             <select name="categoria_id[]" class="select2 form-control">
@@ -22,60 +19,45 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="row justify-content-center" style="margin-bottom:20px;">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header"><b>Legenda das cores</b></div>
-                <div class="card-body">
-                    <div class="row justify-content-center" style="margin-bottom:15px;">
-                        @foreach($finalidades as $cor => $finalidade)
-                        <div class="col">
-                            <div 
-                            style="color:black;
-                            background-color:{{$cor}}; 
-                            border:none; 
-                            padding:15px;
-                            border-radius:5px;
-                            border:1px solid black;
-                            text-align:center;
-                            cursor:auto;">
-                            {{$finalidade[0]['legenda']}}
-                            </div>
-                        </div>
-                    @endforeach
-                    </div>
-                </div>  
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <div class="col-md-12">
         <div class="card" id="card">
             <div class="card-header">
                 <h2><b>Programa de salas</b></h2>
+                <i class="fas fa-plus-square"></i>
             </div>
-            <div class="card-body">
-                <div id="grafico" style="width:100%; overflow-x:auto; overflow-y:auto;">
+                <div class="card-body">
+                    <div class="row justify-content-center" style="margin-bottom:15px;">
+                        <div class="col-12">
+                        <p><b>Legenda das cores</b></p>
+                        </div>
+                        @foreach($finalidade_reserva as $cor => $finalidade)
+                            <div class="col">
+                                <div 
+                                style="color:black;
+                                background-color:{{$cor}}; 
+                                border:none; 
+                                padding:15px;
+                                border-radius:5px;
+                                border:1px solid black;
+                                text-align:center;
+                                cursor:auto;">
+                                {{$finalidade[0]['legenda']}}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <hr/>
+                    <div id="grafico" style="width:100%; overflow-x:auto; overflow-y:auto;">
+                    </div>
+                    <div class="tooltip" id="tooltip"></div>
                 </div>
-                <div class="tooltip" id="tooltip"></div>
-            </div>
         </div>
     </div>
 
-    <style>
-        #card {
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-        }
-    </style>
-
-
     <script>
         const dados = {
-            reservas: @json($reservas),
-            salas_aula: @json($salas)
+            reservas: @json($reserva_grafico),
+            salas_aula: @json($salas_aula)
         };
 
         const reservas = [];
@@ -211,7 +193,7 @@
             .attr("font-size", "12px")
             .text(d => `${truncarDescricao(d.descricao, Math.floor(d.comprimentoBarra / 9))} (${d.inicio}-${d.fim})`);
     </script>
-@endsection
+
 @section('javascripts_bottom')
 @endsection
 <script src="https://d3js.org/d3.v7.min.js"></script>

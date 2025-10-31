@@ -13,6 +13,8 @@ class IndexController extends Controller
 {
     public function search(Request $request)
     {
+        $reserva_grafico = CalendarController::index($request);
+        
         $reservas = Reserva::make()
             ->when($request->busca_nome, function ($query) use ($request) {
                 $query->where('nome', 'LIKE', '%'.$request->busca_nome.'%')
@@ -33,16 +35,21 @@ class IndexController extends Controller
             });
 
         $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
-
+        
         \UspTheme::activeUrl('/');
         return view('home', [
-            'categorias' => Categoria::all(),
+            'categorias' => Categoria::select('id','nome')->get(),
             'filter' => ($request->filter) ?: [],
-            'reservas' => $reservas,
-            'finalidades' => Finalidade::all(),
+            'finalidades' => Finalidade::select('cor','legenda')->get(),
             'finalidades_filter' => $request->finalidades_filter ?? [],
             'salas' => Sala::all(),
-            'salas_filter' => $request->salas_filter ?? []
+            'salas_filter' => $request->salas_filter ?? [],
+            'categoria_id' => $request->categoria_id ?? [],
+            'data' => Carbon::today(),
+            'reservas' => $reservas,
+            'reserva_grafico' => $reserva_grafico->reserva_grafico,
+            'finalidade_reserva' => $res->fin ?? [],
+            'salas_aula' => Sala::where('categoria_id',$request->categoria_id)->get(),
         ]);
     }
 
@@ -51,6 +58,8 @@ class IndexController extends Controller
         $data = today();
         $reservas = Reserva::whereDate('data', $data)->orderBy('horario_inicio', 'ASC')->paginate(20);
 
+        $reserva_grafico = CalendarController::index($request);
+        
         \UspTheme::activeUrl('/');
         return view('home', [
             'categorias' => Categoria::all(),
@@ -59,7 +68,12 @@ class IndexController extends Controller
             'finalidades' => Finalidade::all(),
             'finalidades_filter' => $request->finalidades_filter ?? [],
             'salas' => Sala::all(),
-            'salas_filter' => $request->salas_filter ?? []
+            'salas_filter' => $request->salas_filter ?? [],
+            'categoria_id' => $request->categoria_id ?? [],
+            'data' => $data,
+            'reserva_grafico' => $reserva_grafico->reserva_grafico,
+            'finalidade_reserva' => $reserva_grafico->finalidades ?? [],
+            'salas_aula' => Sala::where('categoria_id',$request->categoria_id)->get(),
         ]);
     }
 }
