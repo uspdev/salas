@@ -1,8 +1,9 @@
 @extends('main')
 @section('content')
-    <form action="/calendario" method="get">
-        <div class="col-4">
-            <label><b>Escolha o prédio</b></label>
+    
+<form action="/calendario" method="get">
+        <div class="col-sm-6">
+            <label><b>Esolha o prédio</b></label>
             <select name="categoria_id[]" class="select2 form-control">
                 @foreach ($categorias as $categoria)
                     <option value="{{ $categoria->id }}" {{ in_array($categoria->id, $categoria_id) ? 'selected' : '' }}>
@@ -11,31 +12,61 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-4">
+        <div class="col-sm-5">
             <label><b>Escolha a data</b></label>
             <input type="text" class="datepicker form-control" name="data" value="{{ old('data', request()->data) }}">
             <small class="text-muted">Ex.: {{ $data->format('d/m/Y') }}</small>
         </div>
-        <div class="col-4">
+        <div class="col-sm-1">
             <button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
         </div>
-    </form>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center" style="margin-bottom:20px;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header"><b>Legenda das cores</b></div>
+                <div class="card-body">
+                    <div class="row justify-content-center" style="margin-bottom:15px;">
+                        @foreach($finalidades as $cor => $finalidade)
+                        <div class="col">
+                            <div 
+                            style="color:black;
+                            background-color:{{$cor}}; 
+                            border:none; 
+                            padding:15px;
+                            border-radius:5px;
+                            border:1px solid black;
+                            text-align:center;
+                            cursor:auto;">
+                            {{$finalidade[0]['legenda']}}
+                            </div>
+                        </div>
+                    @endforeach
+                    </div>
+                </div>  
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <div class="col-md-12">
-        <div class="card">
+        <div class="card" id="card">
             <div class="card-header">
-                <h2>Programa de salas</h2>
+                <h2><b>Programa de salas</b></h2>
             </div>
             <div class="card-body">
-                <div id="grafico"></div>
+                <div id="grafico" style="width:100%; overflow-x:auto; overflow-y:auto;">
+                </div>
                 <div class="tooltip" id="tooltip"></div>
             </div>
         </div>
     </div>
 
     <style>
-        .card {
+        #card {
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
         }
     </style>
@@ -43,52 +74,49 @@
 
     <script>
         const dados = {
-            res: @json($res),
+            reservas: @json($reservas),
             salas_aula: @json($salas)
         };
 
         const reservas = [];
-
-        for (let i = 0; i < dados.res.length; i++) {
-            const r = dados.res[i];
-
+        dados.reservas.forEach((e, i) =>{
+            const r = dados.reservas[i];
             reservas.push({
                 sala_id: r.sala_id,
-                sala: r.nome_sala ? r.nome_sala : '?',
+                sala: r.nome_sala,
                 inicio: r.horario_inicio,
                 fim: r.horario_fim,
                 descricao: r.nome,
+                finalidade: r.cor,
             });
-        }
+        });
 
-        let ReservaSize = dados.salas_aula.length <= 20 ? (window.innerHeight - 1280) : (window.innerHeight * 2);
         const margin = {
-                top: 30,
-                right: 40,
-                bottom: 90,
-                left: 150
-            },
+            top: 30,
+            right: 40,
+            bottom: 90,
+            left: 150
+        },
 
-        width = (window.innerWidth);
-        height = (window.innerHeight + ReservaSize) - margin.top - margin.bottom;
+        //ajustes conforme tamanho da tela
+        reservaHeight = dados.salas_aula.length < 20 ? window.innerHeight : window.innerHeight * 3;
+        height = (reservaHeight) + margin.bottom; 
+        width = window.innerWidth < 768 ? window.innerWidth * 3 : window.innerHeight * 2; 
 
         const svg = d3.select("#grafico")
             .append("svg")
-            .attr("width", "100%")
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("width", width)
+            .attr("height", height + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // ======================
-        // ESCALAS
-        // ======================
+        /* ESCALAS*/
         const parseHora = d3.timeParse("%H:%M");
-
         const minHora = parseHora("8:00");
         const maxHora = parseHora("23:59");
 
         const x = d3.scaleTime()
-            .domain([d3.timeHour.offset(minHora, 0), d3.timeHour.offset(maxHora, 2)])
+            .domain([d3.timeHour.offset(minHora, 0), d3.timeHour.offset(maxHora, 1)])
             .range([2, width]);
 
         const salas = Array.from(new Set(reservas.map(d => d.sala)));
@@ -102,9 +130,8 @@
             .domain(dados.salas_aula.map(c => c.nome)) //retorna todas as salas do prédio selecionado, livre ou não
             .range([1, height])
             .padding(0.1);
-        // ======================
-        // EIXOS
-        // ======================
+        
+        /* EIXOS */
         const eixoX = d3.axisBottom(x)
             .ticks(d3.timeHour.every(1))
             .tickFormat(d3.timeFormat("%H:%M"));
@@ -124,7 +151,7 @@
                 const link = d3.select(this.parentNode);
 
                 d3.select(this).remove();
-                    
+                console.log(sala.nome.length);
                 link.append("a")
                     .attr("href", `/salas/${sala.id}`)
                     .attr("target", "_blank")
@@ -132,52 +159,43 @@
                     .attr("x", -10)
                     .attr("y", 5)
                     .attr("text-anchor", "end")
-                    .attr("font-size", "14px")
-                    .attr("fill","#000")
+                    .attr("font-size", d => sala.nome.length > 15 ? "14px" : "16px")
+                    .attr("fill","#0000ee99")
                     .style("cursor","pointer")
-                    .text(sala.nome);
+                    .text(sala.nome.length > 16 ? sala.nome.slice(0, 18) + "…" : sala.nome);
             });
-            
-        // ======================
-        // TOOLTIP
-        // ======================
-        const tooltip = d3.select("#tooltip");
 
-        // ======================
-        // BARRAS (RESERVAS)
-        // ======================
-
+        /* BARRAS */
         svg.selectAll(".barra")
             .data(reservas)
             .enter()
             .append("a")
-            .attr("xlink:href", d => `/salas/${d.sala_id}`)
+            .attr("href", d => `/salas/${d.sala_id}`)
             .attr("target", "_blank")
             .append("rect")
             .attr("class", "barra")
+            .attr("stroke","#333")
+            .attr("stroke-width",".5")
             .attr("x", d => x(parseHora(d.inicio)))
             .attr("y", d => y(d.sala))
-            .attr("width", d => x(parseHora(d.fim)) - x(parseHora(d.inicio)))
-            .attr("height", y.bandwidth())
-            .attr("fill", d => "#ffd53bff")
-            .on("mouseover", function(event, d) {
-                tooltip.style("opacity", 1)
-                    .html(`
-        <strong>${d.descricao}</strong><br>
-        ${d.sala}<br>
-        ${d.inicio} – ${d.fim}
-      `);
-                d3.select(this).attr("fill", "#ff4e4eff");
+            .attr("width", d => {
+                const barra = x(parseHora(d.fim)) - x(parseHora(d.inicio));
+                d.comprimentoBarra = barra;
+                return barra;
             })
-            .on("mouseout", function() {
-                tooltip.style("opacity", 0);
-                d3.select(this).attr("fill", "#ffd53bff");
-            });
+            .attr("height", y.bandwidth())
+            .attr("fill", d => d.finalidade);
+        
 
-        // ======================
-        // RÓTULOS NAS BARRAS
-        // ======================
+        /* MEDIA QUERY (DISPOSITIVOS MÓVEIS) */
+        const mediaQuery = window.matchMedia("(max-width: 768px)");
+        if (mediaQuery.matches) { //somente telas menores a 768px
+        d3.select("#grafico svg")
+            .attr("width", 1200)
+            .attr("height", height + margin.bottom);
+        }
 
+        /* LIMITE DE CARACTERES NAS BARRAS */
         function truncarDescricao(descricao, limite) {
             if (!descricao) return "Sem descrição";
             return descricao.length > limite ? descricao.slice(0, limite) + "…" : descricao;
@@ -191,7 +209,7 @@
             .attr("y", d => y(d.sala) + y.bandwidth() / 1.6)
             .attr("fill", "#333")
             .attr("font-size", "12px")
-            .text(d => `${truncarDescricao(d.descricao, 15)} (${d.inicio}-${d.fim})`);
+            .text(d => `${truncarDescricao(d.descricao, Math.floor(d.comprimentoBarra / 9))} (${d.inicio}-${d.fim})`);
     </script>
 @endsection
 @section('javascripts_bottom')
