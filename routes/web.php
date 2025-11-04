@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 // Isso se faz necessário pois há itens de menu diferentes que usam as mesmas rotas, e queremos ser capazes de aplicar os highlights no menu corretamente
 Route::middleware('redirectreusedroutes')->group(function() {
 
+Route::get('/calendario',[CalendarController::class,'index'])->name('calendario.search');
+
 // Reservas
 Route::get('/reservas/my', [ReservaController::class, 'my']);
 Route::get('/reservas/{reserva}/aprovar', [ReservaController::class, 'aprovar'])->name('reservas.aprovar');

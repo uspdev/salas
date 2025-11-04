@@ -1,68 +1,38 @@
-<form action="/search" method="get">
-        <div class="col-sm-6">
-            <label><b>Esolha o prédio</b></label>
-            <select name="categoria_id[]" class="select2 form-control">
-                @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}" {{ in_array($categoria->id, $categoria_id) ? 'selected' : '' }}>
-                        {{ $categoria->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-sm-5">
-            <label><b>Escolha a data</b></label>
-            <input type="text" class="datepicker form-control" name="data" value="{{ old('data', request()->data) }}">
-            <small class="text-muted">Ex.: {{ $data->format('d/m/Y') }}</small>
-        </div>
-        <div class="col-sm-1">
-            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
-        </div>
-    </div>
-
-    <div class="col-md-12">
-        <div class="card" id="card">
-            <div class="card-header">
-                <h2><b>Programa de salas</b></h2>
-                <i class="fas fa-plus-square"></i>
-            </div>
-                <div class="card-body">
-                    <div class="row justify-content-center" style="margin-bottom:15px;">
-                        <div class="col-12">
-                        <p><b>Legenda das cores</b></p>
-                        </div>
-                        @foreach($finalidade_reserva as $cor => $finalidade)
-                            <div class="col">
-                                <div 
-                                style="color:black;
-                                background-color:{{$cor}}; 
-                                border:none; 
-                                padding:15px;
-                                border-radius:5px;
-                                border:1px solid black;
-                                text-align:center;
-                                cursor:auto;">
-                                {{$finalidade[0]['legenda']}}
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <hr/>
-                    <div id="grafico" style="width:100%; overflow-x:auto; overflow-y:auto;">
-                    </div>
-                    <div class="tooltip" id="tooltip"></div>
-                </div>
-        </div>
-    </div>
-
+<div id="grafico" style="width:100%; overflow-x:auto; overflow-y:auto;"></div>
     <script>
-        const dados = {
-            reservas: @json($reserva_grafico),
-            salas_aula: @json($salas_aula)
-        };
 
+    let reserva_grafico = [];
+    let salas_aula = [];
+    let finalidade = [];
+    $(document).ready(function(){
+        $("#form-search").on("submit", function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/calendario',
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+                beforeSend: function(){
+                    $("#spinner").removeClass('d-none');
+                },
+                success: function(response){
+                    finalidade = response.finalidade_reserva;
+                    reserva_grafico = response.reserva_grafico;
+                    salas_aula = response.salas_aula;
+                    $("#grafico").html(response);
+                    $("#spinner").addClass('d-none');
+                    iniciarGrafico();
+                },
+                error: function(error){
+                    $("#grafico").html("<h3 class='text-danger' style='margin:20px;'>" + error.responseJSON.error + "</h3>");
+                    $("#spinner").addClass('d-none');
+                }
+            });
+        });
+    });
+    function iniciarGrafico(){
         const reservas = [];
-        dados.reservas.forEach((e, i) =>{
-            const r = dados.reservas[i];
+        reserva_grafico.forEach((e, i) =>{
+            const r = reserva_grafico[i];
             reservas.push({
                 sala_id: r.sala_id,
                 sala: r.nome_sala,
@@ -70,7 +40,32 @@
                 fim: r.horario_fim,
                 descricao: r.nome,
                 finalidade: r.cor,
+                legenda_finalidade: r.legenda
             });
+        });
+
+        const cores = Object.keys(finalidade);
+        const teste = Object.values(finalidade);
+        let container = $("#finalidades");
+        let item = [];
+        let legenda = [];
+        container.empty();
+        cores.forEach((e,i) => {
+            console.log(legenda);
+            legenda = finalidade[e][0]['legenda'];
+            item = $("<div>")
+            .css({
+                "background-color":e,
+                "width":100,
+                "height":100,
+                "border-radius":5,
+                "border":"1px solid black",
+                "margin":20
+            })
+            .addClass("col")
+            .text(legenda)
+            .css({'font-weight':"bold",'font-size':16,"padding-top":35})
+            container.append(item);
         });
 
         const margin = {
@@ -81,7 +76,7 @@
         },
 
         //ajustes conforme tamanho da tela
-        reservaHeight = dados.salas_aula.length < 20 ? window.innerHeight : window.innerHeight * 3;
+        reservaHeight = salas_aula.length < 20 ? window.innerHeight : window.innerHeight * 3;
         height = (reservaHeight) + margin.bottom; 
         width = window.innerWidth < 768 ? window.innerWidth * 3 : window.innerHeight * 2; 
 
@@ -104,12 +99,12 @@
         const salas = Array.from(new Set(reservas.map(d => d.sala)));
 
         //retorna o nome das salas caso não haja nenhuma reserva
-        if (salas.length === 0 && dados.salas_aula.length > 0) {
-            salas.push(dados.salas_aula.map(c => c.nome));
+        if (salas.length === 0 && salas_aula.length > 0) {
+            salas.push(salas_aula.map(c => c.nome));
         }
 
         const y = d3.scaleBand()
-            .domain(dados.salas_aula.map(c => c.nome)) //retorna todas as salas do prédio selecionado, livre ou não
+            .domain(salas_aula.map(c => c.nome)) //retorna todas as salas do prédio selecionado, livre ou não
             .range([1, height])
             .padding(0.1);
         
@@ -129,11 +124,10 @@
 
         gY.selectAll(".tick text")
             .each(function(d) {
-                const sala = dados.salas_aula.find(s => s.nome === d);
+                const sala = salas_aula.find(s => s.nome === d);
                 const link = d3.select(this.parentNode);
 
                 d3.select(this).remove();
-                console.log(sala.nome.length);
                 link.append("a")
                     .attr("href", `/salas/${sala.id}`)
                     .attr("target", "_blank")
@@ -192,8 +186,6 @@
             .attr("fill", "#333")
             .attr("font-size", "12px")
             .text(d => `${truncarDescricao(d.descricao, Math.floor(d.comprimentoBarra / 9))} (${d.inicio}-${d.fim})`);
+    }
+    
     </script>
-
-@section('javascripts_bottom')
-@endsection
-<script src="https://d3js.org/d3.v7.min.js"></script>

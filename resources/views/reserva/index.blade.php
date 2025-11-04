@@ -1,4 +1,34 @@
-@include('sala.calendario')
+<div class="col-md-12">
+    <div class="card">
+        <div 
+        class="card-header"
+        type="button" 
+        data-toggle="collapse" 
+        data-target="#collapse0" 
+        aria-expanded="false" 
+        aria-controls="collapse0">
+        <h2><b>Programa de salas</b></h2><i class="fas fa-plus-square"></i>
+        </div>
+        <div class="collapse" id="collapse0" >
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        @include('reserva.partials.form_calendario')
+                    </div>
+                    <hr/>
+                    <div class="col-12">
+                        <b>Legenda de cores</b>
+                        <div id="finalidades" class="row justify-content-center"></div>
+                    </div>
+                </div>
+                <div class="spinner-border m-5 d-none" role="status" id="spinner">
+                    <span class="sr-only">Carregando...</span>
+                </div>
+                @include('reserva.calendario')
+            </div>
+        </div>
+    </div>
+</div>
 <div class="col-md-12" style="margin-top:12px;">
 <div class="card">
     <div class="card-body">

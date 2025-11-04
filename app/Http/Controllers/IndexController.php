@@ -35,7 +35,7 @@ class IndexController extends Controller
             });
 
         $reservas = $reservas->orderBy('horario_inicio', 'ASC')->paginate(20);
-        
+
         \UspTheme::activeUrl('/');
         return view('home', [
             'categorias' => Categoria::select('id','nome')->get(),
@@ -44,12 +44,6 @@ class IndexController extends Controller
             'finalidades_filter' => $request->finalidades_filter ?? [],
             'salas' => Sala::all(),
             'salas_filter' => $request->salas_filter ?? [],
-            'categoria_id' => $request->categoria_id ?? [],
-            'data' => Carbon::today(),
-            'reservas' => $reservas,
-            'reserva_grafico' => $reserva_grafico->reserva_grafico,
-            'finalidade_reserva' => $res->fin ?? [],
-            'salas_aula' => Sala::where('categoria_id',$request->categoria_id)->get(),
         ]);
     }
 
@@ -59,7 +53,6 @@ class IndexController extends Controller
         $reservas = Reserva::whereDate('data', $data)->orderBy('horario_inicio', 'ASC')->paginate(20);
 
         $reserva_grafico = CalendarController::index($request);
-        
         \UspTheme::activeUrl('/');
         return view('home', [
             'categorias' => Categoria::all(),
@@ -71,9 +64,9 @@ class IndexController extends Controller
             'salas_filter' => $request->salas_filter ?? [],
             'categoria_id' => $request->categoria_id ?? [],
             'data' => $data,
-            'reserva_grafico' => $reserva_grafico->reserva_grafico,
-            'finalidade_reserva' => $reserva_grafico->finalidades ?? [],
-            'salas_aula' => Sala::where('categoria_id',$request->categoria_id)->get(),
+            'reserva_grafico' => $reserva_grafico->original['reserva_grafico'],
+            'salas_aula' => $reserva_grafico->original['salas_aula'],
+            'finalidade_reserva' => $reserva_grafico->original['finalidade_reserva'],
         ]);
     }
 }
