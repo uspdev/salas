@@ -23,7 +23,7 @@
                     iniciarGrafico();
                 },
                 error: function(error){
-                    $("#grafico").html("<h3 class='text-danger' style='margin:20px;'>" + error.responseJSON.error + "</h3>");
+                    $("#grafico").html("<h3 class='text-danger' style='margin:20px;'>" + error.responseJSON.message + "</h3>"); 
                     $("#spinner").addClass('d-none');
                 }
             });
@@ -45,7 +45,6 @@
         });
 
         const cores = Object.keys(finalidade);
-        const teste = Object.values(finalidade);
         let container = $("#finalidades");
         let item = [];
         let legenda = [];
@@ -75,7 +74,7 @@
             left: 150
         },
 
-        //ajustes conforme tamanho da tela
+        //ajustes das barras conforme tamanho da tela
         reservaHeight = salas_aula.length < 20 ? window.innerHeight : window.innerHeight * 3;
         height = (reservaHeight) + margin.bottom; 
         width = window.innerWidth < 768 ? window.innerWidth * 3 : window.innerHeight * 2; 
@@ -110,6 +109,9 @@
         
         /* EIXOS */
         const eixoX = d3.axisBottom(x)
+        .ticks(d3.timeHour.every(1))
+        .tickFormat(d3.timeFormat("%H:%M"));
+        const eixoX2 = d3.axisTop(x)
             .ticks(d3.timeHour.every(1))
             .tickFormat(d3.timeFormat("%H:%M"));
         const eixoY = d3.axisLeft(y);
@@ -121,6 +123,7 @@
             .attr("font-size", "16px");
 
         const gY = svg.append("g").call(eixoY);
+        const gX = svg.append("g").call(eixoX2).attr('font-size', "16px");
 
         gY.selectAll(".tick text")
             .each(function(d) {
@@ -167,7 +170,7 @@
         const mediaQuery = window.matchMedia("(max-width: 768px)");
         if (mediaQuery.matches) { //somente telas menores a 768px
         d3.select("#grafico svg")
-            .attr("width", 1200)
+            .attr("width", 1450)
             .attr("height", height + margin.bottom);
         }
 

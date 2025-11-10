@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CalendarioRequest;
 use App\Models\Categoria;
 use App\Models\Finalidade;
 use App\Models\Reserva;
@@ -11,9 +12,9 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    public function search(Request $request)
+    public function search(Request $request, CalendarioRequest $calendario)
     {
-        $reserva_grafico = CalendarController::index($request);
+        $reserva_grafico = CalendarController::index($calendario);
         
         $reservas = Reserva::make()
             ->when($request->busca_nome, function ($query) use ($request) {
@@ -44,6 +45,11 @@ class IndexController extends Controller
             'finalidades_filter' => $request->finalidades_filter ?? [],
             'salas' => Sala::all(),
             'salas_filter' => $request->salas_filter ?? [],
+            'data' => today(),
+            'reservas' => $reservas,
+            'reserva_grafico' => $reserva_grafico->original['reserva_grafico'],
+            'salas_aula' => $reserva_grafico->original['salas_aula'],
+            'finalidade_reserva' => $reserva_grafico->original['finalidade_reserva'],
         ]);
     }
 
@@ -52,7 +58,6 @@ class IndexController extends Controller
         $data = today();
         $reservas = Reserva::whereDate('data', $data)->orderBy('horario_inicio', 'ASC')->paginate(20);
 
-        $reserva_grafico = CalendarController::index($request);
         \UspTheme::activeUrl('/');
         return view('home', [
             'categorias' => Categoria::all(),
@@ -63,10 +68,10 @@ class IndexController extends Controller
             'salas' => Sala::all(),
             'salas_filter' => $request->salas_filter ?? [],
             'categoria_id' => $request->categoria_id ?? [],
-            'data' => $data,
-            'reserva_grafico' => $reserva_grafico->original['reserva_grafico'],
-            'salas_aula' => $reserva_grafico->original['salas_aula'],
-            'finalidade_reserva' => $reserva_grafico->original['finalidade_reserva'],
+            'data' => today(),
+            'reserva_grafico' => [],
+            'salas_aula' => [],
+            'finalidade_reserva' => [],
         ]);
     }
 }
