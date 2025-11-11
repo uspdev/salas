@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class CalendarController extends Controller
 {
-    public static function index(CalendarioRequest $request){
+    public function index(CalendarioRequest $request){
         $data = Carbon::createFromFormat('d/m/Y',$request->data ?? today()->format('d/m/Y'));
         $reservas = Reserva::join('salas','salas.id','reservas.sala_id')
         ->join('finalidades','finalidades.id','reservas.finalidade_id')

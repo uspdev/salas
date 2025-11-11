@@ -12,10 +12,8 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    public function search(Request $request, CalendarioRequest $calendario)
+    public function search(Request $request)
     {
-        $reserva_grafico = CalendarController::index($calendario);
-        
         $reservas = Reserva::make()
             ->when($request->busca_nome, function ($query) use ($request) {
                 $query->where('nome', 'LIKE', '%'.$request->busca_nome.'%')
@@ -47,9 +45,6 @@ class IndexController extends Controller
             'salas_filter' => $request->salas_filter ?? [],
             'data' => today(),
             'reservas' => $reservas,
-            'reserva_grafico' => $reserva_grafico->original['reserva_grafico'],
-            'salas_aula' => $reserva_grafico->original['salas_aula'],
-            'finalidade_reserva' => $reserva_grafico->original['finalidade_reserva'],
         ]);
     }
 
@@ -69,9 +64,6 @@ class IndexController extends Controller
             'salas_filter' => $request->salas_filter ?? [],
             'categoria_id' => $request->categoria_id ?? [],
             'data' => today(),
-            'reserva_grafico' => [],
-            'salas_aula' => [],
-            'finalidade_reserva' => [],
         ]);
     }
 }
