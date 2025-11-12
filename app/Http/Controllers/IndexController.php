@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CalendarioRequest;
 use App\Models\Categoria;
 use App\Models\Finalidade;
 use App\Models\Reserva;
