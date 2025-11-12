@@ -36,13 +36,14 @@ class IndexController extends Controller
 
         \UspTheme::activeUrl('/');
         return view('home', [
-            'categorias' => Categoria::all(),
+            'categorias' => Categoria::select('id','nome')->get(),
             'filter' => ($request->filter) ?: [],
-            'reservas' => $reservas,
-            'finalidades' => Finalidade::all(),
+            'finalidades' => Finalidade::select('cor','legenda')->get(),
             'finalidades_filter' => $request->finalidades_filter ?? [],
             'salas' => Sala::all(),
-            'salas_filter' => $request->salas_filter ?? []
+            'salas_filter' => $request->salas_filter ?? [],
+            'data' => today(),
+            'reservas' => $reservas,
         ]);
     }
 
@@ -59,7 +60,9 @@ class IndexController extends Controller
             'finalidades' => Finalidade::all(),
             'finalidades_filter' => $request->finalidades_filter ?? [],
             'salas' => Sala::all(),
-            'salas_filter' => $request->salas_filter ?? []
+            'salas_filter' => $request->salas_filter ?? [],
+            'categoria_id' => $request->categoria_id ?? [],
+            'data' => today(),
         ]);
     }
 }
