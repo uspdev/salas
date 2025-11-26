@@ -15,6 +15,7 @@ class CalendarController extends Controller
         $reservas = Reserva::join('salas','salas.id','reservas.sala_id')
         ->join('finalidades','finalidades.id','reservas.finalidade_id')
         ->select(
+            'reservas.id',
             'salas.nome as nome_sala',
             'reservas.sala_id',
             'reservas.nome',

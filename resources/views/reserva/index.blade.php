@@ -7,9 +7,9 @@
         data-target="#collapse0" 
         aria-expanded="false" 
         aria-controls="collapse0">
-        <h2><b>Programa de salas</b></h2><i class="fas fa-plus-square"></i>
+        <h2><b>Mural</b></h2><i class="fas fa-plus-square"></i>
         </div>
-        <div class="collapse" id="collapse0" >
+        <div class="collapse" id="collapse0">
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
@@ -93,3 +93,4 @@
 }
 
 </style>
+<script src="https://d3js.org/d3.v7.min.js"></script> <!-- D3 para o gráfico da index -->

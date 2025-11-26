@@ -7,6 +7,7 @@ use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PeriodoLetivoController;
 use App\Http\Controllers\RecursoController;
+use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\ResponsavelController;
 use App\Http\Controllers\SalaController;
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('redirectreusedroutes')->group(function() {
 
 Route::get('/calendario',[CalendarController::class,'index'])->name('calendario.search');
+
+Route::get('/relatorio', [RelatorioController::class, 'index']);
+Route::get('/query', [RelatorioController::class, 'query']);
 
 // Reservas
 Route::get('/reservas/my', [ReservaController::class, 'my']);
