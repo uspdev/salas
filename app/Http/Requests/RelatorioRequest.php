@@ -23,13 +23,14 @@ class RelatorioRequest extends FormRequest
     {
         return [
             'inicio' => 'required|date_format:d/m/Y',
-            'fim' => 'required|date_format:d/m/Y'
+            'fim' => 'required|date_format:d/m/Y',
+            'categoria_id' => '|required|integer'
         ];
     }
 
     public function messages(){
         return [
-            'inicio.required' => 'A data inicial obrigatória',
+            'inicio.required' => 'A data inicial é obrigatória',
             'fim.required' => 'A data final é obrigatória',
             'inicio.date_format' => 'Insira a data no formato d/m/y',
             'fim.date_format' => 'Insira a data no formato d/m/y',

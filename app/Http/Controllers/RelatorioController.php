@@ -12,34 +12,40 @@ use App\Http\Requests\RelatorioRequest;
 class RelatorioController extends Controller
 {
     public function index(){
+        $this->authorize('admin');
         return view('relatorio.index', ['categorias' => Categoria::all('id','nome')]);
     }
 
     public function query(RelatorioRequest $request, Excel $excel){
+        $this->authorize('admin');
         $inicio = Carbon::createFromFormat('d/m/Y', $request->inicio)->format('Y-m-d');
         $fim = Carbon::createFromFormat('d/m/Y', $request->fim)->format('Y-m-d');
 
         $reservas = Reserva::join('salas','reservas.sala_id','salas.id')
         ->where('salas.categoria_id', $request->categoria_id)
+        ->select(
+            'salas.nome as nome_sala',
+            'reservas.nome',
+            'reservas.descricao',
+            'reservas.horario_inicio',
+            'reservas.horario_fim',
+            'reservas.data'
+            )
         ->whereBetween('reservas.data', [$inicio, $fim])
         ->orderBy('data','asc')
+        ->orderBy('horario_inicio','desc')
         ->get();
         
         if($reservas->isNotEmpty()){
-            $nomes_salas = $reservas->select('nome')->groupBy('nome');
-            $reservas = $reservas->select('nome','data')->groupBy('data');
-            
-            /** retorna o nome das salas no excel */
-            $data = $reservas->map(function ($item){
-                return $item->pluck('nome')->unique(); //o unique impede repetição do nome devido a sala ser usada em mais de um horário
-            });
-
-            /** cabeçalho repetindo "Sala" conforme número de registros */
-            foreach($nomes_salas->keys() as $nome_sala){
-                $sala[] = 'Sala';
-            }
-
-            $headings = array_merge(['Data da Reserva'],$sala);
+            $data = $reservas->toArray();    
+            $headings = [
+                'Sala',
+                'Título da reserva',
+                'Horário de início',
+                'Horário de fim',
+                'Descrição',
+                'Data da reserva'
+            ];
             $categoria = Categoria::where('id',$request->categoria_id)->first();
             $export = new RelatorioExport($data, $headings);
             return $excel->download($export, "Relatorio_$categoria->nome"."_$inicio-$fim.xlsx");

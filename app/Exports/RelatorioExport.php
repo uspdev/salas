@@ -16,10 +16,7 @@ class RelatorioExport implements FromArray, WithHeadings
 
     public function array(): array
     {
-        foreach($this->data as $dia => $data){
-            $array[$dia] = array_merge([$dia],$data->toarray());
-        }
-        return $array;
+        return $this->data;
     }
 
     public function headings() : array
