@@ -124,7 +124,7 @@ $menu = [
     [
         'text' => '<i class="fa fa-file-excel" aria-hidden="true"></i> Relatório',
         'url' => '/relatorio',
-        'can' => 'admin'
+        'can' => ''
     ]
 ];
 
