@@ -1,7 +1,5 @@
 @extends('laravel-usp-theme::master')
 
-<script src="https://d3js.org/d3.v7.min.js"></script> <!-- D3 para o gráfico da index -->
-
 @section('styles')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>

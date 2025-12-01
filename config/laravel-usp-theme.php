@@ -121,6 +121,11 @@ $menu = [
         'submenu' => $admin,
         'can' => 'admin',
     ],
+    [
+        'text' => '<i class="fa fa-file-excel" aria-hidden="true"></i> Relatório',
+        'url' => '/relatorio',
+        'can' => 'admin'
+    ]
 ];
 
 $right_menu = [

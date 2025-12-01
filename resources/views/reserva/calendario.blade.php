@@ -29,11 +29,13 @@
             });
         });
     });
+
     function iniciarGrafico(){
         const reservas = [];
         reserva_grafico.forEach((e, i) =>{
             const r = reserva_grafico[i];
             reservas.push({
+                id: r.id,
                 sala_id: r.sala_id,
                 sala: r.nome_sala,
                 inicio: r.horario_inicio,
@@ -149,7 +151,7 @@
             .data(reservas)
             .enter()
             .append("a")
-            .attr("href", d => `/salas/${d.sala_id}`)
+            .attr("href", d => `/reservas/${d.id}`)
             .attr("target", "_blank")
             .append("rect")
             .attr("class", "barra")
@@ -188,7 +190,7 @@
             .attr("y", d => y(d.sala) + y.bandwidth() / 1.6)
             .attr("fill", "#333")
             .attr("font-size", "12px")
-            .text(d => `${truncarDescricao(d.descricao, Math.floor(d.comprimentoBarra / 9))} (${d.inicio}-${d.fim})`);
+            .text(d => `${truncarDescricao(d.descricao, Math.floor(d.comprimentoBarra / 5))}`);
     }
     
     </script>
