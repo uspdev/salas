@@ -13,7 +13,10 @@ class RelatorioController extends Controller
 {
     public function index(){
         $this->authorize('admin');
-        return view('relatorio.index', ['categorias' => Categoria::all('id','nome')]);
+
+        return view('relatorio.index', [
+            'categorias' => Categoria::pluck('nome','id')->prepend('Selecione a Categoria', '')
+        ]);
     }
 
     public function query(RelatorioRequest $request, Excel $excel){
@@ -34,10 +37,11 @@ class RelatorioController extends Controller
         ->whereBetween('reservas.data', [$inicio, $fim])
         ->orderBy('data','asc')
         ->orderBy('horario_inicio','desc')
+        ->toBase()
         ->get();
-        
+
         if($reservas->isNotEmpty()){
-            $data = $reservas->toArray();    
+            $data = $reservas->toArray();
             $headings = [
                 'Sala',
                 'Título da reserva',

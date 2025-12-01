@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Models\Categoria;
 
 class RelatorioRequest extends FormRequest
 {
@@ -21,10 +23,13 @@ class RelatorioRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $categorias = Categoria::pluck('id')->toArray();
+
         return [
             'inicio' => 'required|date_format:d/m/Y',
             'fim' => 'required|date_format:d/m/Y',
-            'categoria_id' => '|required|integer'
+            'categoria_id' => ['required', Rule::in($categorias)]
         ];
     }
 
@@ -34,6 +39,7 @@ class RelatorioRequest extends FormRequest
             'fim.required' => 'A data final é obrigatória',
             'inicio.date_format' => 'Insira a data no formato d/m/y',
             'fim.date_format' => 'Insira a data no formato d/m/y',
+            'categoria_id' => 'A categoria é obrigatória'
         ];
     }
 
