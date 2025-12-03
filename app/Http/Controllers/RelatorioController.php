@@ -25,11 +25,12 @@ class RelatorioController extends Controller
         ->where('salas.categoria_id', $request->categoria_id)
         ->select(
             'salas.nome as nome_sala',
+            'salas.capacidade',
             'reservas.nome',
             'reservas.descricao',
             'reservas.horario_inicio',
             'reservas.horario_fim',
-            'reservas.data'
+            'reservas.data',
             )
         ->whereBetween('reservas.data', [$inicio, $fim])
         ->orderBy('data','asc')
@@ -40,11 +41,12 @@ class RelatorioController extends Controller
             $data = $reservas->toArray();
             $headings = [
                 'Sala',
+                'Capacidade',
                 'Título da reserva',
                 'Descrição',
                 'Horário de início',
                 'Horário de fim',
-                'Data da reserva'
+                'Data da reserva',
             ];
             $categoria = Categoria::where('id',$request->categoria_id)->first();
             $export = new RelatorioExport($data, $headings);
