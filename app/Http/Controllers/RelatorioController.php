@@ -22,7 +22,9 @@ class RelatorioController extends Controller
         $fim = Carbon::createFromFormat('d/m/Y', $request->fim)->format('Y-m-d');
 
         $reservas = Reserva::join('salas','reservas.sala_id','salas.id')
+        ->join('restricoes','restricoes.sala_id','salas.id')
         ->where('salas.categoria_id', $request->categoria_id)
+        ->where('restricoes.bloqueada','<>',1)
         ->select(
             'salas.nome as nome_sala',
             'salas.capacidade',
