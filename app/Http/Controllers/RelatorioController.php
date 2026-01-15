@@ -12,6 +12,7 @@ use App\Http\Requests\RelatorioRequest;
 class RelatorioController extends Controller
 {
     public function index(){
+        \UspTheme::activeUrl('/relatorio');
         return view('relatorio.index', [
             'categorias' => Categoria::pluck('nome','id')->prepend('Selecione a Categoria', '')
         ]);
@@ -38,7 +39,7 @@ class RelatorioController extends Controller
         ->orderBy('data','asc')
         ->orderBy('horario_inicio','desc')
         ->get();
-        
+
         if($reservas->isNotEmpty()){
             $data = $reservas->toArray();
             $headings = [
