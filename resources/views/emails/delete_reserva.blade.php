@@ -15,6 +15,14 @@
     <p><b>Data:</b> {{$reserva->data}} </p>
 @endif
 
+@if (!empty($justificativa))
+    <br>
+    <div style="border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9;">
+        <strong>Motivo da Recusa:</strong><br>
+        {{ $justificativa }}
+    </div>
+@endif
+
 <br>
 
 <p>Mensagem automática do sistema de reserva de salas: {{route('home')}}</p>

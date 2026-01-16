@@ -12,19 +12,21 @@ use App\Models\Sala;
 
 class DeleteReservaMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;    // SerializesModels provocava erro de reserva já deletada e tendo acessá-la
     private $reserva;
     private $purge;
+    private $justificativa;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Reserva $reserva, bool $purge = false)
+    public function __construct(Reserva $reserva, bool $purge = false, string $justificativa = null)
     {
         $this->reserva = $reserva;
         $this->purge = $purge;
+        $this->justificativa = $justificativa;
     }
 
     /**
@@ -40,7 +42,8 @@ class DeleteReservaMail extends Mailable
                     ->to($user->email)
                     ->with([
                         'reserva' => $this->reserva,
-                        'purge' => $this->purge
+                        'purge' => $this->purge,
+                        'justificativa' => $this->justificativa
                     ]);
     }
 }

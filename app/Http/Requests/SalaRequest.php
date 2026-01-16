@@ -44,6 +44,7 @@ class SalaRequest extends FormRequest
             'instrucoes_reserva'    => 'nullable',
             'aceite_reserva'        => 'nullable',
             'prazo_aprovacao'       => 'nullable|integer',
+            'exige_justificativa_recusa' => 'required|integer',
         ];
     }
 
