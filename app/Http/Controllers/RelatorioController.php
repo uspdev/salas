@@ -38,7 +38,13 @@ class RelatorioController extends Controller
         ->orderBy('data','asc')
         ->orderBy('horario_inicio','desc')
         ->get();
-        
+
+        //adiciona os dias da semana ao array de reserva
+        $reservas = $reservas->map(function ($item){
+            $data_semana = Carbon::createFromFormat('d/m/Y',$item->data)->dayName;
+            return [...$item->toArray(), $data_semana];
+        });
+    
         if($reservas->isNotEmpty()){
             $data = $reservas->toArray();
             $headings = [
@@ -49,7 +55,9 @@ class RelatorioController extends Controller
                 'Horário de início',
                 'Horário de fim',
                 'Data da reserva',
+                'Dia da semana'
             ];
+            
             $categoria = Categoria::where('id',$request->categoria_id)->first();
             $export = new RelatorioExport($data, $headings);
             return $excel->download($export, "Relatorio_$categoria->nome"."_$inicio-$fim.xlsx");
