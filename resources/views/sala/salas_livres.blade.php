@@ -52,9 +52,12 @@
                     @include('reserva.partials.checkFlex', ['name' => "repeat_days[5]", 'type' => "checkbox", 'value' => "5", 'label' => "Sex"])
                     @include('reserva.partials.checkFlex', ['name' => "repeat_days[6]", 'type' => "checkbox", 'value' => "6", 'label' => "Sáb"])
                     @include('reserva.partials.checkFlex', ['name' => "repeat_days[0]", 'type' => "checkbox", 'value' => "0", 'label' => "Dom"])
-                </div>
+                  </div>
+                  <div class="checkFlex" style="display:none;padding:10px;">
+                  <input class="form-check-input me-1" type="checkbox" name="orWhere"> <p class="text-muted">Selecione esta opção para escolher qualquer dia disponível entre os itens selecionados</p><br/>
               </div>
-          </div>
+              </div>
+            </div>
           <div class="form-group" id="repeat_until" style="display:none;">
             <div class="col">
               <label>Repetição semanal até</label>

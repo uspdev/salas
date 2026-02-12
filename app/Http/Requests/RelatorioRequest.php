@@ -29,6 +29,7 @@ class RelatorioRequest extends FormRequest
         return [
             'inicio' => 'required|date_format:d/m/Y',
             'fim' => 'required|date_format:d/m/Y',
+            'orderBy' => 'nullable',
             'categoria_id' => ['required', Rule::in($categorias)]
         ];
     }

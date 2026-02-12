@@ -20,11 +20,14 @@ class RelatorioController extends Controller
     public function query(RelatorioRequest $request, Excel $excel){
         $inicio = Carbon::createFromFormat('d/m/Y', $request->inicio)->format('Y-m-d');
         $fim = Carbon::createFromFormat('d/m/Y', $request->fim)->format('Y-m-d');
-
+        
         $reservas = Reserva::join('salas','reservas.sala_id','salas.id')
-        ->join('restricoes','restricoes.sala_id','salas.id')
+        ->leftJoin('restricoes','restricoes.sala_id','salas.id')
+        ->where(function ($query){
+            $query->whereNull('restricoes.bloqueada')
+            ->orWhere('restricoes.bloqueada','<>',1);
+        })
         ->where('salas.categoria_id', $request->categoria_id)
-        ->where('restricoes.bloqueada','<>',1)
         ->select(
             'salas.nome as nome_sala',
             'salas.capacidade',
@@ -35,7 +38,9 @@ class RelatorioController extends Controller
             'reservas.data',
             )
         ->whereBetween('reservas.data', [$inicio, $fim])
-        ->orderBy('data','asc')
+        ->when($request['orderBy'], function($query) use ($request){
+            $query->orderBy($request['orderBy']);
+        })
         ->orderBy('horario_inicio','desc')
         ->get();
 

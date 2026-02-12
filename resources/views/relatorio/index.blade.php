@@ -18,6 +18,13 @@
               @endforeach
             </select>
         </div>
+        <div class="form-group ml-3">
+          <select name="orderBy" class="form-control">
+            <option value=""> - Ordernar por - </option>
+            <option value="nome_sala">Sala</option>
+            <option value="data">Data</option>
+          </select>
+        </div>
         <button type="submit" class="btn btn-success ml-3">
             <i class="fa fa-file-excel"></i>
             Gerar Excel

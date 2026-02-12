@@ -19,6 +19,20 @@ class SalasLivresAction
             return $salasReservadas->contains('sala_id', $item->id);
         });
 
+        if(isset($validated['orWhere'])){
+            $datasSelecionadas = $salasReservadas->groupBy('data')->keys()->toArray();
+            $salasLivres = $salasDesbloqueadas->filter(function ($sala) use ($salasReservadas, $datasSelecionadas) {
+                $datasOcupadas = $salasReservadas
+                    ->where('sala_id', $sala->id)
+                    ->pluck('data')
+                    ->toArray();
+                // se existir pelo menos um dia livre, mantém a sala
+                return collect($datasSelecionadas)
+                ->diff($datasOcupadas)
+                ->isNotEmpty();
+            });
+        }
+        
         if ( isset($validated['recursos']) ) {
             $recursos = $validated['recursos'];
             $salasLivres = Sala::whereIn('id', $salasLivres->pluck('id'))
