@@ -40,6 +40,7 @@ class SalaLivreRequest extends FormRequest
             },
         ],
             'repeat_days' => 'nullable|required_with:data_limite|between:0,7',
+            'orWhere' => 'nullable',
         ];
     }
 

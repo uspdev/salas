@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class SalasReservadasAction
 {
     public static function handle(array $validated){
-        $query = Reserva::select('sala_id')
+        $query = Reserva::select('sala_id','data')
         ->where('horario_inicio', '<', DB::raw("STR_TO_DATE('{$validated['horario_fim']}', '%H:%i')"))
         ->where('horario_fim', '>', DB::raw("STR_TO_DATE('{$validated['horario_inicio']}', '%H:%i')"))
         ->orderBy('sala_id', 'asc');
