@@ -62,6 +62,17 @@
                         <label for="aprovacao-nao">Não</label>
                     </div>
                 </div>
+                <div id="exige_justificativa_recusa_sim_nao" class="col-sm form-group">
+                    <b>Exigir justificativa no ato da recusa?</b>
+                    <div class="form-check">
+                        <input name="exige_justificativa_recusa" type="radio" class="form-check-input radio-exige-justificativa-recusa" id="exige-justificativa-recusa-sim" value="1" {{ ((float) ($sala->restricao->exige_justificativa_recusa ?? 0) > 0) ? 'checked' : '' }}>
+                        <label for="exige-justificativa-recusa-sim">Sim</label>
+                    </div>
+                    <div class="form-check">
+                        <input name="exige_justificativa_recusa" type="radio" class="form-check-input radio-exige-justificativa-recusa" id="exige-justificativa-recusa-nao" value="0" {{ ((float) ($sala->restricao->exige_justificativa_recusa ?? 0) == 0) ? 'checked' : '' }}>
+                        <label for="exige-justificativa-recusa-nao">Não</label>
+                    </div>
+                </div>
                 <div id="prazo_aprovacao_sim_nao" class="col-sm form-group">
                     <b>Aprovar automaticamente após certo prazo sem aprovação nem rejeição?</b>
                     <div class="form-check">
@@ -276,9 +287,12 @@
     });
 
     function aprovacaoChanged() {
-        if ($("#aprovacao-sim").is(":checked"))
+        if ($("#aprovacao-sim").is(":checked")) {
+            $('#exige_justificativa_recusa_sim_nao').show();
             $('#prazo_aprovacao_sim_nao').show();
-        else {
+        } else {
+            $('#exige_justificativa_recusa_sim_nao').hide();
+            $("#exige-justificativa-recusa-nao").prop("checked", true);
             $('#prazo_aprovacao_sim_nao').hide();
             $("#aprovacao-prazo-nao").prop("checked", true);
         }
