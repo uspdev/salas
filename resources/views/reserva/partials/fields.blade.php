@@ -125,6 +125,8 @@
                     $reservas_array = $reserva->irmaos()->toArray();
                 @endphp
 
+                ({{ \Carbon\Carbon::createFromFormat('d/m/Y', $reservas_array[0]['data'])->translatedFormat('l') }})
+
                 @foreach($reservas_array as $key => $reservaIterator)
                     <a href="/reservas/{{ $reservaIterator['id'] }}">{{ $reservaIterator['data'] }}</a>@if( $key !== count($reservas_array) -1 ),@endif
                 @endforeach
