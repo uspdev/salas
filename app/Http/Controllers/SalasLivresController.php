@@ -12,6 +12,7 @@ class SalasLivresController extends Controller
 {
     public function index()
     {
+        \UspTheme::activeUrl('/salas_livres');
         $reserva = new Reserva();
         return view('sala.salas_livres', ['today' => Carbon::today(), 'reserva' => $reserva]);
     }
