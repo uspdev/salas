@@ -21,7 +21,7 @@
 
 @if ($reserva->status == 'pendente')
    <div style="background-color: {{config('salas.cores.pendente')}}" class="p-2 mb-2 rounded">
-     Pendente    
+     Pendente
    </div>
 @endif
 
@@ -121,10 +121,10 @@
         @if($reserva->irmaos())
             <div class="card-body">
                 <b>Recorrências:</b>
-                @php 
+                @php
                     $reservas_array = $reserva->irmaos()->toArray();
                 @endphp
-                
+
                 @foreach($reservas_array as $key => $reservaIterator)
                     <a href="/reservas/{{ $reservaIterator['id'] }}">{{ $reservaIterator['data'] }}</a>@if( $key !== count($reservas_array) -1 ),@endif
                 @endforeach
@@ -138,13 +138,42 @@
 
 @if ($reserva->status == 'pendente')
     @can('responsavel', $reserva->sala)
-        <form action="{{route('reservas.destroy', $reserva)}}" method="POST" id="form-reserva-recusar" onsubmit="return confirm('Recusar reserva?')">
-            @csrf
-            @method('DELETE')
-        </form>
+        @if ($reserva->sala->restricao->exige_justificativa_recusa)
+            <div class="modal fade" id="rejectModal_{{$reserva->id}}" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form action="{{route('reservas.destroy', $reserva)}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rejectModalLabel">Recusar Reserva</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Tem certeza que deseja recusar esta reserva?</p>
+                                <div class="form-group">
+                                    <label for="justificativa_recusa"><b>Justificativa:</b></label>
+                                    <textarea name="justificativa_recusa" class="form-control" rows="3" required></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">Confirmar Recusa</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @else
+            <form action="{{route('reservas.destroy', $reserva)}}" method="POST" id="form-reserva-recusar" onsubmit="return confirm('Recusar reserva?')">
+                @csrf
+                @method('DELETE')
+            </form>
+        @endif
+
         <div class="mt-4">
             <a class="btn btn-success" href="{{route('reservas.aprovar', $reserva)}}"><i class="fa fa-check"></i> Aprovar</a>
-            <button class="btn btn-danger" form="form-reserva-recusar"><i class="fa fa-ban"></i> Recusar</button>
+            <button class="btn btn-danger" @if($reserva->sala->restricao->exige_justificativa_recusa) type="button" data-toggle="modal" data-target="#rejectModal_{{$reserva->id}}" @else form="form-reserva-recusar" @endif><i class="fa fa-ban"></i> Recusar</button>
         </div>
     @endcan
 @endif

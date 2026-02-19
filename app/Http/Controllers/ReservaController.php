@@ -368,9 +368,12 @@ class ReservaController extends Controller
         $parent_id = $reserva->parent_id;
         $purge = !is_null($request->input('purge'));
 
+        $justificativa = $request->input('justificativa_recusa');
+
         $reserva->removerTarefa_AprovacaoAutomatica();
 
-        if(config('salas.emailConfigurado')) Mail::queue(new DeleteReservaMail($reserva, $purge));
+        if(config('salas.emailConfigurado'))
+            Mail::queue(new DeleteReservaMail($reserva, $purge, $justificativa));
 
         if($purge){
             Reserva::where('parent_id', $reserva->parent_id)->delete();

@@ -204,6 +204,7 @@ class SalaController extends Controller
                 'periodo_letivo_id'    => $validated['periodo_letivo'],
                 'aprovacao'            => $validated['aprovacao'],
                 'prazo_aprovacao'      => $validated['prazo_aprovacao'],
+                'exige_justificativa_recusa' => $validated['exige_justificativa_recusa'],
             ]
             );
 
