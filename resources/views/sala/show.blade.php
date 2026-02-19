@@ -21,7 +21,7 @@
     </div>
 
     <div id="calendar" class="mt-4"></div>
-@endsection  
+@endsection
 
 @section('styles')
 @parent
@@ -66,6 +66,9 @@
             },
             views: {
                 timeGrid: {
+                    slotMinTime: "{{ config('salas.calendarioHoraInicial') }}",
+                    slotMaxTime: "{{ config('salas.calendarioHoraFinal') }}",
+
                     selectable: true,
                     eventContent: function(info){
                         let div = document.createElement('div');
@@ -90,9 +93,9 @@
                     select: function(time){
                         if (parseInt({{Gate::allows('members', $sala->id)}})) {
                             window.location.assign("{{route('reservas.create')}}"
-                                + "?data=" + time.start.toLocaleDateString('pt-BR') 
-                                + "&start=" + time.start.getHours() + ":" + (time.start.getMinutes() < 10 ? '0' : '') + time.start.getMinutes() 
-                                + "&end=" + time.end.getHours() + ":" + (time.end.getMinutes() < 10 ? '0' : '') + time.end.getMinutes() 
+                                + "?data=" + time.start.toLocaleDateString('pt-BR')
+                                + "&start=" + time.start.getHours() + ":" + (time.start.getMinutes() < 10 ? '0' : '') + time.start.getMinutes()
+                                + "&end=" + time.end.getHours() + ":" + (time.end.getMinutes() < 10 ? '0' : '') + time.end.getMinutes()
                                 + "&sala={{$sala->id}}");
                         }
                     }
@@ -108,7 +111,7 @@
 
                         let nomesResponsaveis = info.event.extendedProps.responsaveis.join(', ');
 
-                        bold.innerHTML = horarioDeInicio; 
+                        bold.innerHTML = horarioDeInicio;
 
                         div.innerHTML = info.event.title + '<br>' + nomesResponsaveis;
                         div.classList.add('text-wrap');
