@@ -17,4 +17,8 @@ return [
 
     // campos de preenchimento obrigatório quando de solicitação de reserva
     'reservaCamposExtras' => env('RESERVA_CAMPOS_EXTRAS') ? explode(',', env('RESERVA_CAMPOS_EXTRAS')) : null,
+
+    // configurações do calendário de sala
+    'calendarioHoraInicial' => env('CALENDARIO_HORA_INICIAL') ?: '00:00',
+    'calendarioHoraFinal'   => env('CALENDARIO_HORA_FINAL'  ) ?: '24:00',
 ];
