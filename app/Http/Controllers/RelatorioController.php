@@ -12,6 +12,7 @@ use App\Http\Requests\RelatorioRequest;
 class RelatorioController extends Controller
 {
     public function index(){
+        \UspTheme::activeUrl('/relatorio');
         return view('relatorio.index', [
             'categorias' => Categoria::pluck('nome','id')->prepend('Selecione a Categoria', '')
         ]);
@@ -20,7 +21,7 @@ class RelatorioController extends Controller
     public function query(RelatorioRequest $request, Excel $excel){
         $inicio = Carbon::createFromFormat('d/m/Y', $request->inicio)->format('Y-m-d');
         $fim = Carbon::createFromFormat('d/m/Y', $request->fim)->format('Y-m-d');
-        
+
         $reservas = Reserva::join('salas','reservas.sala_id','salas.id')
         ->leftJoin('restricoes','restricoes.sala_id','salas.id')
         ->where(function ($query){
@@ -49,7 +50,7 @@ class RelatorioController extends Controller
             $data_semana = Carbon::createFromFormat('d/m/Y',$item->data)->dayName;
             return [...$item->toArray(), $data_semana];
         });
-    
+
         if($reservas->isNotEmpty()){
             $data = $reservas->toArray();
             $headings = [
@@ -62,7 +63,7 @@ class RelatorioController extends Controller
                 'Data da reserva',
                 'Dia da semana'
             ];
-            
+
             $categoria = Categoria::where('id',$request->categoria_id)->first();
             $export = new RelatorioExport($data, $headings);
             return $excel->download($export, "Relatorio_$categoria->nome"."_$inicio-$fim.xlsx");
