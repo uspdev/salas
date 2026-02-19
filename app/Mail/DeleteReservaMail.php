@@ -12,7 +12,7 @@ use App\Models\Sala;
 
 class DeleteReservaMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;    // SerializesModels provocava erro de reserva já deletada e tendo acessá-la
     private $reserva;
     private $purge;
 
