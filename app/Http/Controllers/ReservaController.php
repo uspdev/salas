@@ -321,27 +321,25 @@ class ReservaController extends Controller
 
         // 3 - edição da reserva pai, caso com repeticões, mas o padrão de repetição foi alterado
         if(isset($request->rep_bool) and $request->rep_bool=='Sim') {
-            $reserva->update($validated);
             // deletar as filhas antigas
             foreach($reserva->children()->get() as $child) {
                 // não podemos apagar a reserva principal
                 if($child->parent_id != $child->id) $child->delete();
             }
-
             // criar novas revervas
-            $inicio = Carbon::createFromFormat('d/m/Y', $validated['data'])->addDays(1);
-            $fim = Carbon::createFromFormat('d/m/Y', $validated['repeat_until']);
-
-            $period = CarbonPeriod::between($inicio, $fim);
-            foreach ($period as $date) {
-                if (in_array($date->dayOfWeek, $validated['repeat_days'])) {
-                    $new = $reserva->replicate();
-                    $new->parent_id = $reserva->id;
-                    $new->data = $date->format('d/m/Y');
-                    $new->save();
+            $period = GetPeriodoAction::handle($validated);
+            if( count ($period) > 0 ){
+                foreach ($period as $date) {
+                    if (in_array($date->dayOfWeek, $validated['repeat_days'])) {
+                        $new = $reserva->replicate();
+                        $new->parent_id = $reserva->id;
+                        $new->data = $date->format('d/m/Y');
+                        $new->save();
+                    }
                 }
+            }else{
+                return redirect()->back()->with('alert-danger', 'Operação não completada, não há data(s) para reserva!')->withInput();
             }
-
         }
 
         $reserva->reagendarTarefa_AprovacaoAutomatica();
