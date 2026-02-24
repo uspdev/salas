@@ -326,7 +326,7 @@ class ReservaController extends Controller
                 // não podemos apagar a reserva principal
                 if($child->parent_id != $child->id) $child->delete();
             }
-            // criar novas revervas
+            // criar novas reservas
             $period = GetPeriodoAction::handle($validated);
             if( count ($period) > 0 ){
                 foreach ($period as $date) {
@@ -334,9 +334,13 @@ class ReservaController extends Controller
                         $new = $reserva->replicate();
                         $new->parent_id = $reserva->id;
                         $new->data = $date->format('d/m/Y');
+                        $new->repeat_until = $validated['repeat_until'];
                         $new->save();
                     }
                 }
+            $validated['data'] = $period[0]->format('d/m/Y');
+            $reserva->repeat_until = $validated['repeat_until'];
+            $reserva->save();
             }else{
                 return redirect()->back()->with('alert-danger', 'Operação não completada, não há data(s) para reserva!')->withInput();
             }
