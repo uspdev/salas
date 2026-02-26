@@ -327,20 +327,21 @@ class ReservaController extends Controller
                 if($child->parent_id != $child->id) $child->delete();
             }
             // criar novas reservas
+            $validated['id'] = $reserva->id;
+
             $period = GetPeriodoAction::handle($validated);
+            
+            $validated['data'] = reset($period)->format('d/m/Y');
+            $reserva->update($validated);
+            array_shift($period);
             if( count ($period) > 0 ){
                 foreach ($period as $date) {
-                    if (in_array($date->dayOfWeek, $validated['repeat_days'])) {
-                        $new = $reserva->replicate();
-                        $new->parent_id = $reserva->id;
-                        $new->data = $date->format('d/m/Y');
-                        $new->repeat_until = $validated['repeat_until'];
-                        $new->save();
-                    }
+                    $new = $reserva->replicate();
+                    $new->parent_id = $reserva->id;
+                    $new->data = $date->format('d/m/Y');
+                    $new->repeat_until = $validated['repeat_until'];
+                    $new->save();
                 }
-            $validated['data'] = $period[0]->format('d/m/Y');
-            $reserva->repeat_until = $validated['repeat_until'];
-            $reserva->save();
             }else{
                 return redirect()->back()->with('alert-danger', 'Operação não completada, não há data(s) para reserva!')->withInput();
             }
