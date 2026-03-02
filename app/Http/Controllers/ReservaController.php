@@ -326,16 +326,15 @@ class ReservaController extends Controller
                 // não podemos apagar a reserva principal
                 if($child->parent_id != $child->id) $child->delete();
             }
-            // criar novas reservas
             $validated['id'] = $reserva->id;
-
-            $period = GetPeriodoAction::handle($validated);
-            
-            $validated['data'] = reset($period)->format('d/m/Y');
+            $periodo = GetPeriodoAction::handle($validated);
+            $validated['data'] = reset($periodo)->format('d/m/Y');
+            // atualiza reserva pai
             $reserva->update($validated);
-            array_shift($period);
-            if( count ($period) > 0 ){
-                foreach ($period as $date) {
+            array_shift($periodo);
+            // criar novas reservas
+            if( count ($periodo) > 0 ){
+                foreach ($periodo as $date) {
                     $new = $reserva->replicate();
                     $new->parent_id = $reserva->id;
                     $new->data = $date->format('d/m/Y');

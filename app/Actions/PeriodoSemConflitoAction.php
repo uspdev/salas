@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class PeriodoSemConflitoAction
 {
     public static function handle($validated, Carbon $inicio, Carbon $fim) {
-        
+
         $query = Reserva::select('data')
             ->whereBetween('data', [$inicio->format('Y-m-d'), $fim->format('Y-m-d')])
             ->where('horario_inicio', '<', DB::raw("STR_TO_DATE('{$validated["horario_fim"]}', '%H:%i')"))
@@ -19,7 +19,7 @@ class PeriodoSemConflitoAction
 
         //é uma tentativa de edição de reserva (serve para ignorar a reserva "pai")
         if(isset($validated['id'])){
-            $datasReservas = $query->where('id','!=',$validated['id'])->toBase()->get();
+            $datasReservas = $query->where('id','!=',$validated['id']);
         }
         //senão, é uma criação de reserva
         $datasReservas = $query->toBase()->get();
