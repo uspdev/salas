@@ -18,11 +18,9 @@ class GetPeriodoAction
 
         $periodo = isset($validated['skip']) ?
             PeriodoSemConflitoAction::handle(
-                $validated['sala_id'],
+                $validated,
                 $inicio,
-                $fim,
-                $validated['horario_inicio'],
-                $validated['horario_fim']) :
+                $fim) :
             CarbonPeriod::create($inicio, $fim);
 
         $periodo = $periodo->toArray();
