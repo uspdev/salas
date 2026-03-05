@@ -376,7 +376,7 @@ class ReservaController extends Controller
             Mail::queue(new DeleteReservaMail($reserva, $purge, $justificativa));
 
         if($purge){
-            Reserva::where('parent_id', $reserva->parent_id)->delete();
+            Reserva::where('parent_id', $reserva->parent_id)->get()->each->delete();    // adicionado get()->each para disparar deleção do Eloquent dos registros correspondentes na tabela arquivos
             session()->put('alert-success', 'Todas instâncias da reserva foram excluídas com sucesso.');
         }
         else{

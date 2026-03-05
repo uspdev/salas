@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArquivoController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\FinalidadeController;
@@ -70,6 +71,7 @@ Route::resource('/periodos_letivos', PeriodoLetivoController::class)->parameters
     'periodos_letivos' => 'periodo',
 ]);;
 
-
+// Arquivos
+Route::resource('arquivos', ArquivoController::class);
 
 });

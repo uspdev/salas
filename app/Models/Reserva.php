@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Reserva extends Model implements Auditable
@@ -15,6 +16,17 @@ class Reserva extends Model implements Auditable
 
     use HasFactory;
     protected $guarded = ['id'];
+
+    protected static function booted()
+    {
+        // escuta o evento de exclusão da reserva
+        static::deleting(function ($reserva) {
+            foreach ($reserva->arquivos as $arquivo)
+                Storage::delete($arquivo->caminho);    // apaga o arquivo físico do disco
+
+            // não é necessário executar $arquivo->delete() no banco, pois a foreign key é onDelete('cascade')
+        });
+    }
 
     public function setDataAttribute($value)
     {
@@ -144,5 +156,13 @@ class Reserva extends Model implements Auditable
 
     public function responsaveis(){
         return $this->belongsToMany(ResponsavelReserva::class, 'reservas_responsaveis_reservas', 'reserva_id', 'responsavel_reserva_id')->withTimestamps();
+    }
+
+    /**
+     * Relacionamento com arquivos
+     */
+    public function arquivos()
+    {
+        return $this->hasMany('App\Models\Arquivo');
     }
 }
