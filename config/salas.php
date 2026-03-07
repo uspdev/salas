@@ -21,4 +21,6 @@ return [
     // configurações do calendário de sala
     'calendarioHoraInicial' => env('CALENDARIO_HORA_INICIAL') ?: '00:00',
     'calendarioHoraFinal'   => env('CALENDARIO_HORA_FINAL'  ) ?: '24:00',
+
+    'upload_max_filesize' => (int) env('UPLOAD_MAX_FILESIZE', '16') * 1024,
 ];

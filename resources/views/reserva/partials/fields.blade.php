@@ -29,6 +29,7 @@
     <div class="card-header" id="reserva-header">
         <div>
             <b>{{ $reserva->nome }}</b>
+            @includeWhen($reserva->arquivos->isNotEmpty(), 'reserva.partials.arquivo-badge')
         </div>
         @can('owner', $reserva)
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -134,6 +135,13 @@
         @endif
         <br>
 
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    @include('reserva.show.card-arquivos')
+                </div>
+            </div>
+        </div>
         <br>
     </div>
 </div>
