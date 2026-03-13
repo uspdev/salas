@@ -61,8 +61,10 @@ jobs:
       - name: Start Laravel server
         run: php artisan serve --port=47800 &
 
+      - name: Remove Dusk visual variables
+        run: |
+          sed -i '/DUSK_START_MAXIMIZED/d' .env
+          sed -i '/DUSK_HEADLESS_DISABLED/d' .env
+
       - name: Run Dusk
-        env:
-          DUSK_START_MAXIMIZED: false
-          DUSK_HEADLESS_DISABLED: false
         run: php artisan dusk --without-tty

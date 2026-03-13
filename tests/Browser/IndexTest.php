@@ -36,6 +36,7 @@ class IndexTest extends DuskTestCase
                     ->typeSlowly('password', 'password')
                     ->press('Entrar')
                     ->pause(2000)
+                    ->assertDontSee('Administração')
                     ->click('.login_logout_link')
                     ->pause(2000);
 
@@ -45,6 +46,7 @@ class IndexTest extends DuskTestCase
                     ->typeSlowly('password', 'password')
                     ->press('Entrar')
                     ->pause(2000)
+                    ->assertSee('Administração')
                     ->click('.login_logout_link')
                     ->pause(2000);
         });
