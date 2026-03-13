@@ -62,4 +62,4 @@ jobs:
         run: php artisan serve --port=47800 &
 
       - name: Run Dusk
-        run: php artisan dusk
+        run: php artisan dusk --without-tty
