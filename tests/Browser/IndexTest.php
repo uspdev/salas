@@ -40,7 +40,7 @@ class IndexTest extends DuskTestCase
                     ->click('.login_logout_link')
                     ->pause(2000);
 
-            // Login com usuário admin,
+            // Login com usuário admin
             $browser->visit('/loginlocal')
                     ->typeSlowly('email', $this->adminUser->email)
                     ->typeSlowly('password', 'password')
@@ -52,24 +52,4 @@ class IndexTest extends DuskTestCase
         });
     }
 
-    /*
-    public function testCompleto()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/loginlocal')
-                    ->typeSlowly('email', $this->adminUser->email)
-                    ->typeSlowly('password', 'password')
-                    ->press('Entrar')
-                    ->pause(2000)
-                    ->clickLink('Administração')
-                    ->clickLink('Cadastrar Categoria')
-                    ->pause(2000)
-                    ->typeSlowly('nome', 'Prédio de Administração')
-                    ->pause(1000)
-                    ->press('Enviar');
-                    #->click('.login_logout_link')
-                    #->pause(2000);
-        });
-    }
-    */
 }
