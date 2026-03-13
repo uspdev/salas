@@ -206,5 +206,22 @@ Os testes serão executados na porta 47800. Caso prefira utilizar outra porta, b
 
 Durante a execução, o navegador Chrome controlado pelo Laravel Dusk abrirá automaticamente e realizará as interações definidas nos testes.
 
-    php artisan dusk --env=testing  
+    php artisan dusk --env=testing
+
+### Novos testes
+
+No diretório app/Helpers foi criado uma Trait UspdevDuskTrait.php que criar um usuário administrador e outro usuário como a partir da biblioteca senhaunica-socialite, assim em novos testes carregar essa Trait:
+
+    use App\Helpers\UspdevDuskTrait;
+    class NovoTest  extends DuskTestCase{
+        use UspdevDuskTrait;
+
+        protected function setUp(): void
+        {
+            parent::setUp();
+            ...
+            $this->setupAdminAndUser(); // cria usuários $this->commonUser e $this->adminUser
+        }
+
+    ...
 
