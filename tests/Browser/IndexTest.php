@@ -43,7 +43,7 @@ class IndexTest extends DuskTestCase
             // Login com usuário admin
             $browser->visit('/loginlocal')
                     ->typeSlowly('email', $this->adminUser->email)
-                    ->typeSlowly('password', 'password')
+                    ->typeSlowly('password', 'password1')
                     ->press('Entrar')
                     ->pause(2000)
                     ->assertSee('Administração')
