@@ -12,10 +12,13 @@ jobs:
       mariadb:
         image: mariadb:10.11
         env:
-          MARIADB_DATABASE: salas
+          MARIADB_DATABASE: salas_dusk
+          MARIADB_ROOT_PASSWORD: admin
+          MARIADB_USER: admin
+          MARIADB_PASSWORD: admin
           MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
         ports:
-          - 47306:3306
+          - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=5s
@@ -36,15 +39,13 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Remove Dusk visual variables
+      - name: Remove Dusk visual variables - usadas no modo assistido
         run: |
-          sed -i '/DUSK_START_MAXIMIZED/d' .env.testing || true
-          sed -i '/DUSK_HEADLESS_DISABLED/d' .env.testing || true
-          echo "ENV after cleanup:"
-          cat .env.testing
+          sed -i '/DUSK_START_MAXIMIZED/d' .env.testing.example || true
+          sed -i '/DUSK_HEADLESS_DISABLED/d' .env.testing.example || true
 
       - name: Copy testing env
-        run: cp .env.testing .env
+        run: cp .env.testing.example .env
 
       - name: Generate APP_KEY
         run: php artisan key:generate
@@ -52,7 +53,7 @@ jobs:
       - name: Wait for MariaDB
         run: |
           for i in {1..30}; do
-            mysqladmin ping -h127.0.0.1 -P47306 --silent && break
+            mysqladmin ping -h127.0.0.1 -P3306 --silent && break
             sleep 2
           done
 

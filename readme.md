@@ -162,4 +162,48 @@ No arquivo de configuração .env:
 
 
 
+# Rodando testes com Dusk (testes de cobertura)
+
+Os testes com **Laravel Dusk** foram desenvolvidos com dois propósitos:
+
+1. **Testar funcionalidades reais do sistema**, simulando a interação de um usuário no navegador.
+2. **Servir como documentação funcional**, demonstrando como as principais funcionalidades do sistema devem se comportar.
+
+A seguir estão os passos para executar o Dusk **em modo assistido**, ou seja, diretamente na sua máquina. Nesse modo é possível **visualizar o navegador Chrome virtual executando os testes**, o que facilita a depuração.
+
+Por esse motivo, neste caso **não executamos os testes em container**.
+
+Entretanto, na pasta **`.github/workflows`** os testes também foram configurados para rodar automaticamente no **GitHub Actions**, garantindo que falhas nos testes sejam detectadas durante novos commits ou pull requests.
+
+
+### 1. Criar o arquivo de ambiente de testes
+
+Copie o arquivo de exemplo:
+
+    cp .env.testing.example .env.testing
+
+### 2. Criar o arquivo de ambiente de testes
+
+Edite o arquivo .env.testing e configure pelo menos as variáveis de banco de dados:
+
+    DB_DATABASE=salas_dusk
+    DB_USERNAME=admin
+    DB_PASSWORD=admin
+
+### 3. Configurar a porta da aplicação
+
+Os testes serão executados na porta 47800. Caso prefira utilizar outra porta, basta alterar o valor de APP_URL.
+
+
+### 4. Preparar o ambiente de testes
+
+    php artisan key:generate --env=testing
+    php artisan migrate:fresh --env=testing
+    php artisan serve --port=47800 --env=testing
+
+### 5. Executar os testes do Dusk
+
+Durante a execução, o navegador Chrome controlado pelo Laravel Dusk abrirá automaticamente e realizará as interações definidas nos testes.
+
+    php artisan dusk --env=testing  
 
