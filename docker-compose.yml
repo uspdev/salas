@@ -1,0 +1,10 @@
+services:
+  mariadb_tests:
+    image: mariadb:10.11
+    container_name: dusk_salas
+    restart: always
+    environment:
+      - MARIADB_DATABASE=salas
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+    ports:
+      - "47306:3306"

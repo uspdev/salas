@@ -17,6 +17,8 @@ class User extends Authenticatable
     use \Spatie\Permission\Traits\HasRoles;
     use \Uspdev\SenhaunicaSocialite\Traits\HasSenhaunica;
 
+    protected $guard_name = 'senhaunica';
+
     /**
      * The attributes that are mass assignable.
      *
