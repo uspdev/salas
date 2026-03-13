@@ -36,6 +36,13 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Remove Dusk visual variables
+        run: |
+          sed -i '/DUSK_START_MAXIMIZED/d' .env.testing || true
+          sed -i '/DUSK_HEADLESS_DISABLED/d' .env.testing || true
+          echo "ENV after cleanup:"
+          cat .env.testing
+
       - name: Copy testing env
         run: cp .env.testing .env
 
@@ -60,13 +67,6 @@ jobs:
 
       - name: Start Laravel server
         run: php artisan serve --port=47800 &
-
-      - name: Remove Dusk visual variables
-        run: |
-          sed -i '/DUSK_START_MAXIMIZED/d' .env || true
-          sed -i '/DUSK_HEADLESS_DISABLED/d' .env || true
-          echo "ENV after cleanup:"
-          cat .env
 
       - name: Run Dusk
         run: php artisan dusk --without-tty
