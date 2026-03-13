@@ -62,4 +62,7 @@ jobs:
         run: php artisan serve --port=47800 &
 
       - name: Run Dusk
+        env:
+          DUSK_START_MAXIMIZED: false
+          DUSK_HEADLESS_DISABLED: false
         run: php artisan dusk --without-tty
