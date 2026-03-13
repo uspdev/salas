@@ -197,6 +197,7 @@ Os testes serão executados na porta 47800. Caso prefira utilizar outra porta, b
 
 ### 4. Preparar o ambiente de testes
 
+    composer install
     php artisan key:generate --env=testing
     php artisan migrate:fresh --env=testing
     php artisan serve --port=47800 --env=testing
