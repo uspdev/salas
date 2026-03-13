@@ -63,8 +63,10 @@ jobs:
 
       - name: Remove Dusk visual variables
         run: |
-          sed -i '/DUSK_START_MAXIMIZED/d' .env
-          sed -i '/DUSK_HEADLESS_DISABLED/d' .env
+          sed -i '/DUSK_START_MAXIMIZED/d' .env || true
+          sed -i '/DUSK_HEADLESS_DISABLED/d' .env || true
+          echo "ENV after cleanup:"
+          cat .env
 
       - name: Run Dusk
         run: php artisan dusk --without-tty
