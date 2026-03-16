@@ -59,9 +59,19 @@ class CategoriaController extends Controller
      */
     public function show(Categoria $categoria)
     {
-        $sigla_unidade = ReplicadoUtils::dumpUnidade(config('salas.codUnidade'), ['sglund']);
-
-        $setores = Estrutura::listarSetores(config('codUnidade'));
+        //Criação de dados para que testes dusk não dependam do replicado
+        $sigla_unidade = env('REPLICADO_CODUNDCLG') 
+        ? ReplicadoUtils::dumpUnidade(config('salas.codUnidade'), ['sglund']) 
+        : [0 =>['sglund' => 'FFLCH2']];
+        
+        $setores = env('REPLICADO_CODUNDCLG') 
+        ? Estrutura::listarSetores(config('codUnidade')) 
+        : [0 => ['nomset' => 'nome setor', 
+            'codset' => 'codigo setor', 
+            'nomabvset' => 'nomabvset', 
+            'tipset' => 'Unidade',
+            'codsetspe' => 0]
+            ];
 
         \UspTheme::activeUrl('categorias');
         return view('categoria.show', [

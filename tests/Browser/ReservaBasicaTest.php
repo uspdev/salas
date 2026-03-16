@@ -20,19 +20,62 @@ class ReservaBasicaTest extends DuskTestCase
         $this->setupAdminAndUser(); // cria usuários $this->commonUser e $this->adminUser
     }
 
+    /*Teste para criar uma reserva básica: 
+    - 1. Criar uma Categoria (Prédio);
+    - 2. Criar Sala dentro de uma categoria;
+    - 3. Cadastrar Reserva contendo a sala;
+    */
     public function testReservaBasica(): void
     {
-        //descrever o que o teste faz. passo a passo...
-        //este teste não pode depender do replicado
-        // Login com usuário admin
+        //1. Login como admin e criação de uma categoria (prédio)
         $this->browse(function (Browser $browser) {
             $browser->visit('/loginlocal')
-                    ->typeSlowly('email', $this->adminUser->email)
-                    ->typeSlowly('password', 'password')
+                    ->typeSlowly('email', $this->adminUser->email, 30)
+                    ->typeSlowly('password', 'password', 30)
                     ->press('Entrar')
+                    ->pause(1000)
+                    ->click('#navbarDropdowniclassfafausercogariahiddentrueiAdministrao') //menu
+                    ->pause(1250)
+                    ->click('a[href="categorias/create"]')
+                    ->pause(1250)
+                    ->typeSlowly('nome','Prédio da Administração', 100)
                     ->pause(2000)
-                    ->visit('/categorias/create')
+                    ->press('Enviar')
                     ->pause(2000);
+
+                    /*Buscando no banco de dados a categoria que acabou de ser criada.*/
+                    $categoria_id = \App\Models\Categoria::select('id')->latest()->first();
+                    
+                    //2. Após a criação da categoria, cria-se uma sala com ela.
+                    $browser->click('#navbarDropdowniclassfafausercogariahiddentrueiAdministrao') //menu
+                    ->pause(1850)
+                    ->click('a[href="salas/create"]')
+                    ->pause(1250)
+                    ->typeSlowly('nome','Sala de Informática Teste', 100)
+                    ->typeSlowly('capacidade','123', 150)
+                    ->select('categoria_id', $categoria_id->id) //Selecionando o ID da cat. criada
+                    ->pause(2300)
+                    ->press('Enviar')
+                    ->pause(2300);
+                    
+                    $sala_id = \App\Models\Sala::select('id')->latest()->first();
+
+                    //3. Por fim, cria-se uma reserva inserindo a sala que desejamos.
+                    $browser->click('a[href="/reservas/create"]')
+                    ->pause(1500)
+                    ->typeSlowly('nome','Reunião DUSK STI', 100)
+                    ->typeSlowly('data',now()->format('d/m/Y'), 50)
+                    ->typeSlowly('horario_inicio','8:00', 50)
+                    ->typeSlowly('horario_fim','10:00', 50)
+                    ->pause(1000)
+                    ->select('sala_id',$sala_id->id)
+                    ->pause(2000)
+                    ->clickAtXPath('//body') //clica fora do "calendário"
+                    ->pause(1000)
+                    ->radio('rep_bool','Não')
+                    ->pause(2000)
+                    ->press('Enviar')
+                    ->pause(5000);
         });
     }
 }
