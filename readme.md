@@ -157,9 +157,3 @@ No arquivo de configuração .env:
 - SENHAUNICA_GERENTES não está sendo utilizado;
 - RESERVA_CAMPOS_EXTRAS define eventuais campos extras de preenchimento obrigatório ao solicitar reserva;
 - MAIL_COPIAR_REMETENTE define se todos os e-mails enviados pelo sistema também serão copiados (em bcc) para o remetente.
-
-
-
-
-
-

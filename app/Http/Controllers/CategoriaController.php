@@ -8,7 +8,6 @@ use App\Models\Setor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Uspdev\Replicado\Pessoa;
-use App\Utils\ReplicadoUtils;
 use Uspdev\Replicado\Estrutura;
 
 class CategoriaController extends Controller
@@ -59,14 +58,13 @@ class CategoriaController extends Controller
      */
     public function show(Categoria $categoria)
     {
-        $sigla_unidade = ReplicadoUtils::dumpUnidade(config('salas.codUnidade'), ['sglund']);
-
+        $unidade = Estrutura::obterUnidade(config('salas.codUnidade'));
         $setores = Estrutura::listarSetores(config('codUnidade'));
 
         \UspTheme::activeUrl('categorias');
         return view('categoria.show', [
             'categoria' => $categoria,
-            'sigla_unidade' => $sigla_unidade[0]['sglund'],
+            'sigla_unidade' => $unidade['sglund'],
             'setores' => $setores
         ]);
     }
