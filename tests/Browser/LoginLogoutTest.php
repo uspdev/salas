@@ -15,7 +15,7 @@ use Spatie\Permission\Models\Permission;
 
 use App\Helpers\UspdevDuskTrait;
 
-class IndexTest extends DuskTestCase
+class LoginLogoutTest extends DuskTestCase
 {
     use UspdevDuskTrait;
 
