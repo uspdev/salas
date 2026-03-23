@@ -50,12 +50,13 @@ class ReservaMultiplaTest extends DuskTestCase
                     ->pause(2300);
 
             $sala_id = \App\Models\Sala::select('id')->latest()->first();
+            
             $primeiro_dia_do_semestre = Carbon::create(now()->format('Y'), 3)->firstOfMonth(Carbon::MONDAY);
-
+            $ultimo_dia_do_semestre = Carbon::create(now()->format('Y'), 6)->lastOfMonth(Carbon::FRIDAY);
+            
                     //3. Por fim, cria-se uma reserva inserindo a sala que desejamos.
                     $browser->click('a[href="/reservas/create"]')
-                    //->pause(1500)
-                    ->type('nome','Introdução aos estudos Clássicos I')
+                    ->typeSlowly('nome','Introdução aos estudos Clássicos I')
                     ->type('data',$primeiro_dia_do_semestre->format('d/m/Y'))
                     ->typeSlowly('horario_inicio','8:00', 50)
                     ->typeSlowly('horario_fim','10:00', 50)
@@ -65,8 +66,8 @@ class ReservaMultiplaTest extends DuskTestCase
                     ->radio('rep_bool','Sim')
                     ->check('repeat_days[1]')
                     ->check('repeat_days[3]')
-                    ->typeSlowly('repeat_until', $primeiro_dia_do_semestre->addDays(180)->format('d/m/Y'))
-                    ->pause(3000)
+                    ->typeSlowly('repeat_until', $ultimo_dia_do_semestre->format('d/m/Y'))
+                    ->pause(6000)
                     ->press('Enviar')
                     ->pause(6000);
         });
