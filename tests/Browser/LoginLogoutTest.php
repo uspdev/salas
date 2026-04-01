@@ -37,7 +37,7 @@ class LoginLogoutTest extends DuskTestCase
                     ->press('Entrar')
                     ->pause(2000)
                     ->assertDontSee('Administração')
-                    ->click('.login_logout_link')
+                    ->clickLink('Sair') //1. usar texto "sair" ao inves da classe
                     ->pause(2000);
 
             // Login com usuário admin
@@ -47,7 +47,7 @@ class LoginLogoutTest extends DuskTestCase
                     ->press('Entrar')
                     ->pause(2000)
                     ->assertSee('Administração')
-                    ->click('.login_logout_link')
+                    ->clickLink('Sair')
                     ->pause(2000);
         });
     }

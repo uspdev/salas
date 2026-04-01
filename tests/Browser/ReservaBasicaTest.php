@@ -34,9 +34,9 @@ class ReservaBasicaTest extends DuskTestCase
                     ->typeSlowly('password', 'password', 30)
                     ->press('Entrar')
                     ->pause(1000)
-                    ->click('#navbarDropdowniclassfafausercogariahiddentrueiAdministrao') //menu
+                    ->clickLink('Administração')
                     ->pause(1250)
-                    ->click('a[href="categorias/create"]')
+                    ->clickLink('Cadastrar Categoria')
                     ->pause(1250)
                     ->typeSlowly('nome','Prédio da Administração', 100)
                     ->pause(2000)
@@ -47,9 +47,9 @@ class ReservaBasicaTest extends DuskTestCase
                     $categoria_id = \App\Models\Categoria::select('id')->latest()->first();
                     
                     //2. Após a criação da categoria, cria-se uma sala com ela.
-                    $browser->click('#navbarDropdowniclassfafausercogariahiddentrueiAdministrao') //menu
+                    $browser->clickLink('Administração')
                     ->pause(1850)
-                    ->click('a[href="salas/create"]')
+                    ->clickLink('Cadastrar Sala')
                     ->pause(1250)
                     ->typeSlowly('nome','Sala de Informática Teste', 100)
                     ->typeSlowly('capacidade','123', 150)
@@ -61,7 +61,7 @@ class ReservaBasicaTest extends DuskTestCase
                     $sala_id = \App\Models\Sala::select('id')->latest()->first();
 
                     //3. Por fim, cria-se uma reserva inserindo a sala que desejamos.
-                    $browser->click('a[href="/reservas/create"]')
+                    $browser->clickLink('Nova reserva')
                     ->pause(1500)
                     ->typeSlowly('nome','Reunião DUSK STI', 100)
                     ->typeSlowly('data',now()->format('d/m/Y'), 50)

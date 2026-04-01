@@ -19,17 +19,17 @@ class ReservaMultiplaTest extends DuskTestCase
         parent::setUp();
         $this->setupAdminAndUser(); // cria usuários $this->commonUser e $this->adminUser
     }
-    public function test_example(): void
+    public function testReservaMultipla(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/loginlocal')
-                    ->typeSlowly('email', $this->adminUser->email, 30)
-                    ->typeSlowly('password', 'password', 30)
+                    ->type('email', $this->adminUser->email)
+                    ->type('password', 'password')
                     ->press('Entrar')
                     ->pause(1000)
-                    ->click('#navbarDropdowniclassfafausercogariahiddentrueiAdministrao') //menu
+                    ->clickLink('Administração')
                     ->pause(1250)
-                    ->click('a[href="categorias/create"]')
+                    ->clickLink('Cadastrar Categoria')
                     ->pause(1250)
                     ->typeSlowly('nome','Prédio da Letras', 100)
                     ->pause(2000)
@@ -38,9 +38,9 @@ class ReservaMultiplaTest extends DuskTestCase
 
             $categoria_id = \App\Models\Categoria::select('id')->latest()->first();
 
-            $browser->click('#navbarDropdowniclassfafausercogariahiddentrueiAdministrao') //menu
+            $browser->clickLink('Administração')
                     ->pause(1850)
-                    ->click('a[href="salas/create"]')
+                    ->clickLink('Cadastrar Sala')
                     ->pause(1250)
                     ->typeSlowly('nome','Sala 171', 100)
                     ->typeSlowly('capacidade','123', 150)
@@ -55,7 +55,7 @@ class ReservaMultiplaTest extends DuskTestCase
             $ultimo_dia_do_semestre = Carbon::create(now()->format('Y'), 6)->lastOfMonth(Carbon::FRIDAY);
             
                     //3. Por fim, cria-se uma reserva inserindo a sala que desejamos.
-                    $browser->click('a[href="/reservas/create"]')
+                    $browser->clickLink('Nova reserva')
                     ->typeSlowly('nome','Introdução aos estudos Clássicos I')
                     ->type('data',$primeiro_dia_do_semestre->format('d/m/Y'))
                     ->typeSlowly('horario_inicio','8:00', 50)
