@@ -1,0 +1,48 @@
+services:
+  salas:
+    image: salas
+    container_name: salas
+    ports:
+      - "8000:80"
+    depends_on:
+      - mariadb
+      - selenium
+    networks:
+      - salas-network
+    volumes:
+      - ./:/var/www/html
+      - storage_data:/var/www/html/storage
+      - cache_data:/var/www/html/bootstrap/cache
+
+  mariadb:
+    image: mariadb:11
+    container_name: salas_mariadb
+    restart: always
+    environment:
+      MYSQL_DATABASE: salas
+      MYSQL_USER: salas
+      MYSQL_PASSWORD: salas
+      MYSQL_ROOT_PASSWORD: salas
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - salas-network
+
+  # http://localhost:7900 senha: secret 
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: salas_selenium
+    ports:
+      - "4444:4444" # WebDriver
+      - "7900:7900" # VNC (ver browser)
+    shm_size: 2gb
+    networks:
+      - salas-network
+
+networks:
+  salas-network:
+
+volumes:
+  mariadb_data:
+  storage_data:
+  cache_data:
