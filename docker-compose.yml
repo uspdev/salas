@@ -1,6 +1,6 @@
 services:
   salas:
-    image: salas
+    build: .
     container_name: salas
     ports:
       - "8000:80"
