@@ -221,3 +221,23 @@ No diretório app/Helpers foi criado uma Trait UspdevDuskTrait.php que criar um 
 
     ...
 
+Criando imagem:
+
+    docker build --no-cache -t salas .
+
+Ambiente dev:
+
+    docker compose up
+
+Comandos do laravel dentro do container:
+
+    cp .env.example .env
+    docker exec -u root -it salas composer install
+    docker exec -u root -it salas php artisan key:generate
+    docker exec -u root -it salas php artisan migrate
+
+Acessando os containers via ssh:
+
+    docker compose exec -u root salas bash
+    docker compose exec -u root mariadb bash
+
