@@ -328,6 +328,11 @@ class ReservaController extends Controller
             }
             $validated['id'] = $reserva->id;
             $periodo = GetPeriodoAction::handle($validated);
+
+            if(!$periodo){
+                return redirect()->back()->with('alert-danger', 'Operação não completada, não há data(s) para reserva!')->withInput();
+            }
+            
             $validated['data'] = reset($periodo)->format('d/m/Y');
             // atualiza reserva pai
             $reserva->update($validated);
