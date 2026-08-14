@@ -1,12 +1,12 @@
 services:
   salas:
     build: .
+    image: salas:latest
     container_name: salas
     ports:
       - "8000:80"
     depends_on:
       - mariadb
-      - selenium
     networks:
       - salas-network
     volumes:
@@ -29,17 +29,33 @@ services:
     networks:
       - salas-network
 
-  # http://localhost:7900 senha: secret 
-  selenium:
-    image: selenium/standalone-chrome:latest
-    container_name: salas_selenium
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: salas_phpmyadmin
+    restart: always
+    depends_on:
+      - mariadb
     ports:
-    #  - "4444:4444" # WebDriver
-      - "7900:7900" # VNC (ver browser)
-    shm_size: 2gb
+      - "8081:80"
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: salas
     networks:
       - salas-network
+      
+  selenium:
+    image: selenium/standalone-chrome
+    container_name: salas_selenium
+    ports:
+      - "7900:7900"
+    networks:
+      - salas-network
+    shm_size: 2gb
 
+  # No /etc/hosts do seu computador colocar a linha `127.0.0.1 auth.local` 
+  # particularidades do protocolo oAuth1 usado na USP
   senhaunica-faker:
     image: uspdev/senhaunica-faker
     container_name: salas_senhaunica-faker
@@ -52,10 +68,17 @@ services:
         aliases:
           - auth.local
 
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: salas_mailpit
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Interface Web
+    networks:
+      - salas-network
+
 networks:
   salas-network:
 
 volumes:
   mariadb_data:
-  storage_data:
-  cache_data:
