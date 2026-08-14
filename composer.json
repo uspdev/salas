@@ -21,7 +21,7 @@
         "uspdev/laravel-tools": "^1.4",
         "uspdev/laravel-usp-theme": "^2.8.1",
         "uspdev/replicado": "^1.6",
-        "uspdev/senhaunica-socialite": "^4.3"
+        "uspdev/senhaunica-socialite": "^4.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

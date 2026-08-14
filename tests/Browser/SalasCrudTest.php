@@ -6,12 +6,12 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
-class ExampleTest extends DuskTestCase
+class SalasCrudTest extends DuskTestCase
 {
     /**
-     * A basic browser test example.
+     * A Dusk test example.
      */
-    public function test_basic_example(): void
+    public function test_salas_crud(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -21,13 +21,21 @@ class ExampleTest extends DuskTestCase
                 ->press('Login')
                 ->waitFor('.login_logout_link')
                 ->assertSee('ADMINISTRAÇÃO')
-                ->press('CADASTRAR CATEGORIA')
+                ->clickLink('Administração')
+                ->pause(2000)
+                ->clickLink('Cadastrar Categoria')
                 ->typeSlowly('nome', 'Categoria Teste')
+                ->press('Enviar')
                 ->assertSee('ADMINISTRAÇÃO')
-                ->press('CADASTRAR SALA')
+                ->clickLink('Administração')
+                ->pause(2000)
+                ->clickLink('Cadastrar Sala')
                 ->typeSlowly('nome', 'Sala Teste')
                 ->typeSlowly('capacidade', '40')
-                ->select('categoria_id', 'Categoria Teste')
+                ->click('span[title="Selecione um opção"]')
+                ->pause(2000)
+                ->click('Categoria Teste')
+                ->pause(2000)
                 ->press('Enviar');
         });
     }
