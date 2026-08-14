@@ -11,8 +11,9 @@ services:
       - salas-network
     volumes:
       - ./:/var/www/html
-      - storage_data:/var/www/html/storage
-      - cache_data:/var/www/html/bootstrap/cache
+    environment:
+      HOME: /tmp
+    user: "${UID:-1000}:${GID:-1000}"
 
   mariadb:
     image: mariadb:11
@@ -33,11 +34,23 @@ services:
     image: selenium/standalone-chrome:latest
     container_name: salas_selenium
     ports:
-      - "4444:4444" # WebDriver
+    #  - "4444:4444" # WebDriver
       - "7900:7900" # VNC (ver browser)
     shm_size: 2gb
     networks:
       - salas-network
+
+  senhaunica-faker:
+    image: uspdev/senhaunica-faker
+    container_name: salas_senhaunica-faker
+    ports:
+      - "3141:3141"
+    environment:
+          - APP_URL=http://auth.local:3141
+    networks:
+      salas-network:
+        aliases:
+          - auth.local
 
 networks:
   salas-network:
