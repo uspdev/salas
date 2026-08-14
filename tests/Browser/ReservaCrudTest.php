@@ -15,7 +15,7 @@ class ReservaCrudTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertSee('Laravel');
+                ->assertSee('Salas');
         });
     }
 }
