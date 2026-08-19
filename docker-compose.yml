@@ -51,6 +51,15 @@ services:
       salas-network:
         aliases:
           - auth.local
+  
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: salas__mailpit
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Interface Web
+    networks:
+      - salas-network
 
 networks:
   salas-network:
