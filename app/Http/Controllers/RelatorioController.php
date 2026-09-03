@@ -8,13 +8,17 @@ use Carbon\Carbon;
 use Maatwebsite\Excel\Excel;
 use App\Exports\RelatorioExport;
 use App\Http\Requests\RelatorioRequest;
+use App\Models\Finalidade;
 
 class RelatorioController extends Controller
 {
     public function index(){
+        $finalidades = Finalidade::all();
+
         \UspTheme::activeUrl('/relatorio');
         return view('relatorio.index', [
-            'categorias' => Categoria::pluck('nome','id')->prepend('Selecione a Categoria', '')
+            'categorias' => Categoria::pluck('nome','id')->prepend('Selecione a Categoria', ''),
+            'finalidades' => $finalidades
         ]);
     }
 
@@ -23,17 +27,22 @@ class RelatorioController extends Controller
         $fim = Carbon::createFromFormat('d/m/Y', $request->fim)->format('Y-m-d');
 
         $reservas = Reserva::join('salas','reservas.sala_id','salas.id')
+        ->join('finalidades', 'reservas.finalidade_id', 'finalidades.id')
         ->leftJoin('restricoes','restricoes.sala_id','salas.id')
         ->where(function ($query){
             $query->whereNull('restricoes.bloqueada')
             ->orWhere('restricoes.bloqueada','<>',1);
         })
         ->where('salas.categoria_id', $request->categoria_id)
+        ->when($request->finalidade_id, function ($query, $finalidade_id) {
+            return $query->where('reservas.finalidade_id', $finalidade_id);
+        })
         ->select(
             'salas.nome as nome_sala',
             'salas.capacidade',
             'reservas.nome',
             'reservas.descricao',
+            'finalidades.legenda',
             'reservas.horario_inicio',
             'reservas.horario_fim',
             'reservas.data',
@@ -58,6 +67,7 @@ class RelatorioController extends Controller
                 'Capacidade',
                 'Título da reserva',
                 'Descrição',
+                'Finalidade',
                 'Horário de início',
                 'Horário de fim',
                 'Data da reserva',
