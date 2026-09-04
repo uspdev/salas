@@ -1,8 +1,8 @@
 @extends('main')
 
 @section('content')
-    @can ('admin')
-        <a href="{{route('salas.create')}}" class="btn btn-success mb-3">Cadastrar Sala</a>
+    @can('admin')
+        <a href="{{ route('salas.create') }}" class="btn btn-success mb-3">Cadastrar Sala</a>
     @endcan
 
     <div class="card">
@@ -11,8 +11,10 @@
             <form method="GET" action="{{ $origem ? $origem : route('salas.listar') }}" id="form-filtros">
                 <b>Categorias:</b>
                 <select name="categorias_filter[]" class="select2 form-control" multiple="multiple">
-                    @foreach($categorias as $categoria)
-                        <option value="{{$categoria->id}}" {{ in_array($categoria->id, $categorias_filter) ? 'selected' : ''}}>{{$categoria->nome}}</option>
+                    @foreach ($categorias as $categoria)
+                        <option value="{{ $categoria->id }}"
+                            {{ in_array($categoria->id, $categorias_filter) ? 'selected' : '' }}>{{ $categoria->nome }}
+                        </option>
                     @endforeach
                 </select>
 
@@ -21,13 +23,16 @@
                         <b>Recursos:</b>
                         <select name="recursos_filter[]" id="" class="select2 form-control" multiple="multiple">
                             @foreach ($recursos as $recurso)
-                                <option value="{{$recurso->id}}" {{in_array($recurso->id, $recursos_filter) ? 'selected' : ''}}>{{$recurso->nome}}</option>
+                                <option value="{{ $recurso->id }}"
+                                    {{ in_array($recurso->id, $recursos_filter) ? 'selected' : '' }}>{{ $recurso->nome }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-sm">
                         <b>Capacidade Mínima:</b>
-                        <input type="number" min="0" class="form-control" name="capacidade_filter" value="{{old('capacidade_filter', $capacidade_filter)}}">
+                        <input type="number" min="0" class="form-control" name="capacidade_filter"
+                            value="{{ old('capacidade_filter', $capacidade_filter) }}">
                     </div>
                 </div>
 
@@ -54,28 +59,40 @@
                     </thead>
                     @forelse($salas as $sala)
                         <tr>
-                            <td><a @can('admin') href="{{route('salas.edit', $sala->id)}}" @endcan>{{ $sala->nome }}</a></td>
-                            <td>{{$sala->categoria->nome}}</td>
-                            <td>{{$sala->capacidade}} pessoas</td>
+                            <td><a
+                                    @can('admin') href="{{ route('salas.edit', $sala->id) }}" @endcan>{{ $sala->nome }}</a>
+                            </td>
+                            <td>{{ $sala->categoria->nome }}</td>
+                            <td>{{ $sala->capacidade }} pessoas</td>
                             <td>
                                 @can('admin')
-                                    <form method="POST" action="{{route('salas.destroy', $sala->id)}}" class="d-inline">
-                                        <a class="btn btn-success" href="{{route('salas.edit', $sala->id)}}" role="button"
+                                    <form method="POST" action="{{ route('salas.destroy', $sala->id) }}" class="d-inline">
+                                        <a class="btn btn-success" href="{{ route('salas.edit', $sala->id) }}" role="button"
                                             data-bs-toggle="tooltip" title="Editar">
                                             <i class="fa fa-pen"></i>
                                         </a>
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza?');">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                        @if ($sala->reservas->isEmpty())
+                                            <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Tem certeza?');">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        @else
+                                            <a class="btn btn-danger" href="{{ route('salas.confirm-delete', $sala->id) }}">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        @endif
                                     </form>
                                 @endcan
 
-                                <a href="{{route('salas.show', $sala->id)}}" title="Calendário da sala" class="btn btn-info"><i class="fa fa-calendar"></i></a>
+                                <a href="{{ route('salas.show', $sala->id) }}" title="Calendário da sala"
+                                    class="btn btn-info"><i class="fa fa-calendar"></i></a>
 
-                                @if(Gate::allows('members', $sala->id) && !($sala->restricao->bloqueada ?? false))
-                                    <a href="{{route('reservas.create', ['sala' => $sala->id])}}" title="Cadastrar reserva na sala" class="btn btn-primary"><i class="fa fa-calendar-plus"></i></a>
+                                @if (Gate::allows('members', $sala->id) && !($sala->restricao->bloqueada ?? false))
+                                    <a href="{{ route('reservas.create', ['sala' => $sala->id]) }}"
+                                        title="Cadastrar reserva na sala" class="btn btn-primary"><i
+                                            class="fa fa-calendar-plus"></i></a>
                                 @endif
 
                             </td>
@@ -92,7 +109,7 @@
 @section('javascripts_bottom')
     <script>
         $(document).ready(function() {
-            $('#btn-limpar-filtros').on('click', function(){
+            $('#btn-limpar-filtros').on('click', function() {
                 $('#form-filtros').find(':input').val("");
                 $('.select2').val('val').trigger('change');
             });

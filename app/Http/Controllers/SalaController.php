@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\DestroySalaAction;
 use App\Http\Requests\SalaRequest;
 use App\Models\Categoria;
 use App\Models\Finalidade;
 use App\Models\Recurso;
-use App\Models\Reserva;
 use App\Models\Sala;
 use App\Models\Restricao;
 use App\Models\PeriodoLetivo;
@@ -60,8 +60,7 @@ class SalaController extends Controller
         $validated = $request->validated();
 
         // Conferindo se nesta categoria já há uma sala de mesmo nome.
-        if(Sala::where('nome', $validated['nome'])->where('categoria_id', $validated['categoria_id'])->get()->isNotEmpty())
-        {
+        if (Sala::where('nome', $validated['nome'])->where('categoria_id', $validated['categoria_id'])->get()->isNotEmpty()) {
             \UspTheme::activeUrl('salas/create');
             session()->put('alert-danger', 'Já existe sala com este nome nesta categoria.');
             return redirect()->route('salas.create')->withInput();
@@ -69,7 +68,7 @@ class SalaController extends Controller
 
         $sala = Sala::create($validated);
 
-        if(array_key_exists('recursos', $validated)) {
+        if (array_key_exists('recursos', $validated)) {
             $sala->recursos()->attach($validated['recursos']);
         }
 
@@ -98,10 +97,9 @@ class SalaController extends Controller
                 'color' => $reserva->status == 'pendente' ? config('salas.cores.pendente') : ($reserva->finalidade->cor ?? config('salas.cores.semFinalidade')),
                 'textColor' => 'black',
                 'extendedProps' => [
-                    'responsaveis'=> $reserva->responsaveis->pluck('nome')
+                    'responsaveis' => $reserva->responsaveis->pluck('nome')
                 ]
             ];
-
         }
 
         $finalidades = Finalidade::all();
@@ -112,7 +110,7 @@ class SalaController extends Controller
             'recursos' => Recurso::all(),
             'finalidades' => $finalidades,
             'eventos' => $eventos
-            ]);
+        ]);
     }
 
     /**
@@ -125,7 +123,7 @@ class SalaController extends Controller
         $this->authorize('admin');
 
         $sala->load('recursos');
-        $recursos = Recurso::get()->map(function($recurso) use ($sala) {
+        $recursos = Recurso::get()->map(function ($recurso) use ($sala) {
             $recurso->checked = data_get($sala->recursos->firstWhere('id', $recurso->id), 'pivot.recurso_id') ?? null;
             return $recurso;
         });
@@ -144,7 +142,7 @@ class SalaController extends Controller
             'responsaveis' => $sala->responsaveis,
             'periodos' => PeriodoLetivo::all(),
             'origem' => session('origem')
-            ]);
+        ]);
     }
 
     /**
@@ -161,7 +159,7 @@ class SalaController extends Controller
         $validated = $request->validated();
 
 
-        if($validated['aprovacao'] && count($sala->responsaveis) < 1) {
+        if ($validated['aprovacao'] && count($sala->responsaveis) < 1) {
             \UspTheme::activeUrl('salas/listar');
             session()->put('alert-danger', 'A sala deve ter ao menos um responsável se necessitar de aprovação para reserva.');
             return redirect()->route('salas.edit', ['sala' => $sala->id]);
@@ -171,18 +169,17 @@ class SalaController extends Controller
 
         if (!$validated['aprovacao'] && count($sala->responsaveis) > 0) {
             $responsavel_ids = [];
-            foreach($sala->responsaveis as $responsavel) {
+            foreach ($sala->responsaveis as $responsavel) {
                 $responsavel_ids[] = $responsavel->id;
             }
             $sala->responsaveis()->detach($responsavel_ids);
         }
 
-        if(array_key_exists('recursos', $validated)) {
+        if (array_key_exists('recursos', $validated)) {
             $sala->recursos()->sync($validated['recursos']);
-        }
-        else {
+        } else {
             $recurso_ids = [];
-            foreach($sala->recursos as $recurso) {
+            foreach ($sala->recursos as $recurso) {
                 $recurso_ids[] = $recurso->id;
             }
             $sala->recursos()->detach($recurso_ids);
@@ -206,7 +203,7 @@ class SalaController extends Controller
                 'prazo_aprovacao'      => $validated['prazo_aprovacao'],
                 'exige_justificativa_recusa' => $validated['exige_justificativa_recusa'],
             ]
-            );
+        );
 
 
         \UspTheme::activeUrl(session('origem') === 'filtro_de_recursos' ? '/filtro_de_recursos' : '/salas');
@@ -223,42 +220,57 @@ class SalaController extends Controller
     {
         $this->authorize('admin');
 
-        if($sala->reservas->isNotEmpty()) {
-            $sala->load('recursos');
-            $recursos = Recurso::get()->map(function($recurso) use ($sala) {
-                $recurso->checked = data_get($sala->recursos->firstWhere('id', $recurso->id), 'pivot.recurso_id') ?? null;
-                return $recurso;
-            });
-            $sala->restricao = Restricao::firstOrCreate([
-                'sala_id' => $sala->id
-            ]);
 
-            \UspTheme::activeUrl((session('origem') === 'filtro_de_recursos') ? '/filtro_de_recursos' : 'salas/listar');
-            session()->put('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');
-            return redirect("/" . (session('origem') === 'filtro_de_recursos' ? 'filtro_de_recursos' : 'salas') . "/{$sala->id}");
+        if ($sala->reservas->isEmpty()) {
+            $sala->delete();
+
+            \UspTheme::activeUrl('/');
+            session()->put('alert-success', 'Sala excluída com sucesso');
+            return redirect("/");
         }
 
-        $sala->delete();
+        $sala->load('recursos');
+        $recursos = Recurso::get()->map(function ($recurso) use ($sala) {
+            $recurso->checked = data_get($sala->recursos->firstWhere('id', $recurso->id), 'pivot.recurso_id') ?? null;
+            return $recurso;
+        });
+        $sala->restricao = Restricao::firstOrCreate([
+            'sala_id' => $sala->id
+        ]);
 
-        \UspTheme::activeUrl('/');
-        session()->put('alert-success', 'Sala excluída com sucesso');
-        return redirect("/");
+        \UspTheme::activeUrl((session('origem') === 'filtro_de_recursos') ? '/filtro_de_recursos' : 'salas/listar');
+        session()->put('alert-danger', 'Não é possível deletar essa sala pois ela contém reservas');
+        return redirect("/" . (session('origem') === 'filtro_de_recursos' ? 'filtro_de_recursos' : 'salas') . "/{$sala->id}");
+    }
+
+    public function delete(Sala $sala)
+    {
+        DestroySalaAction::execute($sala);
+        return redirect("/salas/listar");
+    }
+
+    public function confirm_delete(Sala $sala)
+    {
+        return view('sala.confirm_delete', [
+            'sala' => $sala,
+            'reservas' => $sala->reservas
+        ]);
     }
 
     public function listar(Request $request)
     {
         $salas = Sala::make()
-                    ->when($request->categorias_filter, function($query) use ($request){
-                        $query->whereIn('categoria_id', $request->categorias_filter);
-                    })
-                    ->when($request->recursos_filter, function($query) use ($request){
-                        $query->whereHas('recursos', function($query) use ($request){
-                            $query->whereIn('recursos.id', $request->recursos_filter);
-                        });
-                    })
-                    ->when($request->capacidade_filter, function($query) use ($request){
-                        $query->where('capacidade', '>=', $request->capacidade_filter);
-                    });;
+            ->when($request->categorias_filter, function ($query) use ($request) {
+                $query->whereIn('categoria_id', $request->categorias_filter);
+            })
+            ->when($request->recursos_filter, function ($query) use ($request) {
+                $query->whereHas('recursos', function ($query) use ($request) {
+                    $query->whereIn('recursos.id', $request->recursos_filter);
+                });
+            })
+            ->when($request->capacidade_filter, function ($query) use ($request) {
+                $query->where('capacidade', '>=', $request->capacidade_filter);
+            });;
 
 
         \UspTheme::activeUrl(session('origem') === 'filtro_de_recursos' ? '/filtro_de_recursos' : 'salas/listar');
