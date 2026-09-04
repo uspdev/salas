@@ -35,8 +35,10 @@ Route::get('/salas_livres/search',[SalasLivresController::class, 'search'])->nam
 
 // Salas
 Route::get('/salas/listar', [SalaController::class, 'listar'])->name('salas.listar');
+Route::get('/salas/{sala}/confirm-delete', [SalaController::class, 'confirm_delete'])->name('salas.confirm-delete');
 Route::resource('/filtro_de_recursos', SalaController::class);
 Route::resource('/salas', SalaController::class);
+Route::delete('/salas/{sala}/delete', [SalaController::class, 'delete'])->name('salas.delete');
 Route::post('/salas/redirect', [SalaController::class, 'redirect']);
 
 // Responsáveis
