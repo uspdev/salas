@@ -16,8 +16,6 @@ class User extends Authenticatable
     use Notifiable;
     use HasRoles;
     use HasSenhaunica;
-    use \Spatie\Permission\Traits\HasRoles;
-    use \Uspdev\SenhaunicaSocialite\Traits\HasSenhaunica;
 
     /**
      * The attributes that are mass assignable.
