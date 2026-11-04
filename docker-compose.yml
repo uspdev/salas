@@ -70,7 +70,7 @@ services:
   
   mailpit:
     image: axllent/mailpit:latest
-    container_name: salas__mailpit
+    container_name: salas_mailpit
     ports:
       - "1025:1025"   # SMTP
       - "8025:8025"   # Interface Web

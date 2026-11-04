@@ -5,6 +5,23 @@
 <p><b>Sala:</b> {{$reserva->sala->nome}} </p>
 <p><b>Finalidade:</b> {{$reserva->finalidade->legenda}} </p>
 
+<p><b>Alterada por:</b> {{ $changed_by['name'] ?? 'Usuário autenticado' }}</p>
+<p><b>Quando:</b> {{ $changed_at->format('d/m/Y H:i') }}</p>
+
+<h3>Alterações</h3>
+<table>
+    <tr><th>Campo</th><th>Antes</th><th>Depois</th></tr>
+    @forelse($changes as $change)
+        <tr>
+            <td>{{ $change['label'] }}</td>
+            <td>{{ $change['old'] }}</td>
+            <td>{{ $change['new'] }}</td>
+        </tr>
+    @empty
+        <tr><td colspan="3">Nenhum campo foi alterado.</td></tr>
+    @endforelse
+</table>
+
 @if($reserva->irmaos())
     <p><b>Datas:</b>
     @foreach($reserva->irmaos() as $reserva)

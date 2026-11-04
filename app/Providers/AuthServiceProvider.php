@@ -32,17 +32,8 @@ class AuthServiceProvider extends ServiceProvider
             return true;
         });
 
-        /** 
-         * As pessoas só podem editar e excluir reservas feitas por elas mesma
-         **/
-        Gate::define('owner', function ($user, $instance) {
-            if(Gate::allows('admin') || Gate::allows('responsavel', $instance->sala)) return true;
-            if($instance->user_id == $user->id) return true;
-            return false;
-        });
-
         /**
-         * Pessoas numa mesma categoria podem criar reservas nas salas
+         * Pessoas numa mesma categoria podem criar/editar/deletar reservas nas salas
          * daquela categoria
          */
         Gate::define('members', function ($user, $sala_id) {

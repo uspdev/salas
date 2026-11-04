@@ -182,7 +182,6 @@ class ReservaController extends Controller
      */
     public function show(Request $request, Reserva $reserva)
     {
-        //$this->authorize('members',$reserva->sala_id);
         if($request->hasValidSignature())
         {
             Auth::login(User::find($request->user_id));
@@ -204,7 +203,7 @@ class ReservaController extends Controller
      */
     public function edit(Reserva $reserva, GeneralSettings $settings)
     {
-        $this->authorize('owner', $reserva);
+        $this->authorize('members',$reserva->sala_id);
         $this->authorize('reserva.editar', $reserva);
 
         if (Gate::allows('admin')) {
@@ -252,8 +251,12 @@ class ReservaController extends Controller
      */
     public function update(ReservaRequest $request, Reserva $reserva)
     {
-        $this->authorize('owner', $reserva);
+        $this->authorize('members',$reserva->sala_id);
 
+        $oldValues = $reserva->getAttributes();
+        $changedBy = auth()->user();
+        $changedAt = now();
+        $updateMessage = 'Reserva atualizada com sucesso';
         $validated = $request->validated();
         if (isset($validated['extras']))
             $validated['extras'] = json_encode($validated['extras']);
@@ -312,11 +315,9 @@ class ReservaController extends Controller
                 }
             }
 
-            \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
-            session()->put('alert-danger', 'Reserva atualizada com sucesso. <br>
-                                            Entretanto, foi selecionada a opção "Não" para repetição, e portanto
-                                            todas reservas filhas foram excluídas!');
-            return redirect("/reservas/{$reserva->id}");
+            $updateMessage = 'Reserva atualizada com sucesso. <br>
+                              Entretanto, foi selecionada a opção "Não" para repetição, e portanto
+                              todas reservas filhas foram excluídas!';
         }
 
         // 3 - edição da reserva pai, caso com repeticões, mas o padrão de repetição foi alterado
@@ -348,10 +349,18 @@ class ReservaController extends Controller
 
         $reserva->reagendarTarefa_AprovacaoAutomatica();
 
-        if(config('salas.emailConfigurado')) Mail::queue(new UpdateReservaMail($reserva));
+        if(config('salas.emailConfigurado')) {
+            Mail::queue(new UpdateReservaMail(
+                $reserva,
+                $changedBy ? ['name' => $changedBy->name, 'email' => $changedBy->email] : null,
+                $oldValues,
+                $reserva->getAttributes(),
+                $changedAt
+            ));
+        }
 
         \UspTheme::activeUrl(($reserva->user_id == auth()->user()->id) ? '/reservas/my' : '');
-        session()->put('alert-success', 'Reserva atualizada com sucesso');
+        session()->put('alert-success', $updateMessage);
         return redirect("/reservas/{$reserva->id}");
     }
 
@@ -364,8 +373,10 @@ class ReservaController extends Controller
      */
     public function destroy(Request $request, Reserva $reserva)
     {
-        $this->authorize('owner', $reserva);
-
+        $this->authorize('members',$reserva->sala_id);
+        $oldValues = $reserva->getAttributes();
+        $changedBy = auth()->user();
+        $changedAt = now();
         $sala = $reserva->sala;
         $parent_id = $reserva->parent_id;
         $purge = !is_null($request->input('purge'));
@@ -375,7 +386,14 @@ class ReservaController extends Controller
         $reserva->removerTarefa_AprovacaoAutomatica();
 
         if(config('salas.emailConfigurado'))
-            Mail::queue(new DeleteReservaMail($reserva, $purge, $justificativa));
+            Mail::queue(new DeleteReservaMail(
+                $reserva,
+                $purge,
+                $justificativa,
+                $changedBy ? ['name' => $changedBy->name, 'email' => $changedBy->email] : null,
+                $oldValues,
+                $changedAt
+            ));
 
         if($purge){
             Reserva::where('parent_id', $reserva->parent_id)->get()->each->delete();    // adicionado get()->each para disparar deleção do Eloquent dos registros correspondentes na tabela arquivos

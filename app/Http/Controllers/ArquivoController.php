@@ -41,7 +41,7 @@ class ArquivoController extends Controller
         ]);
 
         $reserva = Reserva::find($request->reserva_id);
-        $this->authorize('owner', $reserva);
+        $this->authorize('members',$reserva->sala_id);
         $this->authorize('reserva.editar', $reserva);
 
         $arquivos_nome = [];
@@ -92,7 +92,7 @@ class ArquivoController extends Controller
      */
     public function update(Request $request, Arquivo $arquivo)
     {
-        $this->authorize('owner', $arquivo->reserva);
+        $this->authorize('members', $arquivo->reserva->sala_id);
         $this->authorize('reserva.editar', $arquivo->reserva);
 
         $request->validate(
@@ -116,7 +116,7 @@ class ArquivoController extends Controller
      */
     public function destroy(Request $request, Arquivo $arquivo)
     {
-        $this->authorize('owner', $arquivo->reserva);
+        $this->authorize('members',$arquivo->reserva->sala_id);
         $this->authorize('reserva.editar', $arquivo->reserva);
 
         if (Storage::exists($arquivo->caminho))

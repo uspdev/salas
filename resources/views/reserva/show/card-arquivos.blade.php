@@ -18,7 +18,7 @@
 <div class="card bg-light mb-3" id="card-arquivos">
   <div class="card-header d-flex align-items-center">
     <span class="h5 mb-0">Imagens</span>
-    @if (Gate::allows('owner', $reserva) && Gate::allows('reserva.editar', $reserva))
+    @if (Gate::allows('members', $reserva->sala_id) && Gate::allows('reserva.editar', $reserva))
       <label for="input_arquivo" class="mb-0">
         <span class="btn btn-sm btn-light text-primary ml-2 text-nowrap"> <i class="fas fa-plus"></i> Adicionar</span>
       </label>
@@ -40,7 +40,7 @@
       <div class="arquivos-imagens">
         @foreach ($reserva->arquivos as $arquivo)
           @if (preg_match('/jpeg|png/i', $arquivo->mimeType))
-            @if (Gate::allows('owner', $reserva) && Gate::allows('reserva.editar', $reserva))
+            @if (Gate::allows('members', $reserva->sala_id) && Gate::allows('reserva.editar', $reserva))
               <a onclick="ativar_exclusao_imagem()" class="d-inline-block ml-1 mr-1" data-fancybox="arquivo-galeria"
                 href="arquivos/{{ $arquivo->id }}" data-caption='<form action="arquivos/{{ $arquivo->id }}" method="post">
                             @csrf

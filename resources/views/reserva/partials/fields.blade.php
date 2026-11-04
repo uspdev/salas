@@ -31,7 +31,7 @@
             <b>{{ $reserva->nome }}</b>
             @includeWhen($reserva->arquivos->isNotEmpty(), 'reserva.partials.arquivo-badge')
         </div>
-        @can('owner', $reserva)
+        @can('members', $reserva->sala_id)
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
             <div class="modal-content">
