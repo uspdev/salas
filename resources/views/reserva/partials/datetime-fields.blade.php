@@ -151,9 +151,9 @@
 
     function salaChanged(sala_id) {
         var sala = categorias.flatMap(function (categoria) {
-            return categoria.salas;
+            return Array.isArray(categoria?.salas) ? categoria.salas : [];
         }).find(function (sala) {
-            return sala.id == sala_id;
+            return sala && sala.id == sala_id;
         });
 
         if (sala?.instrucoes_reserva) {
@@ -177,8 +177,8 @@
         }
 
         var categoria = categorias.find(function (categoria) {
-            return categoria.salas.some(function (item) {
-                return item.id == sala_id;
+            return Array.isArray(categoria?.salas) && categoria.salas.some(function (item) {
+                return item && item.id == sala_id;
             });
         });
 
