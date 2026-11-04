@@ -25,13 +25,15 @@ class CategoriaRequest extends FormRequest
     {
         return [
             'nome' => 'required',
+            'habilitar_pular_dias_conflito' => ['nullable', 'boolean'],
         ];
     }
 
     public function messages()
     {
         return [
-        'nome.required' => 'O título não pode ficar em branco.',
-    ];
+            'nome.required' => 'O título não pode ficar em branco.',
+            'habilitar_pular_dias_conflito.boolean' => 'A opção de pular dias de conflito deve ser válida.',
+        ];
     }
 }

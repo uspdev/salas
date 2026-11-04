@@ -13,6 +13,10 @@ class Categoria extends Model implements Auditable
     use HasFactory;
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'habilitar_pular_dias_conflito' => 'boolean',
+    ];
+
     public function salas()
     {
         return $this->hasMany(Sala::class);

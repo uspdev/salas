@@ -44,7 +44,10 @@ class CategoriaController extends Controller
     {
         $this->authorize('admin');
 
-        $categoria = Categoria::create($request->validated());
+        $data = $request->validated();
+        $data['habilitar_pular_dias_conflito'] = $request->has('habilitar_pular_dias_conflito');
+
+        $categoria = Categoria::create($data);
 
         \UspTheme::activeUrl('categorias');
         session()->put('alert-success', 'Categoria criada com sucesso.');
@@ -95,7 +98,10 @@ class CategoriaController extends Controller
     {
         $this->authorize('admin');
 
-        $categoria->update($request->validated());
+        $data = $request->validated();
+        $data['habilitar_pular_dias_conflito'] = $request->has('habilitar_pular_dias_conflito');
+
+        $categoria->update($data);
 
         \UspTheme::activeUrl('categorias');
         session()->put('alert-success', 'Categoria atualizada com sucesso.');

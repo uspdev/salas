@@ -73,28 +73,73 @@
 </div>
 
 @if($reserva->id == null or ($reserva->parent_id != null and ($reserva->id == $reserva->parent_id )))
-    <div class="row">
-        <div class="col-sm form-group">
-            <b>Repetição</b>
-            <div class="checkFlex">
-                <div class="card">
-                    <div class="card-body">
-                        <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool"
-                            @if (old('rep_bool') == 'Não') checked @endif>
-                            <label for="rep_bool_Nao">Não</label>
+    @php
+        $podePularDiasConflito = true;
+        $salaSelecionada = null;
+
+        if (!empty(old('sala_id'))) {
+            $salaSelecionada = old('sala_id');
+        } elseif (isset($reserva->sala_id) && $reserva->sala_id) {
+            $salaSelecionada = $reserva->sala_id;
+        }
+
+        if ($salaSelecionada) {
+            $sala = collect($categorias)->flatMap(function ($categoria) { return $categoria->salas; })->first(function ($sala) use ($salaSelecionada) {
+                return (int) $sala->id === (int) $salaSelecionada;
+            });
+
+            if ($sala && $sala->categoria) {
+                $podePularDiasConflito = (bool) ($sala->categoria->habilitar_pular_dias_conflito ?? true);
+            }
+        }
+    @endphp
+
+    @if ($podePularDiasConflito)
+        <div class="row">
+            <div class="col-sm form-group">
+                <b>Repetição</b>
+                <div class="checkFlex">
+                    <div class="card">
+                        <div class="card-body">
+                            <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool"
+                                @if (old('rep_bool') == 'Não') checked @endif>
+                                <label for="rep_bool_Nao">Não</label>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool"
-                          @if (old('rep_bool') == 'Sim' or ($reserva->parent_id != null and ($reserva->id == $reserva->parent_id ))) checked @endif>
-                          <label for="rep_bool_Sim">Sim</label>
+                    <div class="card">
+                        <div class="card-body">
+                            <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool"
+                              @if (old('rep_bool') == 'Sim' or ($reserva->parent_id != null and ($reserva->id == $reserva->parent_id ))) checked @endif>
+                              <label for="rep_bool_Sim">Sim</label>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    @include('reserva.partials.repeat')
+        @include('reserva.partials.repeat')
+    @else
+        <div class="row">
+            <div class="col-sm form-group">
+                <b>Repetição</b>
+                <div class="checkFlex">
+                    <div class="card">
+                        <div class="card-body">
+                            <input class="form-check-input me-1" type="radio" value="Não" id="rep_bool_Nao" name="rep_bool"
+                                @if (old('rep_bool') == 'Não') checked @endif>
+                                <label for="rep_bool_Nao">Não</label>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <input class="form-check-input me-1" type="radio" value="Sim" id="rep_bool_Sim" name="rep_bool"
+                              @if (old('rep_bool') == 'Sim' or ($reserva->parent_id != null and ($reserva->id == $reserva->parent_id ))) checked @endif>
+                              <label for="rep_bool_Sim">Sim</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @endif
 
 <script type="text/javascript">
@@ -130,5 +175,14 @@
             $('#checkbox_aceite_reserva').attr('required', false);
             $('#label_aceite_reserva').text('');
         }
+
+        var categoria = categorias.find(function (categoria) {
+            return categoria.salas.some(function (item) {
+                return item.id == sala_id;
+            });
+        });
+
+        var habilitarPularDiasConflito = categoria ? !!categoria.habilitar_pular_dias_conflito : true;
+        $('#skip_conflict_field').toggle(!habilitarPularDiasConflito);
     }
 </script>
