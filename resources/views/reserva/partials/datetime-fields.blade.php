@@ -183,6 +183,6 @@
         });
 
         var habilitarPularDiasConflito = categoria ? !!categoria.habilitar_pular_dias_conflito : true;
-        $('#skip_conflict_field').toggle(!habilitarPularDiasConflito);
+        $('#skip_conflict_field').toggle(habilitarPularDiasConflito);
     }
 </script>
