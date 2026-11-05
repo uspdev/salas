@@ -17,7 +17,7 @@ class ReservaCrudTest extends DuskTestCase
             $browser->visit('/')
                 ->clickLink('Entrar')
                 ->waitFor('#loginUsuario') # Importante: Espera a página de login carregar
-                ->typeSlowly('loginUsuario', '111111')
+                ->typeSlowly('loginUsuario', '1111')
                 ->press('Login')
                 ->waitFor('.login_logout_link')
                 ->click('#navbarDropdowniclassfafausercogariahiddentrueiAdministrao') //menu
