@@ -13,7 +13,7 @@ use Uspdev\Replicado\Estrutura;
 class CategoriaController extends Controller
 {
     public function index(){
-        $categorias = Categoria::all();
+        $categorias = Categoria::orderBy('nome')->get();
 
         \UspTheme::activeUrl('categorias');
         return view('categoria.index', compact('categorias'));
