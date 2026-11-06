@@ -21,7 +21,9 @@ class SalaController extends Controller
      */
     public function index()
     {
-        $categorias = Categoria::with(['salas'])->get();
+        $categorias = Categoria::with(['salas' => function ($query) {
+            $query->orderBy('nome');
+        }])->orderBy('nome')->get();
 
         \UspTheme::activeUrl('/salas');
         return view('sala.index', [
@@ -270,7 +272,9 @@ class SalaController extends Controller
             })
             ->when($request->capacidade_filter, function ($query) use ($request) {
                 $query->where('capacidade', '>=', $request->capacidade_filter);
-            });;
+            })
+            ->orderBy(Categoria::select('nome')->whereColumn('categorias.id', 'salas.categoria_id'))
+            ->orderBy('nome');
 
 
         \UspTheme::activeUrl(session('origem') === 'filtro_de_recursos' ? '/filtro_de_recursos' : 'salas/listar');

@@ -54,12 +54,12 @@ class IndexController extends Controller
 
         \UspTheme::activeUrl('/');
         return view('home', [
-            'categorias' => Categoria::all(),
+            'categorias' => Categoria::orderBy('nome')->get(),
             'filter' => ($request->filter) ?: [],
             'reservas' => $reservas,
             'finalidades' => Finalidade::all(),
             'finalidades_filter' => $request->finalidades_filter ?? [],
-            'salas' => Sala::all(),
+            'salas' => Sala::orderBy('nome')->get(),
             'salas_filter' => $request->salas_filter ?? [],
             'categoria_id' => $request->categoria_id ?? [],
             'data' => today(),

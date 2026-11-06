@@ -98,9 +98,12 @@ class ReservaController extends Controller
         $reserva = new Reserva();
         $reserva->tipo_responsaveis = 'eu';
 
-        foreach($categorias as $categoria)
+        foreach($categorias as $categoria) {
             foreach($categoria->salas as $salaKey => $sala)
                 if(!is_null($sala->restricao) && $sala->restricao->bloqueada) $categoria->salas->forget($salaKey);
+
+            $categoria->setRelation('salas', $categoria->salas->sortBy('nome'));
+        }
 
         \UspTheme::activeUrl('/reservas/create');
         return view('reserva.create', [
